@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eqsys.view.ClientListController">
+   <children>
+      <Label text="客户端信息" />
+      <TableView fx:id="clientTable">
+         <columns>
+            <TableColumn fx:id="stationId" prefWidth="73.0" text="站台Id" />
+            <TableColumn fx:id="transMode" editable="false" prefWidth="98.0" text="传输模式" />
+            <TableColumn fx:id="sensitivity" prefWidth="75.0" text="灵敏度" />
+            <TableColumn fx:id="triggerThreshold" prefWidth="75.0" text="触发阈值" />
+         </columns>
+      </TableView>
+   </children>
+</VBox>
