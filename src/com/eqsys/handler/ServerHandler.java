@@ -43,7 +43,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		
-//		System.out.println("channel active:"+ctx.channel().toString());
+		System.out.println("channel active:"+ctx.channel().toString());
 	}
 	
 	/**

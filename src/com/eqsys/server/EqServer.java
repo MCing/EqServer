@@ -5,11 +5,13 @@ import java.awt.Toolkit;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.jboss.marshalling.MarshallerFactory;
 
 import com.eqsys.dao.ClientInfoDao;
 import com.eqsys.handler.ServerHandler;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.msg.RegMsg;
+import com.eqsys.util.MarshallingFactory;
 import com.eqsys.util.SysConfig;
 import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.LogUtil;
@@ -198,6 +200,8 @@ public class EqServer extends Application {
 			pipeline.addLast(new ObjectDecoder(1024,
 					ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
 			pipeline.addLast(new ObjectEncoder());
+//			pipeline.addLast(MarshallingFactory.buildMarshallingDecoder());
+//			pipeline.addLast(MarshallingFactory.buildMarshallingEncoder());
 			pipeline.addLast(new ServerHandler(EqServer.this));
 		}
 
