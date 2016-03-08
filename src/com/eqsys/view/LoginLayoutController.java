@@ -1,7 +1,7 @@
 package com.eqsys.view;
 
+import com.eqsys.application.EqServer;
 import com.eqsys.security.Authenticator;
-import com.eqsys.server.EqServer;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

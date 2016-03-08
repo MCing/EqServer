@@ -72,7 +72,7 @@ public class ClientConnList {
 					if(it.next().getId().equals(entry.getKey())){
 						it.remove();
 						
-						log.info("客户端:"+entry.getKey()+"登出");
+						log.info("客户端:"+entry.getKey()+"退出");
 						break;
 					}
 				}
@@ -80,6 +80,7 @@ public class ClientConnList {
 			}
 		}
 	}
+	
 	public ObservableList<ClientInfo> getObservableList(){
 		return this.clientList;
 	}
@@ -101,5 +102,10 @@ public class ClientConnList {
 				return "触发传输不传波形";
 			default :return "连续传输";
 		}
+	}
+	
+	public boolean containsClient(String id){
+		
+		return map.containsKey(id);
 	}
 }

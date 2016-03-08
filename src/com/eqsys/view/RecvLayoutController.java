@@ -1,7 +1,8 @@
 package com.eqsys.view;
 
+import com.eqsys.application.EqServer;
 import com.eqsys.model.RecvInfo;
-import com.eqsys.server.EqServer;
+import com.eqsys.util.TmpOblist;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -27,7 +28,7 @@ public class RecvLayoutController {
 		srcColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("srcId"));
 		typeColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("type"));
 		
-		recvInfoTable.setItems(EqServer.recvInfoList);
+		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 	}
 	
 }

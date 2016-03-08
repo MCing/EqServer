@@ -1,22 +1,4 @@
-package com.eqsys.server;
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.IOException;
-
-import org.apache.log4j.Logger;
-import org.jboss.marshalling.MarshallerFactory;
-
-import com.eqsys.dao.ClientInfoDao;
-import com.eqsys.handler.ServerHandler;
-import com.eqsys.model.RecvInfo;
-import com.eqsys.msg.RegMsg;
-import com.eqsys.util.MarshallingFactory;
-import com.eqsys.util.SysConfig;
-import com.eqsys.util.JDBCHelper;
-import com.eqsys.util.LogUtil;
-import com.eqsys.view.LoginLayoutController;
-import com.eqsys.view.RootLayoutController;
+package com.eqsys.application;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -31,6 +13,13 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,6 +33,21 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import org.apache.log4j.Logger;
+
+import com.eqsys.dao.ClientInfoDao;
+import com.eqsys.handler.CmdRespHandler;
+import com.eqsys.handler.DataRecvHandler;
+import com.eqsys.handler.HeartbeatRespHandler;
+import com.eqsys.handler.RegRespHandler;
+import com.eqsys.model.RecvInfo;
+import com.eqsys.msg.RegMsg;
+import com.eqsys.util.JDBCHelper;
+import com.eqsys.util.LogUtil;
+import com.eqsys.util.SysConfig;
+import com.eqsys.view.LoginLayoutController;
+import com.eqsys.view.RootLayoutController;
 
 public class EqServer extends Application {
 	
@@ -66,9 +70,6 @@ public class EqServer extends Application {
 	private int port = 8080;
 	private String host = "localhost";
 	
-	//接收数据显示列表
-	public static ObservableList<RecvInfo> recvInfoList = FXCollections.observableArrayList();
-
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -202,7 +203,11 @@ public class EqServer extends Application {
 			pipeline.addLast(new ObjectEncoder());
 //			pipeline.addLast(MarshallingFactory.buildMarshallingDecoder());
 //			pipeline.addLast(MarshallingFactory.buildMarshallingEncoder());
-			pipeline.addLast(new ServerHandler(EqServer.this));
+			pipeline.addLast(new ReadTimeoutHandler(60, TimeUnit.SECONDS));
+			pipeline.addLast(new RegRespHandler());
+//			pipeline.addLast(new HeartbeatRespHandler());
+			pipeline.addLast(new CmdRespHandler());
+			pipeline.addLast(new DataRecvHandler());
 		}
 
 	}
