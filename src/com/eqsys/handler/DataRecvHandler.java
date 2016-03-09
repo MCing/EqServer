@@ -40,7 +40,7 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 			typeStr = "连续波形数据";
 			WavefDataMsg wavefMsg = (WavefDataMsg) msg;
 //			System.out.println("连续波形数据包:" + wavefMsg.getWavefData().getId());
-			log.info("连续波形数据包->" + "stid:"+wavefMsg.getStId()+" id:"+wavefMsg.getWavefData().getId());
+//			log.info("连续波形数据包->" + "stid:"+wavefMsg.getStId()+" id:"+wavefMsg.getWavefData().getId());
 			//test 数据库操作封装成任务
 			wavefDataDao.save(wavefMsg);
 			

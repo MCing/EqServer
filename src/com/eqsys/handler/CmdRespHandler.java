@@ -32,7 +32,7 @@ public class CmdRespHandler extends ChannelHandlerAdapter {
 		
 		if(msgType.equals(MsgConstant.TYPE_CR)){    //控制应答
 			CtrlCmdRspMsg ccrsg = (CtrlCmdRspMsg) msg;
-			log.info("控制应答->" + "stid:"+ccrsg.getStId()+" detil:"+ccrsg.getStateDetil());
+//			log.info("控制应答->" + "stid:"+ccrsg.getStId()+" detil:"+ccrsg.getStateDetil());
 			TmpOblist.addToRecvList(ccrsg.getStId(), "控制应答");
 		}else{
 			ctx.fireChannelRead(msg);

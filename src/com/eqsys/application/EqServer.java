@@ -203,7 +203,7 @@ public class EqServer extends Application {
 			pipeline.addLast(new ObjectEncoder());
 //			pipeline.addLast(MarshallingFactory.buildMarshallingDecoder());
 //			pipeline.addLast(MarshallingFactory.buildMarshallingEncoder());
-			pipeline.addLast(new ReadTimeoutHandler(60, TimeUnit.SECONDS));
+			pipeline.addLast(new ReadTimeoutHandler(120, TimeUnit.SECONDS));
 			pipeline.addLast(new RegRespHandler());
 //			pipeline.addLast(new HeartbeatRespHandler());
 			pipeline.addLast(new CmdRespHandler());

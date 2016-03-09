@@ -41,12 +41,12 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 		if (msgType.equals(MsgConstant.TYPE_RE)) {
 
 			RegMsg regMsg = (RegMsg) msg;
-			log.info("接收到注册包:" + regMsg.getStId());
+//			log.info("接收到注册包:" + regMsg.getStId());
 			TmpOblist.addToRecvList(regMsg.getStId(), "注册包");
 			//验证,防止重复注册
 			//关闭资源,不做应答
 			if(ClientConnList.getInstance().containsClient(regMsg.getStId())){
-				log.error(regMsg.getStId()+"重复登录");
+				log.error(regMsg.getStId()+" 重复登录");
 				ctx.close();
 				return;
 			}
@@ -62,7 +62,7 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 				// 注册成功后,设定客户端传输模式(默认不改变传输模式)
 				send(ctx, DataBuilder.buildTransModeMsg(0, regMsg.getStId(),
 						(short) 0));
-
+				log.info(regMsg.getStId()+" 注册成功");
 			} else {  //注册失败
 				send(ctx, DataBuilder.buildRegRspMsg(regMsg.getId(),
 						MsgConstant.REG_FAILURE, regMsg.getSrvId(),
@@ -92,13 +92,14 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
-		if (cause instanceof ReadTimeoutException) {
-            // The connection was OK but there was no traffic for last period.
-			cause.printStackTrace();
-        } else {
-            cause.printStackTrace();
-        }
-		log.error("意外中断:"+cause.getMessage());
+//		if (cause instanceof ReadTimeoutException) {
+//            // The connection was OK but there was no traffic for last period.
+//			cause.printStackTrace();
+//        } else {
+//            cause.printStackTrace();
+//        }
+		log.error(ClientConnList.getInstance().getIdByChannel((SocketChannel) ctx.channel())+" 意外中断:"+cause.getMessage() + "  toString:"+cause.toString());
+		cause.printStackTrace();
 		ctx.close();
 	}
 	

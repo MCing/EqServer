@@ -58,7 +58,6 @@ public class ClientConnList {
 		info.setTransMode(deTransMode(client.getTransMode()));
 		info.setTriggerThreshold(client.getTriggerThreshold());
 		clientList.add(info);
-		System.out.println("clientlist size:"+clientList.size());
 		//加入数据库
 		clientInfoDao.add(client);
 	}
@@ -107,5 +106,23 @@ public class ClientConnList {
 	public boolean containsClient(String id){
 		
 		return map.containsKey(id);
+	}
+	
+	public String getIdByChannel(SocketChannel channel){
+		
+		String stationId = null;
+		for(Map.Entry entry : map.entrySet()){
+			if(entry.getValue() == channel){
+				Iterator<ClientInfo> it = clientList.iterator();
+				while(it.hasNext()){
+					stationId = it.next().getId();
+					if(stationId.equals(entry.getKey())){
+						return stationId;
+					}
+				}
+				break;
+			}
+		}
+		return null;
 	}
 }
