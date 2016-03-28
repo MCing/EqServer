@@ -111,16 +111,9 @@ public class ClientConnList {
 	public String getIdByChannel(SocketChannel channel){
 		
 		String stationId = null;
-		for(Map.Entry entry : map.entrySet()){
+		for(Map.Entry<String, SocketChannel> entry : map.entrySet()){
 			if(entry.getValue() == channel){
-				Iterator<ClientInfo> it = clientList.iterator();
-				while(it.hasNext()){
-					stationId = it.next().getId();
-					if(stationId.equals(entry.getKey())){
-						return stationId;
-					}
-				}
-				break;
+				return entry.getKey();
 			}
 		}
 		return null;

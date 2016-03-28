@@ -9,44 +9,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<VBox id="login-background" alignment="CENTER" stylesheets="@demo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eqsys.view.LoginLayoutController">
+<GridPane id="login-background" alignment="CENTER" prefHeight="250.0" prefWidth="400.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eqsys.view.LoginLayoutController">
    <children>
-      <GridPane id="login-pane-background" alignment="CENTER" maxHeight="300.0" maxWidth="400.0" minHeight="235.0" minWidth="400.0" prefHeight="235.0" prefWidth="400.0" stylesheets="@demo.css">
+      <ImageView fitHeight="52.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT">
+         <image>
+            <Image url="@images/img_icon.png" />
+         </image>
+      </ImageView>
+      <Label text="管理员登录" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label text="账号   " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+      <Label text="密码   " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+      <TextField fx:id="accountTf" promptText="输入账号" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <PasswordField fx:id="passwordPf" promptText="输入密码" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
-            <ImageView fitHeight="52.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT">
-               <image>
-                  <Image url="@images/img_icon.png" />
-               </image>
-            </ImageView>
-            <Label text="管理员登录" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-               <font>
-                  <Font size="26.0" />
-               </font>
-            </Label>
-            <Label text="账号   " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <Label text="密码   " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-            <TextField fx:id="accountTf" promptText="输入账号" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <PasswordField fx:id="passwordPf" promptText="输入密码" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-               <children>
-                  <Button fx:id="loginBtn" defaultButton="true" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleLogin" text="进入系统" AnchorPane.topAnchor="5.0" />
-                  <Button fx:id="resetBtn" layoutX="112.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleReset" text="重置" AnchorPane.topAnchor="5.0" />
-               </children>
-            </AnchorPane>
-            <Label fx:id="errorLabel" textFill="#ee0000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="loginBtn" defaultButton="true" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleLogin" text="进入系统" AnchorPane.topAnchor="5.0" />
+            <Button fx:id="resetBtn" layoutX="112.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleReset" text="重置" AnchorPane.topAnchor="5.0" />
          </children>
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="170.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.0" minWidth="10.0" prefWidth="52.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="107.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-      </GridPane>
+      </AnchorPane>
+      <Label fx:id="errorLabel" textFill="#ee0000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
    </children>
-</VBox>
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="170.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.0" minWidth="10.0" prefWidth="52.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="107.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+</GridPane>

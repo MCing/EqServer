@@ -57,9 +57,7 @@ public class LoginLayoutController {
 			errorLabel.setText("密码错误！");
 			return;
 		}
-		// 进入系统
-		System.out.println("进入系统");
-		mainApp.gotoMainPage();
+		mainApp.loadMainPage();
 
 	}
 

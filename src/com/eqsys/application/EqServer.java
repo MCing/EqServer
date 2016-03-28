@@ -21,54 +21,34 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import org.apache.log4j.Logger;
 
 import com.eqsys.dao.ClientInfoDao;
 import com.eqsys.handler.CmdRespHandler;
 import com.eqsys.handler.DataRecvHandler;
-import com.eqsys.handler.HeartbeatRespHandler;
 import com.eqsys.handler.RegRespHandler;
-import com.eqsys.model.RecvInfo;
 import com.eqsys.msg.RegMsg;
 import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.LogUtil;
 import com.eqsys.util.SysConfig;
 import com.eqsys.view.LoginLayoutController;
-import com.eqsys.view.RootLayoutController;
 
 public class EqServer extends Application {
 	
 	private Logger log = Logger.getLogger(EqServer.class);
 
-	// 标题栏移动坐标
-	private double xOffset = 0;
-	private double yOffset = 0;
-
 	// 布局
-	private BorderPane rootPane; // 主布局
-	private Node headToolbar; // 标题栏
 	private Stage mPrimaryStage;
-	private String rootPath = "/com/eqsys/view/Rootlayout.fxml";
 	private String loginPath = "/com/eqsys/view/Loginlayout.fxml";
 	private String maxIconPath = "/com/eqsys/view/images/icon_max.png";
-	private String mainPanePath = "/com/eqsys/view/MainLayout.fxml";
-
-	// 参数
-	private int port = 8080;
-	private String host = "localhost";
+	private String mainPanePath = "/com/eqsys/view/MainPaneLayout.fxml";
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -88,16 +68,15 @@ public class EqServer extends Application {
 		JDBCHelper.closeDB();
 	}
 
+	/** 程序入口 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
-	/**
-	 * 全局初始化
-	 */
+	/** 全局初始化 */
 	private void globalInit() {
 		LogUtil.initLog();
-		SysConfig.preConfig();
+		SysConfig.preConfig();  //配置文件
 		initView();
 		//初始化数据库连接池
 		JDBCHelper.initDB();
@@ -105,63 +84,58 @@ public class EqServer extends Application {
 
 	}
 
-	/**
-	 * 初始化布局
-	 */
+	private int screenWidth;
+	private int screenHeight;
+	
+	/** 初始化根窗口布局 */
 	private void initView() {
 		// 应用宽高
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int serverWidth = (int) (screenSize.width * 0.8);
-		int serverHeight = (int) (screenSize.height * 0.8);
+		screenWidth = screenSize.width;
+		screenHeight = screenSize.height;
 
 		// 操作系统标题栏图标
 		mPrimaryStage.getIcons().add(new Image(maxIconPath));
-		// 初始化主布局
-		mPrimaryStage.initStyle(StageStyle.UNDECORATED);
+		mPrimaryStage.setTitle("地震数据监控系统");
+		
+		loadLoginPage();
+		
+	}
+    /** 显示登录窗口 */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+	private void loadLoginPage() {
+		
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(rootPath));
+		loader.setLocation(getClass().getResource(loginPath));
+		Node page = null;
 		try {
-			rootPane = loader.load();
+			page = loader.load();
+			LoginLayoutController controller = loader.getController();
+			controller.setMainApp(EqServer.this);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("登录页面加载失败:"+e.getMessage());
+			return;
 		}
-		RootLayoutController controller = loader.getController();
-		controller.setControllerStage(mPrimaryStage);
-		headToolbar = rootPane.getTop();
-
-		// 自定义的标题栏，移动功能
-		headToolbar.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				xOffset = event.getSceneX();
-				yOffset = event.getSceneY();
-			}
-		});
-		// 拖动窗体
-		headToolbar.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (!controller.isMaximized()) {
-					mPrimaryStage.setX(event.getScreenX() - xOffset);
-					mPrimaryStage.setY(event.getScreenY() - yOffset);
-				}
-			}
-		});
-		// 双击最大化/恢复
-		headToolbar.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (event.getClickCount() == 2) {
-					controller.toogleMaximized();
-				}
-
-			}
-		});
-
-		Scene scene = new Scene(rootPane, serverWidth, serverHeight);
+		Scene scene = new Scene((Parent) page);
 		mPrimaryStage.setScene(scene);
-		//gotoLoginPage();
-		gotoMainPage();
+	}
+	/** 显示主工作窗口 */
+	public void loadMainPage(){
+		
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource(mainPanePath));
+		Node page = null;
+		try {
+			page = loader.load();
+		} catch (IOException e) {
+			log.error("主页面加载失败:"+e.getMessage());
+			return;
+		}
+		Scene scene = new Scene((Parent) page, screenWidth*0.8, screenHeight*0.8);
+		mPrimaryStage.setMinHeight(screenHeight*0.8);
+		mPrimaryStage.setMinWidth(screenWidth*0.8);
+		mPrimaryStage.setScene(scene);
+		mPrimaryStage.centerOnScreen();
+		initNetty();
 	}
 
 	/**
@@ -183,15 +157,13 @@ public class EqServer extends Application {
 
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
+				
 				log.info("服务器开始监听");
 			}
 		});
 	}
 
-	/**
-	 * pipeline handler 队列
-	 *
-	 */
+	/** pipeline handler 队列  */
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
 		@Override
@@ -201,57 +173,47 @@ public class EqServer extends Application {
 			pipeline.addLast(new ObjectDecoder(1024,
 					ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
 			pipeline.addLast(new ObjectEncoder());
-//			pipeline.addLast(MarshallingFactory.buildMarshallingDecoder());
-//			pipeline.addLast(MarshallingFactory.buildMarshallingEncoder());
 			pipeline.addLast(new ReadTimeoutHandler(120, TimeUnit.SECONDS));
 			pipeline.addLast(new RegRespHandler());
-//			pipeline.addLast(new HeartbeatRespHandler());
 			pipeline.addLast(new CmdRespHandler());
 			pipeline.addLast(new DataRecvHandler());
 		}
-
 	}
 
 	/**
 	 * 登录页面
 	 */
-	private void gotoLoginPage() {
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(loginPath));
-		try {
-			Node page = loader.load();
-			rootPane.setCenter(page);
-			LoginLayoutController controller = loader.getController();
-			controller.setMainApp(EqServer.this);
-		} catch (IOException e) {
-			
-			log.error("登录页面加载失败:"+e.getMessage());
-		}
-	}
+//	private Node getLoginPage(){
+//		
+//		FXMLLoader loader = new FXMLLoader();
+//		loader.setLocation(getClass().getResource(loginPath));
+//		Node page = null;
+//		try {
+//			page = loader.load();
+//			LoginLayoutController controller = loader.getController();
+//			controller.setMainApp(EqServer.this);
+//		} catch (IOException e) {
+//			log.error("登录页面加载失败:"+e.getMessage());
+//		}
+//		return page;
+//	}
 
 	/**
 	 * 主页面
 	 */
-	public void gotoMainPage() {
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(mainPanePath));
-		try {
-			Node page = loader.load();
-			//设置填充父布局
-			AnchorPane.setTopAnchor(page, Double.valueOf(1));
-			AnchorPane.setBottomAnchor(page, Double.valueOf(1));
-			AnchorPane.setLeftAnchor(page, Double.valueOf(1));
-			AnchorPane.setRightAnchor(page, Double.valueOf(1));
-			rootPane.setCenter(page);
-		} catch (IOException e) {
-			
-			log.error("主页面加载失败:"+e.getMessage());
-		}
-		
-		initNetty();
-	}
+//	public Node getMainPage() {
+//
+//		FXMLLoader loader = new FXMLLoader();
+//		loader.setLocation(getClass().getResource(mainPanePath));
+//		Node page = null;
+//		try {
+//			page = loader.load();
+//		} catch (IOException e) {
+//			
+//			log.error("主页面加载失败:"+e.getMessage());
+//		}
+//		return page;
+//	}
 	
 	/**
 	 * 测试jdbc

@@ -39,8 +39,7 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 		if(msgType.equals(MsgConstant.TYPE_WC)){    //连续波形数据
 			typeStr = "连续波形数据";
 			WavefDataMsg wavefMsg = (WavefDataMsg) msg;
-//			System.out.println("连续波形数据包:" + wavefMsg.getWavefData().getId());
-//			log.info("连续波形数据包->" + "stid:"+wavefMsg.getStId()+" id:"+wavefMsg.getWavefData().getId());
+			log.info("连续波形数据包->" + "stid:"+wavefMsg.getStId()+" id:"+wavefMsg.getWavefData().getId());
 			//test 数据库操作封装成任务
 			wavefDataDao.save(wavefMsg);
 			
@@ -48,19 +47,15 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 			typeStr = "触发波形数据";
 			WavefDataMsg wavefMsg = (WavefDataMsg) msg;
 			log.info("触发波形数据包->" + "stid:"+wavefMsg.getStId()+" id:"+wavefMsg.getWavefData().getId());
-//			System.out.println("触发波形数据包:");
 		}else if(msgType.equals(MsgConstant.TYPE_WS)){    //时间段波形数据
 			WavefDataMsg wavefMsg = (WavefDataMsg) msg;
 			log.info("时间段波形数据->" + "stid:"+wavefMsg.getStId()+" id:"+wavefMsg.getWavefData().getId());
-//			System.out.println("时间段波形数据:");
 		}else if(msgType.equals(MsgConstant.TYPE_TI)){    //触发信息
 			typeStr = "时间段波形数据";
 			TriggleMsg trgMsg = (TriggleMsg) msg;
 			log.info("时间段波形数据->" + "stid:"+trgMsg.getStId()+" id:"+trgMsg.getTriggerData().getId());
-//			System.out.println("触发信息包:");
 		}else if(msgType.equals(MsgConstant.TYPE_SI)){    //状态信息
 			typeStr = "状态信息";
-//			System.out.println("状态信息包:");
 			StatusDataMsg statMsg = (StatusDataMsg)msg;
 			log.info("状态信息包->" + "stid:"+statMsg.getStId()+" id:"+statMsg.getStatusData().getId());
 		}

@@ -98,7 +98,7 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 //        } else {
 //            cause.printStackTrace();
 //        }
-		log.error(ClientConnList.getInstance().getIdByChannel((SocketChannel) ctx.channel())+" 意外中断:"+cause.getMessage() + "  toString:"+cause.toString());
+		log.error(ClientConnList.getInstance().getIdByChannel((SocketChannel) ctx.channel())+" 意外中断: "+cause.getMessage() + "  toString:"+cause.toString());
 		cause.printStackTrace();
 		ctx.close();
 	}
