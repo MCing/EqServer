@@ -98,6 +98,8 @@ public class MainPaneController {
 					}
 
 				});
+		
+		
 	}
 
 	/** 树形菜单 */

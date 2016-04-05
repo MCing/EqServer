@@ -55,7 +55,7 @@ public class ClientConnList {
 		info.setLatitude(client.getLatitude());
 		info.setLongitude(client.getLongitude());
 		info.setSensitivity(client.getSensitivity());
-		info.setTransMode(deTransMode(client.getTransMode()));
+		info.setTransMode(ParseUtil.parseTransMode(client.getTransMode()));
 		info.setTriggerThreshold(client.getTriggerThreshold());
 		clientList.add(info);
 		//加入数据库
@@ -63,7 +63,7 @@ public class ClientConnList {
 	}
 	
 	public void remove(SocketChannel socketChannel){
-		for(Map.Entry entry : map.entrySet()){
+		for(Map.Entry<String,SocketChannel> entry : map.entrySet()){
 			if(entry.getValue() == socketChannel){
 				map.remove(entry.getKey());
 				Iterator<ClientInfo> it = clientList.iterator();
@@ -71,13 +71,14 @@ public class ClientConnList {
 					if(it.next().getId().equals(entry.getKey())){
 						it.remove();
 						
-						log.info("客户端:"+entry.getKey()+"退出");
+						log.error("客户端: "+entry.getKey()+" 退出");
 						break;
 					}
 				}
 				break;
 			}
 		}
+		log.error("客户端数量: "+map.size());
 	}
 	
 	public ObservableList<ClientInfo> getObservableList(){
@@ -85,23 +86,23 @@ public class ClientConnList {
 	}
 
 
-	/**
-	 * 解析传输模式
-	 * 1：连续  2：触发波形 3：触发无波形
-	 * @param mode
-	 * @return
-	 */
-	private String deTransMode(int mode){
-		switch(mode){
-			case 1:
-				return "连续传输";
-			case 2:
-				return "触发传输传波形";
-			case 3:
-				return "触发传输不传波形";
-			default :return "连续传输";
-		}
-	}
+//	/**
+//	 * 解析传输模式
+//	 * 1：连续  2：触发波形 3：触发无波形
+//	 * @param mode
+//	 * @return
+//	 */
+//	private String deTransMode(int mode){
+//		switch(mode){
+//			case 1:
+//				return "连续传输";
+//			case 2:
+//				return "触发传输传波形";
+//			case 3:
+//				return "触发传输不传波形";
+//			default :return "连续传输";
+//		}
+//	}
 	
 	public boolean containsClient(String id){
 		

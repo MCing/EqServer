@@ -41,7 +41,6 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 		if (msgType.equals(MsgConstant.TYPE_RE)) {
 
 			RegMsg regMsg = (RegMsg) msg;
-//			log.info("接收到注册包:" + regMsg.getStId());
 			TmpOblist.addToRecvList(regMsg.getStId(), "注册包");
 			//验证,防止重复注册
 			//关闭资源,不做应答
@@ -92,12 +91,6 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
-//		if (cause instanceof ReadTimeoutException) {
-//            // The connection was OK but there was no traffic for last period.
-//			cause.printStackTrace();
-//        } else {
-//            cause.printStackTrace();
-//        }
 		log.error(ClientConnList.getInstance().getIdByChannel((SocketChannel) ctx.channel())+" 意外中断: "+cause.getMessage() + "  toString:"+cause.toString());
 		cause.printStackTrace();
 		ctx.close();
