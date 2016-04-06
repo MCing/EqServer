@@ -11,12 +11,10 @@ public class ClientInfo {
 	
 	private StringProperty id;
 	private StringProperty transMode;
-//	private ObjectProperty<Date> linkTime;
 	private IntegerProperty longitude;				//经度 度＊100000
 	private IntegerProperty latitude;				//纬度 度＊100000
 	private IntegerProperty altitude;				//高程 单位M
 	private IntegerProperty sensitivity;			//灵敏度
-//	private IntegerProperty transMode;			    //传输模式 1  设定为连续传输模式 2  设定为触发传输传波形 3  设定为触发传输不传波形
 	private IntegerProperty triggerThreshold;		//触发阀值
 	
 	private short permit;

@@ -16,6 +16,7 @@ import com.eqsys.handler.DataRecvHandler;
 import com.eqsys.handler.RegRespHandler;
 import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.LogUtil;
+import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
 import com.eqsys.view.LoginLayoutController;
 
@@ -106,7 +107,7 @@ public class EqServer extends Application {
 	private void loadLoginPage() {
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getFXMLURL(loginPath));
+		loader.setLocation(ParseUtil.getFXMLURL(loginPath));
 		Node page = null;
 		try {
 			page = loader.load();
@@ -124,7 +125,7 @@ public class EqServer extends Application {
 	public void loadMainPage() {
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getFXMLURL(mainPanePath));
+		loader.setLocation(ParseUtil.getFXMLURL(mainPanePath));
 		Node page = null;
 		try {
 			page = loader.load();
@@ -184,30 +185,6 @@ public class EqServer extends Application {
 			pipeline.addLast(new CmdRespHandler());
 			pipeline.addLast(new DataRecvHandler());
 		}
-	}
-
-	/**
-	 * 为了解决打包成jar包后找不到fxml文件的问题
-	 * @param path  fxml的绝对路径(这里的绝对路径是相对于工程的)
-	 * @return
-	 */
-	private URL getFXMLURL(String path) {
-
-		URL url = null;
-		url = this.getClass().getResource(path);
-		try {
-			//打包成jar包后不能通过getResource得到类路径
-			//所以,jar包中的文件用url表示方法:  jar:url!{entity}
-			//如 :     jar:file:/c:/a/b.jar!/com/test/a.txt
-			if (url == null) {
-				URL jarUrl = this.getClass().getProtectionDomain()
-						.getCodeSource().getLocation();
-				url = new URL("jar:" + jarUrl + "!" + path);
-			}
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		}
-		return url;
 	}
 
 }

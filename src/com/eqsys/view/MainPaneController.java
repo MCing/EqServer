@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.util.ClientConnList;
+import com.eqsys.util.ParseUtil;
 import com.eqsys.util.TmpOblist;
 
 import javafx.beans.value.ChangeListener;
@@ -13,6 +14,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -23,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
@@ -30,6 +34,8 @@ import javafx.util.Callback;
  *
  */
 public class MainPaneController {
+	
+	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 
 	// 左栏,节点树形
 	@FXML
@@ -49,7 +55,7 @@ public class MainPaneController {
 
 	// 接收消息
 	@FXML
-	private TableView recvInfoTable;
+	private TableView<RecvInfo> recvInfoTable;
 	@FXML
 	private TableColumn<RecvInfo, String> timeColumn;
 	@FXML
@@ -57,33 +63,6 @@ public class MainPaneController {
 	@FXML
 	private TableColumn<RecvInfo, String> typeColumn;
 	
-	Callback<TableColumn<ClientInfo, String>, TableCell<ClientInfo, String>> cellFactory =
-	        new Callback<TableColumn<ClientInfo, String>, TableCell<ClientInfo, String>>() {
-	    public TableCell<ClientInfo, String> call(TableColumn<ClientInfo, String> p) {
-	        TableCell<ClientInfo, String> cell = new TableCell<ClientInfo, String>();// {
-//
-//	            @Override
-//	            public void updateItem(Integer item, boolean empty) {
-//	                super.updateItem(item, empty);
-//	                setText((item == null || empty) ? null : item.toString());
-//	                setGraphic(null);
-//	            }
-//	        };
-
-	        cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-	            @Override
-	            public void handle(MouseEvent event) {
-	                if (event.getClickCount() > 1) {
-	                    System.err.println("double clicked!");
-	                    TableCell c = (TableCell) event.getSource();
-	                    System.out.println("Cell text: " + c.getText());
-	                }
-	            }
-	        });
-	        return cell;
-	    }
-	};
-
 	@FXML
 	private void initialize() {
 
@@ -104,14 +83,13 @@ public class MainPaneController {
 		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 
 		// Initialize client info
-//		stationId.setCellFactory(value);
 		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("id"));
-		transMode.setCellValueFactory(new PropertyValueFactory("transMode"));
+		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
 		sensitivity
-				.setCellValueFactory(new PropertyValueFactory("sensitivity"));
-		triggerThreshold.setCellValueFactory(new PropertyValueFactory(
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("sensitivity"));
+		triggerThreshold.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
 				"triggerThreshold"));
-		transMode.setCellValueFactory(new PropertyValueFactory("transMode"));
+		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
 		//实现对ClientInfo中一行的双击响应
 		clientTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
 			
@@ -138,6 +116,10 @@ public class MainPaneController {
 		treeView.setRoot(root);
 	}
 	
+	/**
+	 * 用于控制clientInfo table 的行(实现双击响应)
+	 *
+	 */
 	class TableRowControl extends TableRow<ClientInfo> {  
 		  
         public TableRowControl() {  
@@ -148,12 +130,34 @@ public class MainPaneController {
                     if (event.getButton().equals(MouseButton.PRIMARY)  //左键
                             && event.getClickCount() == 2  				//双击
                             && TableRowControl.this.getIndex() < clientTable.getItems().size()) {
-                    	ClientInfo info = clientTable.getSelectionModel().getSelectedItem();
-                    	//
+                    	ClientInfo clientInfo = clientTable.getSelectionModel().getSelectedItem();
+                    	openClientDetail(clientInfo);
                     }  
-                }  
+                }
+
             });  
         }  
     }  
 
+	/** 打开客户端详情窗口  */
+	private void openClientDetail(ClientInfo clientInfo) {
+
+		Stage stage = new Stage();
+    	FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(clientDetailPath));
+		Node page = null;
+		try {
+			page = loader.load();
+			ClientDetailController controller = loader.getController();
+			controller.setClient(clientInfo);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		Scene scene = new Scene((Parent) page);
+		stage.setScene(scene);
+    	stage.centerOnScreen();
+    	stage.show();
+		
+	}  
 }
