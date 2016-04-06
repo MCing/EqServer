@@ -9,15 +9,21 @@ import com.eqsys.util.TmpOblist;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 
 /**
  * 主工作窗口
@@ -50,6 +56,33 @@ public class MainPaneController {
 	private TableColumn<RecvInfo, String> srcColumn;
 	@FXML
 	private TableColumn<RecvInfo, String> typeColumn;
+	
+	Callback<TableColumn<ClientInfo, String>, TableCell<ClientInfo, String>> cellFactory =
+	        new Callback<TableColumn<ClientInfo, String>, TableCell<ClientInfo, String>>() {
+	    public TableCell<ClientInfo, String> call(TableColumn<ClientInfo, String> p) {
+	        TableCell<ClientInfo, String> cell = new TableCell<ClientInfo, String>();// {
+//
+//	            @Override
+//	            public void updateItem(Integer item, boolean empty) {
+//	                super.updateItem(item, empty);
+//	                setText((item == null || empty) ? null : item.toString());
+//	                setGraphic(null);
+//	            }
+//	        };
+
+	        cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+	            @Override
+	            public void handle(MouseEvent event) {
+	                if (event.getClickCount() > 1) {
+	                    System.err.println("double clicked!");
+	                    TableCell c = (TableCell) event.getSource();
+	                    System.out.println("Cell text: " + c.getText());
+	                }
+	            }
+	        });
+	        return cell;
+	    }
+	};
 
 	@FXML
 	private void initialize() {
@@ -71,34 +104,23 @@ public class MainPaneController {
 		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 
 		// Initialize client info
-		stationId.setCellValueFactory(new PropertyValueFactory("id"));
+//		stationId.setCellFactory(value);
+		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("id"));
 		transMode.setCellValueFactory(new PropertyValueFactory("transMode"));
 		sensitivity
 				.setCellValueFactory(new PropertyValueFactory("sensitivity"));
 		triggerThreshold.setCellValueFactory(new PropertyValueFactory(
 				"triggerThreshold"));
 		transMode.setCellValueFactory(new PropertyValueFactory("transMode"));
-
+		//实现对ClientInfo中一行的双击响应
+		clientTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
+			
+			@Override
+			public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
+				return new TableRowControl(); 
+			}
+		});
 		clientTable.setItems(ClientConnList.getInstance().getObservableList());
-
-		clientTable.getSelectionModel().selectedItemProperty()
-				.addListener(new ChangeListener<ClientInfo>() {
-
-					@Override
-					public void changed(
-							ObservableValue<? extends ClientInfo> observable,
-							ClientInfo oldValue, ClientInfo newValue) {
-
-						int selectedIndex = clientTable.getSelectionModel()
-								.getSelectedIndex();
-						System.out.println("select index:" + selectedIndex);
-						if (selectedIndex >= 0) {
-						}
-
-					}
-
-				});
-		
 		
 	}
 
@@ -115,5 +137,23 @@ public class MainPaneController {
 		root.getChildren().add(itemChild);
 		treeView.setRoot(root);
 	}
+	
+	class TableRowControl extends TableRow<ClientInfo> {  
+		  
+        public TableRowControl() {  
+            super();  
+            this.setOnMouseClicked(new EventHandler<MouseEvent>() {  
+                @Override  
+                public void handle(MouseEvent event) {  
+                    if (event.getButton().equals(MouseButton.PRIMARY)  //左键
+                            && event.getClickCount() == 2  				//双击
+                            && TableRowControl.this.getIndex() < clientTable.getItems().size()) {
+                    	ClientInfo info = clientTable.getSelectionModel().getSelectedItem();
+                    	//
+                    }  
+                }  
+            });  
+        }  
+    }  
 
 }

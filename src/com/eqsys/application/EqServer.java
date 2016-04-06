@@ -207,7 +207,6 @@ public class EqServer extends Application {
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 		}
-		System.err.println("url:"+url.toExternalForm());
 		return url;
 	}
 
