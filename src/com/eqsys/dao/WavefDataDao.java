@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import com.eqsys.msg.WavefDataMsg;
+
+import com.eqsys.msg.EqMessage;
 import com.eqsys.msg.data.WavefData;
 import com.eqsys.util.JDBCHelper;
 
@@ -15,22 +16,22 @@ public class WavefDataDao {
 			+ "(id, type, qid, stationid, localid, channid, starttime, samcount, samfactor, sammul, actid, iocflag, dataqflag, blockcount, timecorr, dataoffs, subblockoffs, subheadtype, nextblockid, codeformat, byteorder, datalen, subblocktype, dimension, sensfactor, datablock) "
 			+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-	public boolean save(WavefDataMsg msg) {
+	public boolean save(EqMessage msg) {
 
 		boolean ret = false;
 		PreparedStatement preStat = null;
 		Connection conn = null;
-		if (msg == null) {
-			return false;
-		}
+//		if (msg == null) {
+//			return false;
+//		}
 		try {
-			WavefData t = msg.getWavefData();
+			WavefData t = (WavefData) msg.getBody();
 			conn = JDBCHelper.getDBConnection();
 			preStat = conn.prepareStatement(mInsertSql);
 			preStat.setInt(1, t.getId());
-			preStat.setString(2, msg.getMsgType());
+			preStat.setString(2, msg.getHeader().getMsgType());
 			preStat.setString(3, t.getQuality());
-			preStat.setString(4, msg.getStId());
+			preStat.setString(4, msg.getHeader().getStationId());
 			preStat.setString(5, t.getLocId());
 			preStat.setString(6, t.getChannId());
 			preStat.setLong(7, t.getStartTime());

@@ -1,5 +1,20 @@
 package com.eqsys.application;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
+
+import com.eqsys.handler.CmdRespHandler;
+import com.eqsys.handler.DataRecvHandler;
+import com.eqsys.handler.RegRespHandler;
+import com.eqsys.util.JDBCHelper;
+import com.eqsys.util.LogUtil;
+import com.eqsys.util.SysConfig;
+import com.eqsys.view.LoginLayoutController;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -14,12 +29,6 @@ import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,18 +36,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import org.apache.log4j.Logger;
-
-import com.eqsys.dao.ClientInfoDao;
-import com.eqsys.handler.CmdRespHandler;
-import com.eqsys.handler.DataRecvHandler;
-import com.eqsys.handler.RegRespHandler;
-import com.eqsys.msg.RegMsg;
-import com.eqsys.util.JDBCHelper;
-import com.eqsys.util.LogUtil;
-import com.eqsys.util.SysConfig;
-import com.eqsys.view.LoginLayoutController;
 
 public class EqServer extends Application {
 	
@@ -80,7 +77,6 @@ public class EqServer extends Application {
 		initView();
 		//初始化数据库连接池
 		JDBCHelper.initDB();
-		//testJDBC();
 
 	}
 
@@ -178,48 +174,6 @@ public class EqServer extends Application {
 			pipeline.addLast(new CmdRespHandler());
 			pipeline.addLast(new DataRecvHandler());
 		}
-	}
-
-	/**
-	 * 登录页面
-	 */
-//	private Node getLoginPage(){
-//		
-//		FXMLLoader loader = new FXMLLoader();
-//		loader.setLocation(getClass().getResource(loginPath));
-//		Node page = null;
-//		try {
-//			page = loader.load();
-//			LoginLayoutController controller = loader.getController();
-//			controller.setMainApp(EqServer.this);
-//		} catch (IOException e) {
-//			log.error("登录页面加载失败:"+e.getMessage());
-//		}
-//		return page;
-//	}
-
-	/**
-	 * 主页面
-	 */
-//	public Node getMainPage() {
-//
-//		FXMLLoader loader = new FXMLLoader();
-//		loader.setLocation(getClass().getResource(mainPanePath));
-//		Node page = null;
-//		try {
-//			page = loader.load();
-//		} catch (IOException e) {
-//			
-//			log.error("主页面加载失败:"+e.getMessage());
-//		}
-//		return page;
-//	}
-	
-	/**
-	 * 测试jdbc
-	 */
-	private void testJDBC(){
-		new ClientInfoDao().add(new RegMsg());
 	}
 
 }

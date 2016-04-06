@@ -31,7 +31,7 @@ public class TmpOblist {
 		RecvInfo info = new RecvInfo(id, type, UTCTimeUtil.getStringTime(new Date().getTime()));
 		synchronized (recvInfoList) {
 			//列表超过一定数目后应该保存起来,然后清空
-			if(recvInfoList.size() > 100){
+			if(recvInfoList.size() > 1000){
 				//保存(未完成),清空
 				recvInfoList.clear();
 			}

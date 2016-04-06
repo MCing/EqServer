@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.eqsys.msg.RegMsg;
+import com.eqsys.msg.EqMessage;
+import com.eqsys.msg.RegReq;
 import com.eqsys.util.JDBCHelper;
 
 public class ClientInfoDao {
@@ -32,17 +33,20 @@ public class ClientInfoDao {
 	 * 
 	 * @param info
 	 */
-	public void add(RegMsg info) {
-		if (info == null) {
-			return;
-		}
+	public void add(EqMessage client) {
+		
+		String stationId = client.getHeader().getStationId();
+		RegReq info = (RegReq) client.getBody();
+//		if (client == null) {
+//			return;
+//		}
 		PreparedStatement preStat = null;
 		Connection conn = JDBCHelper.getDBConnection();
-		if (!isExist(info.getStId())) {
+		if (!isExist(stationId)) {
 			// 数据库中不存在客户端信息
 			try {
 				preStat = conn.prepareStatement(mInsertSql);
-				preStat.setString(1, info.getStId());
+				preStat.setString(1, stationId);
 				preStat.setShort(2, info.getCtrlAuthority());
 				preStat.setInt(3, info.getLongitude());
 				preStat.setInt(4, info.getLatitude());
@@ -66,8 +70,8 @@ public class ClientInfoDao {
 				JDBCHelper.closeDBConnection(conn);
 			}
 		} else {
-			// 已存在,更新控制权限(目前只有控制权限可能变)
-			updatePermit(info.getStId(), info.getCtrlAuthority());
+			// 数据库中已存在已存在,更新控制权限(目前只有控制权限可能变)
+			updatePermit(stationId, info.getCtrlAuthority());
 		}
 	}
 

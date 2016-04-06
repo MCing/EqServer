@@ -8,7 +8,8 @@ import org.apache.log4j.Logger;
 
 import com.eqsys.dao.ClientInfoDao;
 import com.eqsys.model.ClientInfo;
-import com.eqsys.msg.RegMsg;
+import com.eqsys.msg.EqMessage;
+import com.eqsys.msg.RegReq;
 
 import io.netty.channel.socket.SocketChannel;
 import javafx.collections.FXCollections;
@@ -45,18 +46,20 @@ public class ClientConnList {
 		return list;
 	}
 	
-	public void add(RegMsg client, SocketChannel socketChannel){
+	public void add(EqMessage client, SocketChannel socketChannel){
 		
-		map.put(client.getStId(), socketChannel);
+		String stationId = client.getHeader().getStationId();
+		RegReq msg = (RegReq) client.getBody();
+		map.put(stationId, socketChannel);
 		
 		ClientInfo info = new ClientInfo();
-		info.setId(client.getStId());
-		info.setAltitude(client.getAltitude());
-		info.setLatitude(client.getLatitude());
-		info.setLongitude(client.getLongitude());
-		info.setSensitivity(client.getSensitivity());
-		info.setTransMode(ParseUtil.parseTransMode(client.getTransMode()));
-		info.setTriggerThreshold(client.getTriggerThreshold());
+		info.setId(stationId);
+		info.setAltitude(msg.getAltitude());
+		info.setLatitude(msg.getLatitude());
+		info.setLongitude(msg.getLongitude());
+		info.setSensitivity(msg.getSensitivity());
+		info.setTransMode(ParseUtil.parseTransMode(msg.getTransMode()));
+		info.setTriggerThreshold(msg.getTriggerThreshold());
 		clientList.add(info);
 		//加入数据库
 		clientInfoDao.add(client);
