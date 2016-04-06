@@ -3,6 +3,10 @@ package com.eqsys.application;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -38,15 +42,15 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class EqServer extends Application {
-	
+
 	private Logger log = Logger.getLogger(EqServer.class);
 
 	// 布局
 	private Stage mPrimaryStage;
-	private String loginPath = "/com/eqsys/view/Loginlayout.fxml";
+	private String loginPath = "/com/eqsys/view/LoginLayout.fxml";
 	private String maxIconPath = "/com/eqsys/view/images/icon_max.png";
 	private String mainPanePath = "/com/eqsys/view/MainPaneLayout.fxml";
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -60,7 +64,7 @@ public class EqServer extends Application {
 
 	@Override
 	public void stop() throws Exception {
-		
+
 		log.info("服务器退出");
 		JDBCHelper.closeDB();
 	}
@@ -73,16 +77,16 @@ public class EqServer extends Application {
 	/** 全局初始化 */
 	private void globalInit() {
 		LogUtil.initLog();
-		SysConfig.preConfig();  //配置文件
+		SysConfig.preConfig(); // 配置文件
 		initView();
-		//初始化数据库连接池
+		// 初始化数据库连接池
 		JDBCHelper.initDB();
 
 	}
 
 	private int screenWidth;
 	private int screenHeight;
-	
+
 	/** 初始化根窗口布局 */
 	private void initView() {
 		// 应用宽高
@@ -93,42 +97,45 @@ public class EqServer extends Application {
 		// 操作系统标题栏图标
 		mPrimaryStage.getIcons().add(new Image(maxIconPath));
 		mPrimaryStage.setTitle("地震数据监控系统");
-		
+
 		loadLoginPage();
-		
+
 	}
-    /** 显示登录窗口 */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+	/** 显示登录窗口 */
 	private void loadLoginPage() {
-		
+
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(loginPath));
+		loader.setLocation(getFXMLURL(loginPath));
 		Node page = null;
 		try {
 			page = loader.load();
 			LoginLayoutController controller = loader.getController();
 			controller.setMainApp(EqServer.this);
 		} catch (IOException e) {
-			log.error("登录页面加载失败:"+e.getMessage());
+			log.error("登录页面加载失败:" + e.getMessage());
 			return;
 		}
 		Scene scene = new Scene((Parent) page);
 		mPrimaryStage.setScene(scene);
 	}
+
 	/** 显示主工作窗口 */
-	public void loadMainPage(){
-		
+	public void loadMainPage() {
+
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(mainPanePath));
+		loader.setLocation(getFXMLURL(mainPanePath));
 		Node page = null;
 		try {
 			page = loader.load();
 		} catch (IOException e) {
-			log.error("主页面加载失败:"+e.getMessage());
+			log.error("主页面加载失败:" + e.getMessage());
 			return;
 		}
-		Scene scene = new Scene((Parent) page, screenWidth*0.8, screenHeight*0.8);
-		mPrimaryStage.setMinHeight(screenHeight*0.8);
-		mPrimaryStage.setMinWidth(screenWidth*0.8);
+		Scene scene = new Scene((Parent) page, screenWidth * 0.8,
+				screenHeight * 0.8);
+		mPrimaryStage.setMinHeight(screenHeight * 0.8);
+		mPrimaryStage.setMinWidth(screenWidth * 0.8);
 		mPrimaryStage.setScene(scene);
 		mPrimaryStage.centerOnScreen();
 		initNetty();
@@ -148,32 +155,60 @@ public class EqServer extends Application {
 				.option(ChannelOption.SO_BACKLOG, 1000) // TCP请求队列最大长度
 				.childOption(ChannelOption.SO_KEEPALIVE, true); // 长连接
 
-		ChannelFuture future = bootstrap.bind(SysConfig.getServerIp(), SysConfig.getServerPort());
+		ChannelFuture future = bootstrap.bind(SysConfig.getServerIp(),
+				SysConfig.getServerPort());
 		future.addListener(new ChannelFutureListener() {
 
 			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-				
+			public void operationComplete(ChannelFuture future)
+					throws Exception {
+
 				log.info("服务器开始监听");
 			}
 		});
 	}
 
-	/** pipeline handler 队列  */
+	/** pipeline handler 队列 */
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
 		@Override
 		protected void initChannel(SocketChannel ch) throws Exception {
 
 			ChannelPipeline pipeline = ch.pipeline();
-			pipeline.addLast(new ObjectDecoder(1024,
-					ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
+			pipeline.addLast(new ObjectDecoder(1024, ClassResolvers
+					.weakCachingConcurrentResolver(this.getClass()
+							.getClassLoader())));
 			pipeline.addLast(new ObjectEncoder());
 			pipeline.addLast(new ReadTimeoutHandler(120, TimeUnit.SECONDS));
 			pipeline.addLast(new RegRespHandler());
 			pipeline.addLast(new CmdRespHandler());
 			pipeline.addLast(new DataRecvHandler());
 		}
+	}
+
+	/**
+	 * 为了解决打包成jar包后找不到fxml文件的问题
+	 * @param path  fxml的绝对路径(这里的绝对路径是相对于工程的)
+	 * @return
+	 */
+	private URL getFXMLURL(String path) {
+
+		URL url = null;
+		url = this.getClass().getResource(path);
+		try {
+			//打包成jar包后不能通过getResource得到类路径
+			//所以,jar包中的文件用url表示方法:  jar:url!{entity}
+			//如 :     jar:file:/c:/a/b.jar!/com/test/a.txt
+			if (url == null) {
+				URL jarUrl = this.getClass().getProtectionDomain()
+						.getCodeSource().getLocation();
+				url = new URL("jar:" + jarUrl + "!" + path);
+			}
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		}
+		System.err.println("url:"+url.toExternalForm());
+		return url;
 	}
 
 }
