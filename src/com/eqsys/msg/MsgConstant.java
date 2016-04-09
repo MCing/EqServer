@@ -20,8 +20,9 @@ public class MsgConstant {
 	public static final short REG_FAILURE = -1;
 	
 	/* 子命令 */
+	public static final short CMD_NULL = 0;
 	public static final short CMD_TRANSMODE = 1;
 	public static final short CMD_PERIODDATA = 2;
 	public static final short CMD_TRGTHRESHOLD = 3;
-	public static final short CMD_TRGPRIOD = 4;
+	public static final short CMD_TRIGGER = 4;
 }

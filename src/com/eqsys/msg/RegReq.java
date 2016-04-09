@@ -13,7 +13,7 @@ public class RegReq implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String authenCode;			//认证密码 
+	private String authenCode;			//认证密码
 	private short ctrlAuthority;		//控制权限  0:可控制  -1：不可控制
 	private int longitude;				//经度 度＊100000
 	private int latitude;				//纬度 度＊100000

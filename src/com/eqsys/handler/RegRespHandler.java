@@ -8,6 +8,7 @@ import com.eqsys.msg.EqMessage;
 import com.eqsys.msg.Header;
 import com.eqsys.msg.MsgConstant;
 import com.eqsys.msg.RegReq;
+import com.eqsys.msg.TransModeReq;
 import com.eqsys.security.Authenticator;
 import com.eqsys.util.ClientConnList;
 import com.eqsys.util.DataBuilder;
@@ -56,8 +57,10 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 						hMsg.getServerId()));
 				TimeUnit.MILLISECONDS.sleep(500);
 				// 注册成功后,设定客户端传输模式(默认不改变传输模式)
-				send(ctx, DataBuilder.buildTransModeMsg(0, hMsg.getStationId(),
-						(short) 0));
+				TransModeReq req = new TransModeReq();
+				req.setSubCommand(MsgConstant.CMD_TRANSMODE);
+				req.setSubTransMode(MsgConstant.CMD_NULL);
+				send(ctx, DataBuilder.buildCtrlReq(hMsg.getStationId(), req));
 				log.info(hMsg.getStationId()+" 注册成功");
 			} else {  //注册失败
 				send(ctx, DataBuilder.buildRegRspMsg(hMsg.getPid(),

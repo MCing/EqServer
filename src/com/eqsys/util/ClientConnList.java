@@ -122,4 +122,8 @@ public class ClientConnList {
 		}
 		return null;
 	}
+	
+	public SocketChannel getChannelById(String id){
+		return map.get(id);
+	}
 }

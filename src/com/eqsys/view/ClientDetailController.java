@@ -2,9 +2,17 @@ package com.eqsys.view;
 
 import com.eqsys.model.ClientInfo;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ClientDetailController {
 
@@ -41,7 +49,7 @@ public class ClientDetailController {
 		initClientInfo();
 	}
 
-	/** 设置ClientInfo(客户端信息值)  */
+	/** 设置ClientInfo(客户端信息值) */
 	private void initClientInfo() {
 		if (client == null) {
 			stationIdLab.setText("");
@@ -64,15 +72,60 @@ public class ClientDetailController {
 			permitLab.setText(String.valueOf(client.getPermit()));
 		}
 	}
-	
+
 	/** 处理 设置传输模式 */
 	@FXML
-	private void handleTransMode(){
-		
+	private void handleTransMode() {
+		if(verifyPermit()){
+			new ModalDialog(permitLab.getScene().getWindow());
+		}else{
+			//没有控制权限
+		}
 	}
+
+	/** 验证该服务端是否有控制权限 */
+	private boolean verifyPermit() {
+		
+		return client.getPermit() == 0 ? true : false;
+	}
+
 	/** 处理 设置触发阈值 */
 	@FXML
-	private void handleThreshold(){
-		
+	private void handleThreshold() {
+		new ModalDialog(permitLab.getScene().getWindow());
 	}
+
+	private class ModalDialog {
+		Button btn;
+
+		public ModalDialog(final Window parent) {
+			btn = new Button();
+
+			final Stage stage = new Stage();
+			
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initOwner(parent);
+			stage.setTitle("Top Stage With Modality");
+			Group root = new Group();
+			Scene scene = new Scene(root, 300, 250, Color.LIGHTGREEN);
+
+			btn.setOnAction(new EventHandler<ActionEvent>() {
+
+				public void handle(ActionEvent event) {
+					stage.hide();
+
+				}
+			});
+
+			btn.setLayoutX(100);
+			btn.setLayoutY(80);
+			btn.setText("OK");
+
+			root.getChildren().add(btn);
+			stage.setScene(scene);
+			stage.show();
+
+		}
+	}
+
 }

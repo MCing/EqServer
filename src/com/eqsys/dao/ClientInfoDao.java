@@ -15,7 +15,9 @@ public class ClientInfoDao {
 			+ "(stationid, permit, longitude, latitude, altitude, sensitivity, transmode, trigglethreshold, lastpacketid) "
 			+ "values( ?, ?,?,?,?,?,?,?,?);";
 	private String mFindIdSql = "select stationid from " + mTableName + " where stationid=?";
-	private String mUpdataPermitSql = "update " + mTableName + " set permit=? where stationid=?;";;
+	private String mUpdataPermitSql = "update " + mTableName + " set permit=? where stationid=?;";
+	private String mUpdataTransModeSql = "update " + mTableName + " set transmode=? where stationid=?;";
+	private String mUpdataThresholdSql = "update " + mTableName + " set trigglethreshold=? where stationid=?;";
 
 	private static final String TableName = "triggerdata_t";
 	private String insertSql = "insert into "+TableName+
@@ -24,9 +26,7 @@ public class ClientInfoDao {
 			+ "ud2psa03, ud2psa10, ud2psa30, ew2psa03, ew2psa10,ew2psa30, ns2psa03, ns2psa10, ns2psa30,"
 			+ "intensity) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 	
-	public ClientInfoDao() {
-
-	}
+	public ClientInfoDao() {}
 	
 	/**
 	 * 在数据库中添加一条信息
@@ -41,10 +41,11 @@ public class ClientInfoDao {
 //			return;
 //		}
 		PreparedStatement preStat = null;
-		Connection conn = JDBCHelper.getDBConnection();
+		Connection conn = null;
 		if (!isExist(stationId)) {
 			// 数据库中不存在客户端信息
 			try {
+				JDBCHelper.getDBConnection();
 				preStat = conn.prepareStatement(mInsertSql);
 				preStat.setString(1, stationId);
 				preStat.setShort(2, info.getCtrlAuthority());
@@ -124,7 +125,52 @@ public class ClientInfoDao {
 			preStat.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+	}
+	public void updateTransMode(String id, short newValue) {
+		PreparedStatement preStat = null;
+		Connection conn = JDBCHelper.getDBConnection();
+		try {
+			preStat = conn.prepareStatement(mUpdataTransModeSql);
+			preStat.setShort(1, newValue);
+			preStat.setString(2, id);
+			preStat.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+	}
+	public void updateThreshold(String id, short newValue) {
+		PreparedStatement preStat = null;
+		Connection conn = JDBCHelper.getDBConnection();
+		try {
+			preStat = conn.prepareStatement(mUpdataThresholdSql);
+			preStat.setShort(1, newValue);
+			preStat.setString(2, id);
+			preStat.executeUpdate();
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {

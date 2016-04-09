@@ -6,41 +6,60 @@ import com.eqsys.msg.CommandResp;
 import com.eqsys.msg.EqMessage;
 import com.eqsys.msg.Header;
 import com.eqsys.msg.MsgConstant;
+import com.eqsys.util.SubCommand;
 import com.eqsys.util.TmpOblist;
+import com.oracle.webservices.internal.api.message.MessageContext;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * 处理控制应答消息
- * not finish
+ * 处理控制应答消息 not finish
  *
  */
 public class CmdRespHandler extends ChannelHandlerAdapter {
 
 	private Logger log = Logger.getLogger(CmdRespHandler.class);
-	
+
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
 		EqMessage eqMsg = (EqMessage) msg;
 		Header hMsg = eqMsg.getHeader();
 		String msgType = hMsg.getMsgType();
-		
-		if(msgType.equals(MsgConstant.TYPE_CR)){    //控制应答
+
+		if (msgType.equals(MsgConstant.TYPE_CR)) { // 控制应答
 			CommandResp ccrsg = (CommandResp) eqMsg.getBody();
-//			log.info("控制应答->" + "stid:"+ccrsg.getStId()+" detil:"+ccrsg.getStateDetil());
+			notifyCmdResp(ccrsg);
+			
+//			switch (ccrsg.getSubCommand()) {
+//			case MsgConstant.CMD_TRANSMODE:
+//				break;
+//			case MsgConstant.CMD_PERIODDATA:
+//				break;
+//			case MsgConstant.CMD_TRGTHRESHOLD:
+//				break;
+//			case MsgConstant.CMD_TRIGGER:
+//				break;
+//			default:
+//				break;
+//			}
 			TmpOblist.addToRecvList(hMsg.getStationId(), "控制应答");
-		}else{
+		} else {
 			ctx.fireChannelRead(msg);
 		}
+
+	}
+	//通知
+	private void notifyCmdResp(CommandResp ccrsg) {
 		
 	}
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
 		cause.printStackTrace();
 		super.exceptionCaught(ctx, cause);
 	}
-	
+
 }
