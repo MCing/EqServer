@@ -3,36 +3,24 @@ package com.eqsys.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.eqsys.msg.MsgConstant;
+
 public class ParseUtil {
 
-	private static final String TRANMODE_CONS = "连续波形传输";
-	private static final String TRANMODE_TRIWN_STRING = "触发传输不传波形";
-	private static final String TRANMODE_TRIW_STRING = "触发传输传波形";
-
+	/** 根据传输模式id 获取模式字符串 */
 	public static String parseTransMode(short mode) {
 
-		switch (mode) {
-		case 2:
-			return TRANMODE_TRIW_STRING;
-		case 3:
-			return TRANMODE_TRIWN_STRING;
-		default:
-			return TRANMODE_CONS;
-		}
-
+		return MsgConstant.TRANSMODE[mode];
 	}
-
+	/** 根据传输模式字符串 获取模式id */
 	public static short parseTransMode(String mode) {
 
-		if (TRANMODE_CONS.equals(mode)) {
-			return 1;
-		} else if (TRANMODE_TRIW_STRING.equals(mode)) {
-			return 2;
-		} else if (TRANMODE_TRIWN_STRING.equals(mode)) {
-			return 3;
-		} else {
-			return 0;
+		for(short i = 1; i < MsgConstant.TRANSMODE.length; i++){
+			if(mode.equals(MsgConstant.TRANSMODE[i])){
+				return i;
+			}
 		}
+		return 0;
 	}
 
 	/**

@@ -30,29 +30,13 @@ public class CmdRespHandler extends ChannelHandlerAdapter {
 
 		if (msgType.equals(MsgConstant.TYPE_CR)) { // 控制应答
 			CommandResp ccrsg = (CommandResp) eqMsg.getBody();
-			notifyCmdResp(ccrsg);
-			
-//			switch (ccrsg.getSubCommand()) {
-//			case MsgConstant.CMD_TRANSMODE:
-//				break;
-//			case MsgConstant.CMD_PERIODDATA:
-//				break;
-//			case MsgConstant.CMD_TRGTHRESHOLD:
-//				break;
-//			case MsgConstant.CMD_TRIGGER:
-//				break;
-//			default:
-//				break;
-//			}
-			TmpOblist.addToRecvList(hMsg.getStationId(), "控制应答");
+			TmpOblist.addToSysEventList(hMsg.getStationId(), ccrsg.getStateDetil());
+			CtrlManager.getMagager().ctrlResp(eqMsg);
+//			TmpOblist.addToRecvList(hMsg.getStationId(), "控制应答");
 		} else {
 			ctx.fireChannelRead(msg);
 		}
 
-	}
-	//通知
-	private void notifyCmdResp(CommandResp ccrsg) {
-		
 	}
 
 	@Override

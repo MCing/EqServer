@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
+import com.eqsys.model.SysEvent;
 import com.eqsys.util.ClientConnList;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.TmpOblist;
@@ -20,6 +21,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -63,6 +65,16 @@ public class MainPaneController {
 	@FXML
 	private TableColumn<RecvInfo, String> typeColumn;
 	
+	//系统事件
+	@FXML
+	private TableView<SysEvent> eventTable;
+	@FXML
+	private TableColumn<SysEvent, String> stimeColumn;
+	@FXML
+	private TableColumn<SysEvent, String> ssrcColumn;
+	@FXML
+	private TableColumn<SysEvent, String> eventColumn;
+	
 	@FXML
 	private void initialize() {
 
@@ -99,6 +111,19 @@ public class MainPaneController {
 			}
 		});
 		clientTable.setItems(ClientConnList.getInstance().getObservableList());
+		
+		// initialize system event
+				stimeColumn
+						.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+								"time"));
+				ssrcColumn
+						.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+								"srcId"));
+				eventColumn
+						.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+								"event"));
+
+				eventTable.setItems(TmpOblist.getsysEventObserList());
 		
 	}
 

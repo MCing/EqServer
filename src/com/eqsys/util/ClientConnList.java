@@ -73,7 +73,7 @@ public class ClientConnList {
 				while(it.hasNext()){
 					if(it.next().getId().equals(entry.getKey())){
 						it.remove();
-						
+						TmpOblist.addToSysEventList(entry.getKey(), "退出");
 						log.error("客户端: "+entry.getKey()+" 退出");
 						break;
 					}
@@ -81,7 +81,7 @@ public class ClientConnList {
 				break;
 			}
 		}
-		log.error("客户端数量: "+map.size());
+//		log.error("客户端数量: "+map.size());
 	}
 	
 	public ObservableList<ClientInfo> getObservableList(){
@@ -89,24 +89,6 @@ public class ClientConnList {
 	}
 
 
-//	/**
-//	 * 解析传输模式
-//	 * 1：连续  2：触发波形 3：触发无波形
-//	 * @param mode
-//	 * @return
-//	 */
-//	private String deTransMode(int mode){
-//		switch(mode){
-//			case 1:
-//				return "连续传输";
-//			case 2:
-//				return "触发传输传波形";
-//			case 3:
-//				return "触发传输不传波形";
-//			default :return "连续传输";
-//		}
-//	}
-	
 	public boolean containsClient(String id){
 		
 		return map.containsKey(id);
@@ -114,7 +96,6 @@ public class ClientConnList {
 	
 	public String getIdByChannel(SocketChannel channel){
 		
-		String stationId = null;
 		for(Map.Entry<String, SocketChannel> entry : map.entrySet()){
 			if(entry.getValue() == channel){
 				return entry.getKey();

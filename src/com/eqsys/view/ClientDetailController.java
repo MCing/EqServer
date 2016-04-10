@@ -1,11 +1,17 @@
 package com.eqsys.view;
 
+import java.io.IOException;
+
 import com.eqsys.model.ClientInfo;
+import com.eqsys.util.ParseUtil;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +23,7 @@ import javafx.stage.Window;
 public class ClientDetailController {
 
 	private ClientInfo client;
+	private String settingPath = "/com/eqsys/view/ClientSettingLayout.fxml";
 
 	@FXML
 	private Label stationIdLab;
@@ -77,7 +84,8 @@ public class ClientDetailController {
 	@FXML
 	private void handleTransMode() {
 		if(verifyPermit()){
-			new ModalDialog(permitLab.getScene().getWindow());
+			//new ModalDialog(permitLab.getScene().getWindow());
+			openClientSetting();
 		}else{
 			//没有控制权限
 		}
@@ -92,8 +100,32 @@ public class ClientDetailController {
 	/** 处理 设置触发阈值 */
 	@FXML
 	private void handleThreshold() {
-		new ModalDialog(permitLab.getScene().getWindow());
+//		new ModalDialog(permitLab.getScene().getWindow());
 	}
+	
+	private void openClientSetting() {
+
+		Stage stage = new Stage();
+    	FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(settingPath));
+		Node page = null;
+		try {
+			page = loader.load();
+			ClientSettingController controller = loader.getController();
+			controller.initController(client, stage);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
+		stage.initOwner(permitLab.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
+		stage.setTitle("客户端控制");
+		Scene scene = new Scene((Parent) page);
+		stage.setScene(scene);
+    	stage.centerOnScreen();
+    	stage.show();
+	}  
 
 	private class ModalDialog {
 		Button btn;

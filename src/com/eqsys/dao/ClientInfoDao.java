@@ -45,7 +45,7 @@ public class ClientInfoDao {
 		if (!isExist(stationId)) {
 			// 数据库中不存在客户端信息
 			try {
-				JDBCHelper.getDBConnection();
+				conn = JDBCHelper.getDBConnection();
 				preStat = conn.prepareStatement(mInsertSql);
 				preStat.setString(1, stationId);
 				preStat.setShort(2, info.getCtrlAuthority());

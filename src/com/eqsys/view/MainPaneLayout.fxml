@@ -115,7 +115,7 @@
             </TableView>
          </children>
       </VBox>
-      <VBox prefHeight="331.0" prefWidth="247.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="6">
+      <VBox prefHeight="331.0" prefWidth="247.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
          <children>
             <Label prefHeight="21.0" prefWidth="231.0" text="客户端信息" />
             <TableView fx:id="clientTable">
@@ -137,6 +137,18 @@
                   <TableColumn prefWidth="75.0" text="来自节点" />
                   <TableColumn prefWidth="75.0" text="异常信息" />
                </columns>
+            </TableView>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
+         <children>
+            <Label text="系统事件" />
+            <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="stimeColumn" prefWidth="75.0" text="时间" />
+                <TableColumn fx:id="ssrcColumn" prefWidth="75.0" text="来源" />
+                  <TableColumn fx:id="eventColumn" prefWidth="75.0" text="事件" />
+              </columns>
             </TableView>
          </children>
       </VBox>

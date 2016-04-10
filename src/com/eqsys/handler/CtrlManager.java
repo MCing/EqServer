@@ -29,7 +29,7 @@ public class CtrlManager {
 	private ClientInfoDao clientInfoDao;
 	private LinkedList<CtrlEvent> list;
 	
-	public CtrlManager getMagager(){
+	public static CtrlManager getMagager(){
 		if(mThis == null){
 			mThis = new CtrlManager();
 		}
@@ -53,11 +53,13 @@ public class CtrlManager {
 		CommandReq req = (CommandReq) msg.getBody();
 		if(req.getSubCommand() == MsgConstant.CMD_TRANSMODE || req.getSubCommand()  == MsgConstant.CMD_TRGTHRESHOLD){
 			list.add(event);
+			System.err.println("ctrl req add to list");
 		}
 		
 		String clientId = event.getClient().getId();
 		SocketChannel clientChannel = ClientConnList.getInstance().getChannelById(clientId);
 		clientChannel.writeAndFlush(msg);
+		System.err.println("ctrl req sended");
 	}
 	/** 负责接收控制命令的回应,并做相应处理 
 	 * 	@respMsg 	控制应答消息包
@@ -65,9 +67,8 @@ public class CtrlManager {
 	 */
 	public void ctrlResp(EqMessage respMsg){
 		
-		
-		//updateLogConsole();
 		CommandResp resp = (CommandResp) respMsg.getBody();
+//		log.info(respMsg.getHeader().getStationId()+" response: " + resp.getRspState() + " detail: " + resp.getStateDetil());
 		//这些控制需要做额外数据更新(显示列表和数据库)
 		if(resp.getSubCommand() == MsgConstant.CMD_TRANSMODE || resp.getSubCommand() == MsgConstant.CMD_TRGTHRESHOLD){
 			ctrlResp0(respMsg.getHeader().getPid(), respMsg.getHeader().getStationId(), resp);
@@ -81,7 +82,9 @@ public class CtrlManager {
 	 *
 	 */
 	private void ctrlResp0(int pid, String stationId, CommandResp resp) {
+		
 		CtrlEvent event = getEvent(pid, stationId);
+		if(event == null){	return;	}
 		if(resp.getRspState() == 0 || resp.getRspState() == 1){   //应答成功
 
 			ObservableList<ClientInfo> obList = ClientConnList.getInstance().getObservableList();

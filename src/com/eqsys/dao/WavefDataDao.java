@@ -61,7 +61,9 @@ public class WavefDataDao {
 
 			ret = false;
 			e.printStackTrace();
-		} finally {
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
 			try {
 				if (preStat != null) {
 					preStat.close();

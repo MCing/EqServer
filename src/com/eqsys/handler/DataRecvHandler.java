@@ -34,7 +34,7 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 		
 		if(msgType.equals(MsgConstant.TYPE_WC)){    //连续波形数据
 			typeStr = "连续波形数据";
-			log.info("连续波形数据包->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
+//			log.info("连续波形数据包->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
 			//test 数据库操作封装成任务
 			wavefDataDao.save(eqMsg);
 			
