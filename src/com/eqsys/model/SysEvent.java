@@ -28,14 +28,14 @@ public SysEvent(String srcId, String event, String time) {
 		return  this.srcId;
 	}
 
-	public String getType() {
+	public String getEvent() {
 		return event.get();
 	}
 
-	public void setType(String event) {
+	public void setEvent(String event) {
 		this.event.set(event);
 	}
-	public  StringProperty typeProperty(){
+	public  StringProperty eventProperty(){
 		return  this.event;
 	}
 
