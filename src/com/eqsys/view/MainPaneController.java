@@ -28,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -38,6 +39,7 @@ import javafx.util.Callback;
 public class MainPaneController {
 	
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
+	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
 
 	// 左栏,节点树形
 	@FXML
@@ -95,12 +97,12 @@ public class MainPaneController {
 		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 
 		// Initialize client info
-		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("id"));
+		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("stationId"));
 		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
 		sensitivity
 				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("sensitivity"));
 		triggerThreshold.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
-				"triggerThreshold"));
+				"threshold"));
 		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
 		//实现对ClientInfo中一行的双击响应
 		clientTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
@@ -183,6 +185,33 @@ public class MainPaneController {
 		stage.setScene(scene);
     	stage.centerOnScreen();
     	stage.show();
-		
-	}  
+	}
+	
+	/** 节点管理 */
+	@FXML
+	private void handleNodeMgr(){
+		openNodeMgr();
+	}
+	/** 打开节点管理窗口  */
+	private void openNodeMgr() {
+
+		Stage stage = new Stage();
+    	FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(nodeMgrPath));
+		Node page = null;
+		try {
+			page = loader.load();
+//			ClientDetailController controller = loader.getController();
+//			controller.setClient(clientInfo);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
+		stage.initOwner(clientTable.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
+		Scene scene = new Scene((Parent) page);
+		stage.setScene(scene);
+    	stage.centerOnScreen();
+    	stage.show();
+	}
 }

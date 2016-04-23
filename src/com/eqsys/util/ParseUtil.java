@@ -16,7 +16,7 @@ public class ParseUtil {
 	public static short parseTransMode(String mode) {
 
 		for(short i = 1; i < MsgConstant.TRANSMODE.length; i++){
-			if(mode.equals(MsgConstant.TRANSMODE[i])){
+			if(MsgConstant.TRANSMODE[i].equals(mode)){
 				return i;
 			}
 		}

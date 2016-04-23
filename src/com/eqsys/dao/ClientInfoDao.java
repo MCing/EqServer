@@ -4,27 +4,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.eqsys.model.ClientInfo;
 import com.eqsys.msg.EqMessage;
 import com.eqsys.msg.RegReq;
 import com.eqsys.util.JDBCHelper;
+import com.eqsys.util.ParseUtil;
 
 public class ClientInfoDao {
 
 	private String mTableName = "clientinfo_t";
-	private String mInsertSql = "insert into " + mTableName
-			+ "(stationid, permit, longitude, latitude, altitude, sensitivity, transmode, trigglethreshold, lastpacketid) "
+	private String mInsertSql = "replace into " + mTableName
+			+ "(stationid, permit, longitude, latitude, altitude, sensitivity, transmode, threshold, lastpid) "
 			+ "values( ?, ?,?,?,?,?,?,?,?);";
 	private String mFindIdSql = "select stationid from " + mTableName + " where stationid=?";
 	private String mUpdataPermitSql = "update " + mTableName + " set permit=? where stationid=?;";
 	private String mUpdataTransModeSql = "update " + mTableName + " set transmode=? where stationid=?;";
 	private String mUpdataThresholdSql = "update " + mTableName + " set trigglethreshold=? where stationid=?;";
 
-	private static final String TableName = "triggerdata_t";
-	private String insertSql = "insert into "+TableName+
-			"(starttimesec, starttimemsec, relattime, stalta, initmotiondir, "
-			+ "ud2pga, ud2pgv, ud2pgd, ew2pga, ew2pgv,ew2pgd, ns2pga, ns2pgv, ns2pgd,"
-			+ "ud2psa03, ud2psa10, ud2psa30, ew2psa03, ew2psa10,ew2psa30, ns2psa03, ns2psa10, ns2psa30,"
-			+ "intensity) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+//	private static final String TableName = "triggerdata_t";
+//	private String insertSql = "insert into "+TableName+
+//			"(starttimesec, starttimemsec, relattime, stalta, initmotiondir, "
+//			+ "ud2pga, ud2pgv, ud2pgd, ew2pga, ew2pgv,ew2pgd, ns2pga, ns2pgv, ns2pgd,"
+//			+ "ud2psa03, ud2psa10, ud2psa30, ew2psa03, ew2psa10,ew2psa30, ns2psa03, ns2psa10, ns2psa30,"
+//			+ "intensity) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 	
 	public ClientInfoDao() {}
 	
@@ -33,29 +38,65 @@ public class ClientInfoDao {
 	 * 
 	 * @param info
 	 */
-	public void add(EqMessage client) {
-		
-		String stationId = client.getHeader().getStationId();
-		RegReq info = (RegReq) client.getBody();
-//		if (client == null) {
-//			return;
+//	public void add(EqMessage client) {
+//		
+//		String stationId = client.getHeader().getStationId();
+//		RegReq info = (RegReq) client.getBody();
+////		if (client == null) {
+////			return;
+////		}
+//		PreparedStatement preStat = null;
+//		Connection conn = null;
+//		if (!isExist(stationId)) {
+//			// 数据库中不存在客户端信息
+//			try {
+//				conn = JDBCHelper.getDBConnection();
+//				preStat = conn.prepareStatement(mInsertSql);
+//				preStat.setString(1, stationId);
+//				preStat.setShort(2, info.getCtrlAuthority());
+//				preStat.setInt(3, info.getLongitude());
+//				preStat.setInt(4, info.getLatitude());
+//				preStat.setShort(5, info.getAltitude());
+//				preStat.setInt(6, info.getSensitivity());
+//				preStat.setShort(7, info.getTransMode());
+//				preStat.setShort(8, info.getTriggerThreshold());
+//				preStat.setInt(9, 0);       //客户端第一次连接时上一次包序号初始化为0
+//				preStat.executeUpdate();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			} finally {
+//				try {
+//					if (preStat != null) {
+//						preStat.close();
+//					}
+//				} catch (SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				JDBCHelper.closeDBConnection(conn);
+//			}
+//		} else {
+//			// 数据库中已存在已存在,更新控制权限(目前只有控制权限可能变)
+//			updatePermit(stationId, info.getCtrlAuthority());
 //		}
+//	}
+	
+	public void add(ClientInfo info){
+		
 		PreparedStatement preStat = null;
 		Connection conn = null;
-		if (!isExist(stationId)) {
-			// 数据库中不存在客户端信息
 			try {
 				conn = JDBCHelper.getDBConnection();
 				preStat = conn.prepareStatement(mInsertSql);
-				preStat.setString(1, stationId);
-				preStat.setShort(2, info.getCtrlAuthority());
-				preStat.setInt(3, info.getLongitude());
-				preStat.setInt(4, info.getLatitude());
-				preStat.setShort(5, info.getAltitude());
+				preStat.setString(1, info.getStationId());
+				preStat.setShort(2, info.getPermit());
+				preStat.setFloat(3, info.getLongitude());
+				preStat.setFloat(4, info.getLatitude());
+				preStat.setShort(5, (short) info.getAltitude());
 				preStat.setInt(6, info.getSensitivity());
-				preStat.setShort(7, info.getTransMode());
-				preStat.setShort(8, info.getTriggerThreshold());
-				preStat.setInt(9, 0);       //客户端第一次连接时上一次包序号初始化为0
+				preStat.setShort(7, ParseUtil.parseTransMode(info.getTransMode()));
+				preStat.setShort(8, (short) info.getThreshold());
+				preStat.setInt(9, info.getLastPid());
 				preStat.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -70,11 +111,7 @@ public class ClientInfoDao {
 				}
 				JDBCHelper.closeDBConnection(conn);
 			}
-		} else {
-			// 数据库中已存在已存在,更新控制权限(目前只有控制权限可能变)
-			updatePermit(stationId, info.getCtrlAuthority());
-		}
-	}
+		} 
 
 	/**
 	 * 查询数据库中是否已存在某条数据
@@ -183,5 +220,78 @@ public class ClientInfoDao {
 			}
 			JDBCHelper.closeDBConnection(conn);
 		}
+	}
+	
+	/** 删除一个节点
+	 * 
+	 * @param id 要删除记录的Id
+	 * @return 删除成功 true, 反之false
+	 */
+	public boolean del(String id){
+		
+		String sql = "delete from " + mTableName + " where stationid=?;";
+		PreparedStatement preStat = null;
+		Connection conn = null;
+		try {
+			conn = JDBCHelper.getDBConnection();
+			preStat = conn.prepareStatement(sql);
+			preStat.setString(1, id);
+			int ret = preStat.executeUpdate();
+			if(ret == 1) return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+		return false;
+	}
+	/** 获取记录
+	 * 
+	 * @return
+	 */
+	public List<ClientInfo> get(){
+		String sql = "select * from " + mTableName + ";";
+		
+		PreparedStatement preStat = null;
+		Connection conn = null;
+		ArrayList<ClientInfo> list = new ArrayList<ClientInfo>();
+		try {
+			conn = JDBCHelper.getDBConnection();
+			preStat = conn.prepareStatement(sql);
+			ResultSet results = preStat.executeQuery();
+			int i = 0; //_test
+			while(results.next()){
+				ClientInfo node = new ClientInfo();
+				node.setStationId(results.getString("stationid"));
+				node.setLongitude(results.getFloat("longitude"));
+				node.setLatitude(results.getFloat("latitude"));
+				node.setAltitude(results.getShort("altitude"));
+				node.setThreshold(results.getShort("threshold"));
+				node.setSensitivity(results.getInt("sensitivity"));
+				list.add(node);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+		return list;
 	}
 }

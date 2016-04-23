@@ -53,16 +53,18 @@ public class ClientConnList {
 		map.put(stationId, socketChannel);
 		
 		ClientInfo info = new ClientInfo();
-		info.setId(stationId);
+		info.setStationId(stationId);
 		info.setAltitude(msg.getAltitude());
-		info.setLatitude(msg.getLatitude());
-		info.setLongitude(msg.getLongitude());
+		info.setLatitude((float)msg.getLatitude()/100000);
+		info.setLongitude((float)msg.getLongitude()/100000);
 		info.setSensitivity(msg.getSensitivity());
 		info.setTransMode(ParseUtil.parseTransMode(msg.getTransMode()));
-		info.setTriggerThreshold(msg.getTriggerThreshold());
+		info.setThreshold(msg.getTriggerThreshold());
+		info.setPermit(msg.getCtrlAuthority());
+		
 		clientList.add(info);
 		//加入数据库
-		clientInfoDao.add(client);
+		clientInfoDao.add(info);
 	}
 	
 	public void remove(SocketChannel socketChannel){
@@ -71,7 +73,7 @@ public class ClientConnList {
 				map.remove(entry.getKey());
 				Iterator<ClientInfo> it = clientList.iterator();
 				while(it.hasNext()){
-					if(it.next().getId().equals(entry.getKey())){
+					if(it.next().getStationId().equals(entry.getKey())){
 						it.remove();
 						TmpOblist.addToSysEventList(entry.getKey(), "退出");
 						log.error("客户端: "+entry.getKey()+" 退出");

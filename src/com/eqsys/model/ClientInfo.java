@@ -2,52 +2,57 @@ package com.eqsys.model;
 
 
 
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class ClientInfo {
 	
-	private StringProperty id;
+	private StringProperty stationId;
 	private StringProperty transMode;
-	private IntegerProperty longitude;				//经度 度＊100000
-	private IntegerProperty latitude;				//纬度 度＊100000
+	private FloatProperty longitude;			//经度 度＊100000
+	private FloatProperty latitude;				//纬度 度＊100000
 	private IntegerProperty altitude;				//高程 单位M
 	private IntegerProperty sensitivity;			//灵敏度
-	private IntegerProperty triggerThreshold;		//触发阀值
+	private IntegerProperty threshold;				//触发阀值
 	
+	//下列属性不用于tableview显示
 	private short permit;
+	private int lastPid;
+	
 	
 	
 	public ClientInfo(String id, String transMode, int longitude, int latitude, int altitude, int sensitivity, int triggerThreshold){
-		this.id = new SimpleStringProperty(id);
+		this.stationId = new SimpleStringProperty(id);
 		this.transMode = new SimpleStringProperty(transMode);
-		this.longitude = new SimpleIntegerProperty(longitude);
-		this.latitude = new SimpleIntegerProperty(latitude);
+		this.longitude = new SimpleFloatProperty(longitude);
+		this.latitude = new SimpleFloatProperty(latitude);
 		this.altitude = new SimpleIntegerProperty(altitude);
 		this.sensitivity = new SimpleIntegerProperty(sensitivity);
-		this.triggerThreshold = new SimpleIntegerProperty(triggerThreshold);
+		this.threshold = new SimpleIntegerProperty(triggerThreshold);
 	}
 	public ClientInfo(){
-		this.id = new SimpleStringProperty();
+		this.stationId = new SimpleStringProperty();
 		this.transMode = new SimpleStringProperty();
-		this.longitude = new SimpleIntegerProperty();
-		this.latitude = new SimpleIntegerProperty();
+		this.longitude = new SimpleFloatProperty();
+		this.latitude = new SimpleFloatProperty();
 		this.altitude = new SimpleIntegerProperty();
 		this.sensitivity = new SimpleIntegerProperty();
-		this.triggerThreshold = new SimpleIntegerProperty();
+		this.threshold = new SimpleIntegerProperty();
 	}
 	
 	//getter , settr and propertygeter
-	public String getId() {
-		return id.get();
+	public String getStationId() {
+		return stationId.get();
 	}
-	public void setId(String id) {
-		this.id.set(id);
+	public void setStationId(String id) {
+		this.stationId.set(id);
 	}
-	public StringProperty idProperty(){
-		return id;
+	public StringProperty stationIdProperty(){
+		return stationId;
 	}
 	
 	
@@ -61,23 +66,23 @@ public class ClientInfo {
 		return transMode;
 	}
 
-	public int getLongitude() {
+	public float getLongitude() {
 		return longitude.get();
 	}
-	public void setLongitude(int longitude) {
+	public void setLongitude(float longitude) {
 		this.longitude.set(longitude);
 	}
-	public IntegerProperty longitudeProperty(){
+	public FloatProperty longitudeProperty(){
 		return longitude;
 	}
 
-	public int getLatitude() {
+	public float getLatitude() {
 		return latitude.get();
 	}
-	public void setLatitude(int latitude) {
+	public void setLatitude(float latitude) {
 		this.latitude.set(latitude);;
 	}
-	public IntegerProperty latitudeProperty(){
+	public FloatProperty latitudeProperty(){
 		return latitude;
 	}
 	
@@ -85,7 +90,7 @@ public class ClientInfo {
 		return altitude.get();
 	}
 	public void setAltitude(int altitude) {
-		this.altitude.set(altitude);;
+		this.altitude.set(altitude);
 	}
 
 	public int getSensitivity() {
@@ -98,26 +103,15 @@ public class ClientInfo {
 		return sensitivity;
 	}
 
-	public int getTriggerThreshold() {
-		return triggerThreshold.get();
+	public int getThreshold() {
+		return threshold.get();
 	}
-
-	public void setTriggerThreshold(int triggerThreshold) {
-		this.triggerThreshold.set(triggerThreshold);;
+	public void setThreshold(int triggerThreshold) {
+		this.threshold.set(triggerThreshold);;
 	}
-	public IntegerProperty triggerThresholdProperty(){
-		return triggerThreshold;
+	public IntegerProperty thresholdProperty(){
+		return threshold;
 	}
-	
-//	public Date getLinkTime() {
-//		return linkTime.get();
-//	}
-//	public void setLinkTime(Date linkTime) {
-//		this.linkTime.set(linkTime); ;
-//	}
-//	public ObjectProperty linkTimeProperty(){
-//		return linkTime;
-//	}
 	
 	public short getPermit(){
 		return this.permit;
@@ -125,5 +119,11 @@ public class ClientInfo {
 	public void setPermit(short permit){
 		this.permit = permit;
 	}
-
+	
+	public int getLastPid() {
+		return lastPid;
+	}
+	public void setLastPid(int lastPid) {
+		this.lastPid = lastPid;
+	}
 }

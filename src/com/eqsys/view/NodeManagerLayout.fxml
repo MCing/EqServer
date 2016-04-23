@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eqsys.view.NodeManagerController">
+   <children>
+      <TableView fx:id="nodeTable" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columns>
+            <TableColumn fx:id="stationId" prefWidth="75.0" text="台站代码" />
+            <TableColumn fx:id="longitude" prefWidth="75.0" text="经度" />
+            <TableColumn fx:id="latitude" prefWidth="75.0" text="纬度" />
+            <TableColumn fx:id="altitude" prefWidth="75.0" text="高程" />
+            <TableColumn fx:id="sensitivity" prefWidth="75.0" text="灵敏度" />
+            <TableColumn fx:id="triggerThreshold" prefWidth="75.0" text="触发阈值" />
+         </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#handleEditNode" text="     编辑     " />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDelNode" text="     删除     " />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddNode" text="     添加     " />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </TableView>
+   </children>
+</AnchorPane>

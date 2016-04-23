@@ -72,7 +72,7 @@ public class ClientSettingController {
 				req.setSubCommand(MsgConstant.CMD_TRANSMODE);
 				req.setSubTransMode(selectMode);
 				transModeEvent.setClient(client);
-				transModeEvent.setReqMsg(DataBuilder.buildCtrlReq(client.getId(), req));
+				transModeEvent.setReqMsg(DataBuilder.buildCtrlReq(client.getStationId(), req));
 				CtrlManager.getMagager().ctrlReq(transModeEvent);
 			}
 		}

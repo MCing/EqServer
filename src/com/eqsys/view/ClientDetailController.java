@@ -69,13 +69,13 @@ public class ClientDetailController {
 			permitLab.setText("");
 
 		} else {
-			stationIdLab.setText(client.getId());
+			stationIdLab.setText(client.getStationId());
 			transModeLab.setText(client.getTransMode());
 			longtitudeLab.setText(String.valueOf(client.getLongitude()));
 			latitudeLab.setText(String.valueOf(client.getLatitude()));
 			altitudeLab.setText(String.valueOf(client.getAltitude()));
 			sensitivityLab.setText(String.valueOf(client.getSensitivity()));
-			thresholdLab.setText(String.valueOf(client.getTriggerThreshold()));
+			thresholdLab.setText(String.valueOf(client.getThreshold()));
 			permitLab.setText(String.valueOf(client.getPermit()));
 		}
 	}
@@ -126,38 +126,4 @@ public class ClientDetailController {
     	stage.centerOnScreen();
     	stage.show();
 	}  
-
-	private class ModalDialog {
-		Button btn;
-
-		public ModalDialog(final Window parent) {
-			btn = new Button();
-
-			final Stage stage = new Stage();
-			
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.initOwner(parent);
-			stage.setTitle("Top Stage With Modality");
-			Group root = new Group();
-			Scene scene = new Scene(root, 300, 250, Color.LIGHTGREEN);
-
-			btn.setOnAction(new EventHandler<ActionEvent>() {
-
-				public void handle(ActionEvent event) {
-					stage.hide();
-
-				}
-			});
-
-			btn.setLayoutX(100);
-			btn.setLayoutY(80);
-			btn.setText("OK");
-
-			root.getChildren().add(btn);
-			stage.setScene(scene);
-			stage.show();
-
-		}
-	}
-
 }

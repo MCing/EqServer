@@ -56,7 +56,7 @@ public class CtrlManager {
 			System.err.println("ctrl req add to list");
 		}
 		
-		String clientId = event.getClient().getId();
+		String clientId = event.getClient().getStationId();
 		SocketChannel clientChannel = ClientConnList.getInstance().getChannelById(clientId);
 		clientChannel.writeAndFlush(msg);
 		System.err.println("ctrl req sended");
@@ -94,11 +94,11 @@ public class CtrlManager {
 			if(resp.getSubCommand() == MsgConstant.CMD_TRANSMODE){
 				TransModeReq req = (TransModeReq) event.getReqMsg().getBody();
 				client.setTransMode(ParseUtil.parseTransMode(req.getSubTransMode()));
-				clientInfoDao.updateTransMode(client.getId(), req.getSubTransMode());
+				clientInfoDao.updateTransMode(client.getStationId(), req.getSubTransMode());
 			}else{
 				ThresholdReq req = (ThresholdReq) event.getReqMsg().getBody();
-				client.setTriggerThreshold(req.getTriggleThreshold());
-				clientInfoDao.updateThreshold(client.getId(), req.getTriggleThreshold());
+				client.setThreshold(req.getTriggleThreshold());
+				clientInfoDao.updateThreshold(client.getStationId(), req.getTriggleThreshold());
 			}
 			//update clientinfo tableview
 			obList.set(index, client);
@@ -113,7 +113,7 @@ public class CtrlManager {
 	private CtrlEvent getEvent(int pid, String stationId) {
 
 		for(CtrlEvent event : list){
-			if(pid == event.getReqMsg().getHeader().getPid() || event.getClient().getId().equals(stationId)){
+			if(pid == event.getReqMsg().getHeader().getPid() || event.getClient().getStationId().equals(stationId)){
 				return event;
 			}
 		}

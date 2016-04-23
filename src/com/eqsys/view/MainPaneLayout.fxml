@@ -26,12 +26,14 @@
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -40,7 +42,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <AnchorPane id="tool-bar-background" prefHeight="40.0" prefWidth="791.0" stylesheets="@application.css" GridPane.columnSpan="10">
+      <AnchorPane GridPane.columnSpan="11">
          <children>
             <HBox layoutY="20.0" prefHeight="0.0" prefWidth="670.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="121.0" AnchorPane.topAnchor="5.0">
                <children>
@@ -49,18 +51,14 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                      <menus>
-                        <Menu mnemonicParsing="false" text="日志管理">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                           </items>
-                        </Menu>
+                        <Menu mnemonicParsing="false" text="日志管理" />
                         <Menu mnemonicParsing="false" text="数据库管理">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Close" />
                               <MenuItem mnemonicParsing="false" text="Unspecified Action" />
                            </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="数据库分析">
+                        <Menu mnemonicParsing="false" text="数据分析">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Delete" />
                            </items>
@@ -72,7 +70,8 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="系统管理">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleNodeMgr" text="节点管理" />
+                              <MenuItem mnemonicParsing="false" text="退出" />
                            </items>
                         </Menu>
                      </menus>
@@ -80,30 +79,19 @@
                         <Insets />
                      </opaqueInsets>
                   </MenuBar>
-                  <HBox>
-                     <children>
-                        <Button mnemonicParsing="false" text="功能一" />
-                        <Button mnemonicParsing="false" text="功能二" />
-                        <Button mnemonicParsing="false" text="功能三" />
-                        <Button mnemonicParsing="false" text="功能四" />
-                     </children>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </HBox>
                </children>
             </HBox>
          </children>
       </AnchorPane>
-      <VBox prefHeight="349.0" prefWidth="146.0" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="3">
+      <VBox prefHeight="349.0" prefWidth="146.0" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
          <children>
             <Label prefHeight="29.0" prefWidth="146.0" text="节点布局信息" />
             <Label prefHeight="18.0" prefWidth="95.0" text="      所有节点分布" />
-            <TreeView fx:id="treeView" editable="true" prefHeight="222.0" prefWidth="146.0" />
+            <TreeView fx:id="treeView" editable="true" />
          </children>
       </VBox>
-      <Pagination prefHeight="266.0" prefWidth="398.0" GridPane.columnIndex="2" GridPane.columnSpan="6" GridPane.rowIndex="1" GridPane.rowSpan="3" />
-      <VBox prefHeight="239.0" prefWidth="791.0" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="4" GridPane.rowSpan="3">
+      <Pagination prefHeight="266.0" prefWidth="398.0" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+      <VBox prefHeight="239.0" prefWidth="791.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
          <children>
             <Label prefHeight="22.0" prefWidth="724.0" text="接受数据信息" />
             <TableView fx:id="recvInfoTable">
@@ -115,7 +103,7 @@
             </TableView>
          </children>
       </VBox>
-      <VBox prefHeight="331.0" prefWidth="247.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
+      <VBox prefHeight="331.0" prefWidth="247.0" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="5" GridPane.rowSpan="3">
          <children>
             <Label prefHeight="21.0" prefWidth="231.0" text="客户端信息" />
             <TableView fx:id="clientTable">
@@ -128,7 +116,7 @@
             </TableView>
          </children>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="4" GridPane.rowIndex="4" GridPane.rowSpan="3">
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
          <children>
             <Label prefHeight="15.0" prefWidth="443.0" text="  异常报警信息" />
             <TableView>
@@ -140,10 +128,10 @@
             </TableView>
          </children>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
          <children>
             <Label text="系统事件" />
-            <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="eventTable">
               <columns>
                 <TableColumn fx:id="stimeColumn" prefWidth="75.0" text="时间" />
                 <TableColumn fx:id="ssrcColumn" prefWidth="75.0" text="来源" />
@@ -152,5 +140,13 @@
             </TableView>
          </children>
       </VBox>
+      <HBox GridPane.columnSpan="11" GridPane.rowIndex="1">
+         <children>
+            <Button mnemonicParsing="false" text="功能一" />
+            <Button mnemonicParsing="false" text="功能二" />
+            <Button mnemonicParsing="false" text="功能三" />
+            <Button mnemonicParsing="false" text="功能四" />
+         </children>
+      </HBox>
    </children>
 </GridPane>
