@@ -16,8 +16,8 @@
             <AnchorPane>
                <children>
                   <RadioButton fx:id="consRb" layoutX="120.0" layoutY="108.0" mnemonicParsing="false" text="连续波形传输" />
-                  <RadioButton fx:id="triWNRb" layoutX="121.0" layoutY="144.0" mnemonicParsing="false" text="触发不传波形" />
-                  <RadioButton fx:id="triWRb" layoutX="129.0" layoutY="181.0" mnemonicParsing="false" text="触发传波形" />
+                  <RadioButton fx:id="triWNRb" layoutX="121.0" layoutY="144.0" mnemonicParsing="false" text="触发传波形" />
+                  <RadioButton fx:id="triWRb" layoutX="120.0" layoutY="178.0" mnemonicParsing="false" text="触发不传波形" />
                   <Button layoutX="136.0" layoutY="253.0" mnemonicParsing="false" onAction="#handleTranMode" text="确定" />
                   <Button layoutX="237.0" layoutY="253.0" mnemonicParsing="false" onAction="#handleCancel" text="取消" />
                   <Label layoutX="97.0" layoutY="56.0" text="当前模式:" />

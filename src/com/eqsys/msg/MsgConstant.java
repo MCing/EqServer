@@ -27,5 +27,5 @@ public class MsgConstant {
 	public static final short CMD_TRIGGER = 4;
 	
 	/* 传输模式  第一个(0)为默认模式*/
-	public static final String TRANSMODE[] = {"连续波形传输", "连续波形传输", "触发传输传波形", "触发传输不传波形"};
+	public static final String TRANSMODE[] = {"连续波形传输", "连续波形传输", "触发传波形", "触发不传波形"};
 }
