@@ -2,6 +2,7 @@ package com.eqsys.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -31,6 +32,8 @@ public class NodeEditController {
 	private Button okBtn;
 	@FXML
 	private Button cancelBtn;
+	@FXML
+	private Label errorLab;
 	
 	
 	@FXML
@@ -57,7 +60,7 @@ public class NodeEditController {
 	@FXML
 	private void handleOk(){
 		if(!isValid()){
-//			error!
+			return;
 		}
 		node.setStationId(stationIdTf.getText());
 		node.setAltitude(Integer.valueOf(altitudeTf.getText()));
@@ -74,7 +77,41 @@ public class NodeEditController {
 	
 	/** 验证输入是否合法 */
 	private boolean isValid() {
-		return false;
+		boolean ret = true;
+		String numRegExp ="^\\d+$";  //非负整数
+		String floatRegExp = "^\\d+(\\.\\d+)?$";  //非负浮点数
+		StringBuilder error = new StringBuilder();
+		String stdId = stationIdTf.getText();
+		String altStr = altitudeTf.getText();
+		String longStr = longitudeTf.getText();
+		String latStr = latitudeTf.getText();
+		String triStr = triggerThresholdTf.getText();
+		String sensStr = sensitivityTf.getText();
+		if(stdId == null ||					//_test  如果不输入台站代码，这里的stdId为null而不是空字符串？？
+				"".equals(altStr) || 
+				"".equals(longStr) || 
+				"".equals(latStr) || 
+				"".equals(triStr) || 
+				"".equals(stdId) || 
+				"".equals(sensStr)){
+			error.append("请完成输入！");
+			ret = false;
+		}else if("".equals(stdId) || stdId.length() > 5){
+			error.append("台站代码输入有误！");
+			ret = false;
+		}else if(!altStr.matches(numRegExp) ||
+				!longStr.matches(floatRegExp) ||
+				!latStr.matches(floatRegExp) ||
+				!sensStr.matches(numRegExp) ||
+				!triStr.matches(numRegExp)){
+			error.append("数值非法输入！");
+			ret = false;
+		}
+		
+		if(!ret){
+			errorLab.setText(error.toString());
+		}
+		return ret;
 	}
 
 	@FXML
