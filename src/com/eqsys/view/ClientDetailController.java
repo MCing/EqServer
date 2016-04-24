@@ -3,6 +3,7 @@ package com.eqsys.view;
 import java.io.IOException;
 
 import com.eqsys.model.ClientInfo;
+import com.eqsys.util.ClientConnList;
 import com.eqsys.util.ParseUtil;
 
 import javafx.event.ActionEvent;
@@ -20,6 +21,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * 客户端详情
+ *
+ */
 public class ClientDetailController {
 
 	private ClientInfo client;
@@ -84,7 +89,6 @@ public class ClientDetailController {
 	@FXML
 	private void handleTransMode() {
 		if(verifyPermit()){
-			//new ModalDialog(permitLab.getScene().getWindow());
 			openClientSetting();
 		}else{
 			//没有控制权限
@@ -103,6 +107,7 @@ public class ClientDetailController {
 //		new ModalDialog(permitLab.getScene().getWindow());
 	}
 	
+	/** 打开客户端控制界面 */
 	private void openClientSetting() {
 
 		Stage stage = new Stage();
@@ -124,6 +129,11 @@ public class ClientDetailController {
 		Scene scene = new Scene((Parent) page);
 		stage.setScene(scene);
     	stage.centerOnScreen();
-    	stage.show();
-	}  
+    	stage.showAndWait();
+	}
+	
+	/** 客户端参数修改成功后更新该窗口 */
+	public void update(){
+		
+	}
 }

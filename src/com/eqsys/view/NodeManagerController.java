@@ -8,19 +8,25 @@ import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.TmpOblist;
+import com.eqsys.view.MainPaneController.TableRowControl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class NodeManagerController {
 	
@@ -60,9 +66,41 @@ public class NodeManagerController {
 				"altitude"));
 		nodeTable.setItems(nodeList);
 		
+		nodeTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
+			
+			@Override
+			public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
+				return new TableRowControl(); 
+			}
+		});
+		
+		
 		updateList();
 		
 	}
+	
+	/**
+	 * 用于控制node table 的行(实现双击响应)
+	 *
+	 */
+	class TableRowControl extends TableRow<ClientInfo> {  
+		  
+        public TableRowControl() {  
+            super();  
+            this.setOnMouseClicked(new EventHandler<MouseEvent>() {  
+                @Override  
+                public void handle(MouseEvent event) {  
+                    if (event.getButton().equals(MouseButton.PRIMARY)  //左键
+                            && event.getClickCount() == 2  				//双击
+                            && TableRowControl.this.getIndex() < nodeTable.getItems().size()) {
+                    	ClientInfo clientInfo = nodeTable.getSelectionModel().getSelectedItem();
+                    	openNodeEditDialog(clientInfo);
+                    }  
+                }
+
+            });  
+        }
+       }
 	
 	/** 编辑一条记录 */
 	@FXML
@@ -114,6 +152,13 @@ public class NodeManagerController {
 		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
 		stage.initOwner(nodeTable.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
 		Scene scene = new Scene((Parent) page);
+		String title;
+		if(node == null || "".equals(node)){
+			title = "添加节点";
+		}else{
+			title = "编辑节点";
+		}
+		stage.setTitle(title);
 		stage.setScene(scene);
     	stage.centerOnScreen();
     	stage.showAndWait();   //在此阻塞

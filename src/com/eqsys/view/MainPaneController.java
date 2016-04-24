@@ -165,11 +165,19 @@ public class MainPaneController {
             });  
         }  
     }  
-
+	Stage stage = null;/// = new Stage();
 	/** 打开客户端详情窗口  */
 	private void openClientDetail(ClientInfo clientInfo) {
 
-		Stage stage = new Stage();
+		if(stage == null){
+			stage = new Stage();
+		}else{
+			if(stage.isShowing()){
+				System.err.println("isshowing");
+			}
+			stage.toFront();
+			return;
+		}
     	FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(clientDetailPath));
 		Node page = null;
@@ -182,6 +190,7 @@ public class MainPaneController {
 			return;
 		}
 		Scene scene = new Scene((Parent) page);
+		stage.setTitle("客户端详情");
 		stage.setScene(scene);
     	stage.centerOnScreen();
     	stage.show();
@@ -201,8 +210,6 @@ public class MainPaneController {
 		Node page = null;
 		try {
 			page = loader.load();
-//			ClientDetailController controller = loader.getController();
-//			controller.setClient(clientInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -210,6 +217,7 @@ public class MainPaneController {
 		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
 		stage.initOwner(clientTable.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
 		Scene scene = new Scene((Parent) page);
+		stage.setTitle("节点管理");
 		stage.setScene(scene);
     	stage.centerOnScreen();
     	stage.show();
