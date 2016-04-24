@@ -54,13 +54,11 @@ public class CtrlManager {
 		CommandReq req = (CommandReq) msg.getBody();
 		if(req.getSubCommand() == MsgConstant.CMD_TRANSMODE || req.getSubCommand()  == MsgConstant.CMD_TRGTHRESHOLD){
 			list.add(event);
-			System.err.println("ctrl req add to list");
 		}
 		
 		String clientId = event.getClient().getStationId();
 		SocketChannel clientChannel = ClientConnList.getInstance().getChannelById(clientId);
 		clientChannel.writeAndFlush(msg);
-		System.err.println("ctrl req sended");
 	}
 	/** 负责接收控制命令的回应,并做相应处理 
 	 * 	@respMsg 	控制应答消息包

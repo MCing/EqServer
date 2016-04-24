@@ -12,15 +12,21 @@ public class ParseUtil {
 
 		return MsgConstant.TRANSMODE[mode];
 	}
-	/** 根据传输模式字符串 获取模式id */
+	/** 
+	 * 根据传输模式字符串 获取模式id 
+	 * 
+	 */
 	public static short parseTransMode(String mode) {
 
+		if(mode == null || "".equals(mode)){
+			return 1;
+		}
 		for(short i = 1; i < MsgConstant.TRANSMODE.length; i++){
 			if(MsgConstant.TRANSMODE[i].equals(mode)){
 				return i;
 			}
 		}
-		return 0;
+		return 1;
 	}
 
 	/**
