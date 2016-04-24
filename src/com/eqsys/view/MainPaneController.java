@@ -6,6 +6,7 @@ import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.model.SysEvent;
 import com.eqsys.util.ClientConnList;
+import com.eqsys.util.ClientWindowMgr;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.TmpOblist;
 
@@ -169,22 +170,22 @@ public class MainPaneController {
 	/** 打开客户端详情窗口  */
 	private void openClientDetail(ClientInfo clientInfo) {
 
-		if(stage == null){
-			stage = new Stage();
-		}else{
-			if(stage.isShowing()){
-				System.err.println("isshowing");
-			}
-			stage.toFront();
+		ClientWindowMgr manager = ClientWindowMgr.getClientWindowMgr();
+		if(manager.isExist(clientInfo.getStationId())){
+			manager.open(clientInfo.getStationId());
 			return;
 		}
+		
+		Stage stage = new Stage();
+		
     	FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(clientDetailPath));
 		Node page = null;
+		ClientDetailController controller = null;
 		try {
 			page = loader.load();
-			ClientDetailController controller = loader.getController();
-			controller.setClient(clientInfo);
+			controller = loader.getController();
+			controller.initController(stage, clientInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -194,6 +195,7 @@ public class MainPaneController {
 		stage.setScene(scene);
     	stage.centerOnScreen();
     	stage.show();
+    	manager.add(clientInfo.getStationId(), controller);
 	}
 	
 	/** 节点管理 */

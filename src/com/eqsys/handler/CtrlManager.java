@@ -18,6 +18,7 @@ import com.eqsys.msg.MsgConstant;
 import com.eqsys.msg.ThresholdReq;
 import com.eqsys.msg.TransModeReq;
 import com.eqsys.util.ClientConnList;
+import com.eqsys.util.ClientWindowMgr;
 import com.eqsys.util.ParseUtil;
 
 public class CtrlManager {
@@ -102,6 +103,8 @@ public class CtrlManager {
 			}
 			//update clientinfo tableview
 			obList.set(index, client);
+			
+			ClientWindowMgr.getClientWindowMgr().update(client);
 		}
 		list.remove(event);
 	}

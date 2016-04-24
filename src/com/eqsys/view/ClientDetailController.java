@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.eqsys.model.ClientInfo;
 import com.eqsys.util.ClientConnList;
+import com.eqsys.util.ClientWindowMgr;
 import com.eqsys.util.ParseUtil;
 
 import javafx.event.ActionEvent;
@@ -28,6 +29,7 @@ import javafx.stage.Window;
 public class ClientDetailController {
 
 	private ClientInfo client;
+	private Stage stage;
 	private String settingPath = "/com/eqsys/view/ClientSettingLayout.fxml";
 
 	@FXML
@@ -56,8 +58,9 @@ public class ClientDetailController {
 		initClientInfo();
 	}
 
-	public void setClient(ClientInfo info) {
-		client = info;
+	public void initController(Stage stage, ClientInfo client){
+		this.stage = stage;
+		this.client = client;
 		initClientInfo();
 	}
 
@@ -133,7 +136,16 @@ public class ClientDetailController {
 	}
 	
 	/** 客户端参数修改成功后更新该窗口 */
-	public void update(){
-		
+	public void update(ClientInfo client){
+		this.client = client;
+		initClientInfo();
+	}
+	
+	public void show(){
+		if(stage.isShowing()){
+			stage.toFront();
+		}else{
+			stage.show();
+		}
 	}
 }
