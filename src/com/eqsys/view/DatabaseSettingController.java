@@ -1,5 +1,6 @@
 package com.eqsys.view;
 
+import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.SysConfig;
 
 import javafx.fxml.FXML;
@@ -42,7 +43,7 @@ public class DatabaseSettingController {
 		String jdbcDb = dbName.getText();
 		String jdbcPort = port.getText();
 		String jdbcServerName = serverName.getText();
-		
+		SysConfig.saveDbConfig(jdbcServerName, jdbcPort, jdbcUser, jdbcPasswd, jdbcDb);
 		stage.close();
 	}
 	

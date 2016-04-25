@@ -1,13 +1,14 @@
 package com.eqsys.util;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-
-import javafx.beans.property.Property;
 
 /**
  * 配置类,用于读取配置文件,配置数据库连接,配置网络ip及端口
@@ -30,6 +31,9 @@ public class SysConfig {
 	
 	//台网信息
 	public static String serverId;
+	
+	//配置文件路径
+	public static final String CONFIG_PATH = System.getProperty("user.dir") + "/config.properties";
 
 	/** 预配置,读取文件,设置相应参数值 */
 	public static void preConfig(){
@@ -58,15 +62,44 @@ public class SysConfig {
 		Properties prop = new Properties();
 		
 		//根据工程路径找到配置文件(目前配置文件放在工程根路径下)
-		String workDir = System.getProperty("user.dir");
 		try{
-			InputStream inputStream = new FileInputStream(workDir+"/config.properties");
+			InputStream inputStream = new FileInputStream(CONFIG_PATH);
 			prop.load(inputStream);
 		}catch(IOException e){
 			e.printStackTrace();
 			return null;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 		}
 		return prop;
+	}
+	
+	/** 保存Properties对象到配置文件 */
+	private static void saveProperty(Properties prop){
+		try {
+			OutputStream out = new FileOutputStream(CONFIG_PATH);
+			prop.store(out, new Date().toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/** 保存新的数据库配置到配置文件 */
+	public static void saveDbConfig(String serverName, String port, String userName, String password, String dbName){
+		Properties pro = getPropertiesFromFile();
+		
+		jdbcUser = userName;
+		jdbcPasswd = password;
+	    jdbcDb = dbName;
+		jdbcPort = Integer.valueOf(port);
+		jdbcServerName = serverName;
+		
+		pro.put("JDBC_SERVERNAME", serverName);
+		pro.put("JDBC_PORT", port);
+		pro.put("JDBC_USER", userName);
+		pro.put("JDBC_PASSWORD", password);
+		pro.put("JDBC_DATABASE", dbName);
+		
+		saveProperty(pro);
 	}
 	
 	public static String getJdbcUser() {
@@ -97,7 +130,5 @@ public class SysConfig {
 		return serverPort;
 	}
 	
-	public void saveDbPro(){
-		
-	}
+	
 }

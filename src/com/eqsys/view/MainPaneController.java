@@ -38,6 +38,7 @@ public class MainPaneController {
 	
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
+	private String dbSettingPath = "/com/eqsys/view/DatabaseSettingLayout.fxml";
 
 	// 左栏,节点树形
 	@FXML
@@ -266,6 +267,30 @@ public class MainPaneController {
 	/** 数据库配置 */
 	@FXML 
 	private void handleDbSetting(){
+		openDbSettingDialog();
+	}
+
+	/** 打开数据库设置对话框  */
+	private void openDbSettingDialog() {
 		
+		Stage stage = new Stage();
+    	FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(dbSettingPath));
+		Node page = null;
+		try {
+			page = loader.load();
+			DatabaseSettingController controller = loader.getController();
+			controller.initController(stage);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
+		stage.initOwner(clientTable.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
+		Scene scene = new Scene((Parent) page);
+		stage.setTitle("数据库设置");
+		stage.setScene(scene);
+    	stage.centerOnScreen();
+    	stage.show();
 	}
 }
