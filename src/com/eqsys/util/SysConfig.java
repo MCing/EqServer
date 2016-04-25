@@ -96,4 +96,8 @@ public class SysConfig {
 	public static int getServerPort() {
 		return serverPort;
 	}
+	
+	public void saveDbPro(){
+		
+	}
 }

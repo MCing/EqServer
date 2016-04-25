@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.eqsys.view.DatabaseSettingController">
+   <children>
+      <Label layoutX="59.0" layoutY="48.0" text="数据库服务器：" />
+      <Label layoutX="107.0" layoutY="87.0" text="端口：" />
+      <Label layoutX="96.0" layoutY="124.0" text="数据库：" />
+      <TextField fx:id="serverName" layoutX="144.0" layoutY="44.0" />
+      <TextField fx:id="port" layoutX="144.0" layoutY="83.0" />
+      <TextField fx:id="dbName" layoutX="144.0" layoutY="120.0" />
+      <Button layoutX="123.0" layoutY="246.0" mnemonicParsing="false" onAction="#handleOk" text="确定" />
+      <Button layoutX="231.0" layoutY="246.0" mnemonicParsing="false" onAction="#handleCancel" text="取消" />
+      <Label layoutX="96.0" layoutY="157.0" text="用户名：" />
+      <Label layoutX="107.0" layoutY="182.0" text="密码：" />
+      <TextField fx:id="user" layoutX="144.0" layoutY="153.0" />
+      <PasswordField fx:id="password" layoutX="144.0" layoutY="186.0" />
+   </children>
+</AnchorPane>
