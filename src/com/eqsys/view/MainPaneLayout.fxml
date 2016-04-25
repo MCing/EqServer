@@ -55,8 +55,8 @@
                         <Menu mnemonicParsing="false" text="日志管理" />
                         <Menu mnemonicParsing="false" text="数据库管理">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Close" />
-                              <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleConnectDb" text="连接数据库" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleDbSetting" text="数据库设置" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="数据分析">

@@ -18,7 +18,7 @@ public class JDBCHelper {
 	
 	private static boolean isDbConnect;
 	
-	public static void initDB(){
+	public static boolean initDB(){
 		//使用连接池,数据源
 		MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
 		
@@ -38,6 +38,7 @@ public class JDBCHelper {
 			isDbConnect = false;
 			log.error("数据库配置错误:"+e.getMessage());
 		}
+		return isDbConnect;
 	}
 	
 	/**

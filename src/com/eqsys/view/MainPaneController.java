@@ -1,7 +1,6 @@
 package com.eqsys.view;
 
 import java.io.IOException;
-
 import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.model.SysEvent;
@@ -11,7 +10,6 @@ import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
 import com.eqsys.util.TmpOblist;
-
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -82,8 +80,6 @@ public class MainPaneController {
 	private Label serverId;
 	@FXML
 	private Label serverIp;
-//	@FXML
-//	private Label serverState;
 	
 	//数据库信息
 	@FXML
@@ -102,15 +98,7 @@ public class MainPaneController {
 		//init server info and database info
 		serverId.setText(SysConfig.serverId);
 		serverIp.setText(SysConfig.serverIp);
-		dbName.setText(SysConfig.jdbcServerName);
-		dbType.setText("mysql");
-		if(JDBCHelper.getDbState()){
-			dbState.setText("已连接");
-			dbState.setTextFill(Color.GREEN);
-		}else{
-			dbState.setText("未连接");
-			dbState.setTextFill(Color.RED);
-		}
+		initDbInfo();
 			
 
 		// initialize recv data
@@ -157,6 +145,18 @@ public class MainPaneController {
 
 				eventTable.setItems(TmpOblist.getsysEventObserList());
 		
+	}
+
+	private void initDbInfo() {
+		dbName.setText(SysConfig.jdbcServerName);
+		dbType.setText("mysql");
+		if(JDBCHelper.getDbState()){
+			dbState.setText("已连接");
+			dbState.setTextFill(Color.GREEN);
+		}else{
+			dbState.setText("未连接");
+			dbState.setTextFill(Color.RED);
+		}
 	}
 
 	/** 树形菜单 */
@@ -252,5 +252,20 @@ public class MainPaneController {
 		stage.setScene(scene);
     	stage.centerOnScreen();
     	stage.show();
+	}
+	
+	/** 连接数据库 */
+	@FXML
+	private void handleConnectDb(){
+		
+		if(JDBCHelper.initDB()){
+			initDbInfo();
+		}
+	}
+	
+	/** 数据库配置 */
+	@FXML 
+	private void handleDbSetting(){
+		
 	}
 }
