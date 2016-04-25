@@ -22,11 +22,14 @@ public class SysConfig {
 	private static String jdbcPasswd;
 	private static String jdbcDb;
 	private static int jdbcPort;
-	private static String jdbcServerName;
+	public static String jdbcServerName;
 
 	//网络参数配置
-	private static String serverIp;
+	public static String serverIp;
 	private static int serverPort;
+	
+	//台网信息
+	public static String serverId;
 
 	/** 预配置,读取文件,设置相应参数值 */
 	public static void preConfig(){
@@ -41,13 +44,7 @@ public class SysConfig {
 			serverIp = prop.getProperty("SERVER_IP", "localhost");
 			serverPort = Integer.valueOf(prop.getProperty("SERVER_PORT", "3306"));
 			
-//			System.err.println("user:"+jdbcUser);
-//			System.err.println("password:"+jdbcPasswd);
-//			System.err.println("database:"+jdbcDb);
-//			System.err.println("database port:"+jdbcPort);
-//			System.err.println("servername:"+jdbcServerName);
-//			System.err.println("ip:"+serverIp);
-//			System.err.println("port:"+serverPort);
+			serverId = prop.getProperty("SERVER_ID", "00");
 			
 		}else{
 			log.error("配置文件读取失败!");

@@ -7,28 +7,27 @@ import com.eqsys.model.RecvInfo;
 import com.eqsys.model.SysEvent;
 import com.eqsys.util.ClientConnList;
 import com.eqsys.util.ClientWindowMgr;
+import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.ParseUtil;
+import com.eqsys.util.SysConfig;
 import com.eqsys.util.TmpOblist;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -78,11 +77,41 @@ public class MainPaneController {
 	@FXML
 	private TableColumn<SysEvent, String> eventColumn;
 	
+	//台网信息
+	@FXML
+	private Label serverId;
+	@FXML
+	private Label serverIp;
+//	@FXML
+//	private Label serverState;
+	
+	//数据库信息
+	@FXML
+	private Label dbName;
+	@FXML
+	private Label dbType;
+	@FXML
+	private Label dbState;
+	
 	@FXML
 	private void initialize() {
 
 		// 添加各个分区到主窗口
 		createTree();
+		
+		//init server info and database info
+		serverId.setText(SysConfig.serverId);
+		serverIp.setText(SysConfig.serverIp);
+		dbName.setText(SysConfig.jdbcServerName);
+		dbType.setText("mysql");
+		if(JDBCHelper.getDbState()){
+			dbState.setText("已连接");
+			dbState.setTextFill(Color.GREEN);
+		}else{
+			dbState.setText("未连接");
+			dbState.setTextFill(Color.RED);
+		}
+			
 
 		// initialize recv data
 		timeColumn
