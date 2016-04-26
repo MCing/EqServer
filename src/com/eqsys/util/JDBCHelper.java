@@ -16,7 +16,7 @@ public class JDBCHelper {
 	//数据库连接池连接容量
 	private static final int connectionPoolCapacity = 50;
 	
-	private static boolean isDbConnect;
+	private static boolean dbState;
 	
 	public static boolean initDB(){
 		//使用连接池,数据源
@@ -33,12 +33,12 @@ public class JDBCHelper {
 			Connection testConn = poolMgr.getConnection();
 			testConn.close();
 			
-			isDbConnect = true;
+			dbState = true;
 		}catch(Exception e){
-			isDbConnect = false;
+			dbState = false;
 			log.error("数据库配置错误:"+e.getMessage());
 		}
-		return isDbConnect;
+		return dbState;
 	}
 	
 	/**
@@ -85,6 +85,6 @@ public class JDBCHelper {
 	}
 	
 	public static boolean getDbState(){
-		return isDbConnect;
+		return dbState;
 	}
 }
