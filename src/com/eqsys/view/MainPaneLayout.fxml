@@ -81,9 +81,9 @@
             </Tab>
         </tabs>
       </TabPane>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="3">
+      <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="3">
         <tabs>
-          <Tab text="主页">
+          <Tab closable="false" text="主页">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -148,6 +148,13 @@
                </content>
             </Tab>
         </tabs>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#handleCloseTab" text="关闭" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
       </TabPane>
       <AnchorPane GridPane.columnSpan="11">
          <children>

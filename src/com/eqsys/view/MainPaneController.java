@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -39,7 +40,7 @@ import javafx.util.Callback;
  *
  */
 public class MainPaneController extends FXMLController {
-	
+
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
 	private String dbSettingPath = "/com/eqsys/view/DatabaseSettingLayout.fxml";
@@ -60,7 +61,7 @@ public class MainPaneController extends FXMLController {
 	@FXML
 	private TableColumn<ClientInfo, Integer> triggerThreshold;
 
-	// 接收消息
+	// 接收消息信息
 	@FXML
 	private TableView<RecvInfo> recvInfoTable;
 	@FXML
@@ -69,8 +70,8 @@ public class MainPaneController extends FXMLController {
 	private TableColumn<RecvInfo, String> srcColumn;
 	@FXML
 	private TableColumn<RecvInfo, String> typeColumn;
-	
-	//系统事件
+
+	// 系统事件
 	@FXML
 	private TableView<SysEvent> eventTable;
 	@FXML
@@ -79,35 +80,40 @@ public class MainPaneController extends FXMLController {
 	private TableColumn<SysEvent, String> ssrcColumn;
 	@FXML
 	private TableColumn<SysEvent, String> eventColumn;
-	
-	//台网信息
+
+	// 台网信息
 	@FXML
 	private Label serverId;
 	@FXML
 	private Label serverIp;
-	
-	//数据库信息
+
+	// 数据库信息
 	@FXML
 	private Label dbName;
 	@FXML
 	private Label dbType;
 	@FXML
 	private Label dbState;
-	
+
+	// 主页面
+	@FXML
+	private TabPane mainTabPane;
+
+	SingleSelectionModel<Tab> workspSelectMode;// =
+												// mainTabPane.getSelectionModel();
+
 	@FXML
 	protected void initialize() {
-		
-		 Tab tab1 = new Tab();
-		
+
+		workspSelectMode = mainTabPane.getSelectionModel();
 
 		// 添加各个分区到主窗口
 		createTree();
-		
-		//init server info and database info
+
+		// init server info and database info
 		serverId.setText(SysConfig.serverId);
 		serverIp.setText(SysConfig.serverIp);
 		initDbInfo();
-			
 
 		// initialize recv data
 		timeColumn
@@ -123,45 +129,54 @@ public class MainPaneController extends FXMLController {
 		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 
 		// Initialize client info
-		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("stationId"));
-		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
+		stationId
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
+						"stationId"));
+		transMode
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
+						"transMode"));
 		sensitivity
-				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("sensitivity"));
-		triggerThreshold.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
-				"threshold"));
-		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
-		//实现对ClientInfo中一行的双击响应
-		clientTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
-			
-			@Override
-			public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
-				return new TableRowControl(); 
-			}
-		});
-		clientTable.setItems(ClientConnList.getInstance().getObservableList());
-		
-		// initialize system event
-				stimeColumn
-						.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
-								"time"));
-				ssrcColumn
-						.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
-								"srcId"));
-				eventColumn
-						.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
-								"event"));
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
+						"sensitivity"));
+		triggerThreshold
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
+						"threshold"));
+		transMode
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
+						"transMode"));
+		// 实现对ClientInfo中一行的双击响应
+		clientTable
+				.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
 
-				eventTable.setItems(TmpOblist.getsysEventObserList());
-		
+					@Override
+					public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
+						return new TableRowControl();
+					}
+				});
+		clientTable.setItems(ClientConnList.getInstance().getObservableList());
+
+		// initialize system event
+		stimeColumn
+				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+						"time"));
+		ssrcColumn
+				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+						"srcId"));
+		eventColumn
+				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+						"event"));
+
+		eventTable.setItems(TmpOblist.getsysEventObserList());
+
 	}
 
 	private void initDbInfo() {
 		dbName.setText(SysConfig.jdbcServerName);
 		dbType.setText("mysql");
-		if(JDBCHelper.getDbState()){
+		if (JDBCHelper.getDbState()) {
 			dbState.setText("已连接");
 			dbState.setTextFill(Color.GREEN);
-		}else{
+		} else {
 			dbState.setText("未连接");
 			dbState.setTextFill(Color.RED);
 		}
@@ -180,42 +195,44 @@ public class MainPaneController extends FXMLController {
 		root.getChildren().add(itemChild);
 		treeView.setRoot(root);
 	}
-	
+
 	/**
 	 * 用于控制clientInfo table 的行(实现双击响应)
 	 *
 	 */
-	class TableRowControl extends TableRow<ClientInfo> {  
-		  
-        public TableRowControl() {  
-            super();  
-            this.setOnMouseClicked(new EventHandler<MouseEvent>() {  
-                @Override  
-                public void handle(MouseEvent event) {  
-                    if (event.getButton().equals(MouseButton.PRIMARY)  //左键
-                            && event.getClickCount() == 2  				//双击
-                            && TableRowControl.this.getIndex() < clientTable.getItems().size()) {
-                    	ClientInfo clientInfo = clientTable.getSelectionModel().getSelectedItem();
-                    	openClientDetail(clientInfo);
-                    }  
-                }
+	class TableRowControl extends TableRow<ClientInfo> {
 
-            });  
-        }  
-    }  
-	Stage stage = null;/// = new Stage();
-	/** 打开客户端详情窗口  */
+		public TableRowControl() {
+			super();
+			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (event.getButton().equals(MouseButton.PRIMARY) // 左键
+							&& event.getClickCount() == 2 // 双击
+							&& TableRowControl.this.getIndex() < clientTable
+									.getItems().size()) {
+						ClientInfo clientInfo = clientTable.getSelectionModel()
+								.getSelectedItem();
+						openClientDetail(clientInfo);
+					}
+				}
+
+			});
+		}
+	}
+
+	/** 打开客户端详情窗口 */
 	private void openClientDetail(ClientInfo clientInfo) {
 
 		ClientWindowMgr manager = ClientWindowMgr.getClientWindowMgr();
-		if(manager.isExist(clientInfo.getStationId())){
+		if (manager.isExist(clientInfo.getStationId())) {
 			manager.open(clientInfo.getStationId());
 			return;
 		}
-		
+
 		Stage stage = new Stage();
-		
-    	FXMLLoader loader = new FXMLLoader();
+
+		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(clientDetailPath));
 		Node page = null;
 		ClientDetailController controller = null;
@@ -230,58 +247,62 @@ public class MainPaneController extends FXMLController {
 		Scene scene = new Scene((Parent) page);
 		stage.setTitle("客户端详情");
 		stage.setScene(scene);
-    	stage.centerOnScreen();
-    	stage.show();
-    	manager.add(clientInfo.getStationId(), controller);
+		stage.centerOnScreen();
+		stage.show();
+		manager.add(clientInfo.getStationId(), controller);
 	}
-	
-	/** 节点管理 */
-	@FXML
-	private void handleNodeMgr(){
-		openNodeMgr();
-	}
-	/** 打开节点管理窗口  */
-	private void openNodeMgr() {
 
-		Stage stage = new Stage();
-    	FXMLLoader loader = new FXMLLoader();
+	private Tab nodeMgrTab;
+	/** 打开节点管理界面  */
+	@FXML
+	private void handleNodeMgr() {
+		
+		if(nodeMgrTab == null){
+			nodeMgrTab = new Tab();
+			nodeMgrTab.setContent(getNodeFromFXML());
+			nodeMgrTab.setText("节点管理");
+		}
+		if(!mainTabPane.getTabs().contains(nodeMgrTab)){
+			
+			mainTabPane.getTabs().add(nodeMgrTab);
+		}
+		workspSelectMode.select(nodeMgrTab);
+	}
+
+	/** 打开节点管理窗口 */
+	private Node getNodeFromFXML() {
+
+		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(nodeMgrPath));
 		Node page = null;
 		try {
-			page = loader.load();
+			return loader.load();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return;
+			return null;
 		}
-		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
-		stage.initOwner(clientTable.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
-		Scene scene = new Scene((Parent) page);
-		stage.setTitle("节点管理");
-		stage.setScene(scene);
-    	stage.centerOnScreen();
-    	stage.show();
 	}
-	
+
 	/** 连接数据库 */
 	@FXML
-	private void handleConnectDb(){
-		
-		if(JDBCHelper.initDB()){
+	private void handleConnectDb() {
+
+		if (JDBCHelper.initDB()) {
 			initDbInfo();
 		}
 	}
-	
+
 	/** 数据库配置 */
-	@FXML 
-	private void handleDbSetting(){
+	@FXML
+	private void handleDbSetting() {
 		openDbSettingDialog();
 	}
 
-	/** 打开数据库设置对话框  */
+	/** 打开数据库设置对话框 */
 	private void openDbSettingDialog() {
-		
+
 		Stage stage = new Stage();
-    	FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(dbSettingPath));
 		Node page = null;
 		try {
@@ -292,12 +313,25 @@ public class MainPaneController extends FXMLController {
 			e.printStackTrace();
 			return;
 		}
-		stage.initModality(Modality.APPLICATION_MODAL);     //模态窗口
-		stage.initOwner(clientTable.getScene().getWindow());  //任意一个控件可获得其所属窗口对象
+		stage.initModality(Modality.APPLICATION_MODAL); // 模态窗口
+		stage.initOwner(clientTable.getScene().getWindow()); // 任意一个控件可获得其所属窗口对象
 		Scene scene = new Scene((Parent) page);
 		stage.setTitle("数据库设置");
 		stage.setScene(scene);
-    	stage.centerOnScreen();
-    	stage.show();
+		stage.centerOnScreen();
+		stage.show();
+	}
+
+	/** 关闭主工作无 tab */
+	@FXML
+	private void handleCloseTab() {
+		if (workspSelectMode.getSelectedIndex() == 0) { // 主页不可删除
+			return;
+		}
+		Tab delTab = workspSelectMode.getSelectedItem();
+		if (delTab != null) {
+			
+			mainTabPane.getTabs().remove(delTab);
+		}
 	}
 }
