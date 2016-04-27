@@ -15,7 +15,7 @@ import com.eqsys.msg.TransModeReq;
 import com.eqsys.util.DataBuilder;
 import com.eqsys.util.ParseUtil;
 
-public class ClientSettingController {
+public class ClientSettingController extends FXMLController{
 	
 	private ClientInfo client;
 	private Stage dialogStage;
@@ -31,7 +31,7 @@ public class ClientSettingController {
 	private Label currModeLab;
 	
 	@FXML
-	private void initialize() {
+	protected void initialize() {
 		
 		transmodeGroup = new ToggleGroup();
 		consRb.setToggleGroup(transmodeGroup);

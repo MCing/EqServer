@@ -28,7 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class NodeManagerController {
+public class NodeManagerController extends FXMLController {
 	
 	private ObservableList<ClientInfo> nodeList = FXCollections.observableArrayList();
 	private ClientInfoDao nodeInfoDao = new ClientInfoDao();
@@ -50,7 +50,7 @@ public class NodeManagerController {
 	private TableColumn<ClientInfo, Integer> altitude;
 	
 	@FXML
-	private void initialize() {
+	protected void initialize() {
 		
 		//init tableview
 		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("stationId"));

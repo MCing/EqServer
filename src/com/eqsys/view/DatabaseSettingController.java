@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class DatabaseSettingController {
+public class DatabaseSettingController extends FXMLController {
 
 	private Stage stage;
 	
@@ -24,7 +24,7 @@ public class DatabaseSettingController {
 	private PasswordField password;
 	
 	@FXML
-	private void initialize(){
+	protected void initialize(){
 		serverName.setText(SysConfig.getJdbcServerName());
 		dbName.setText(SysConfig.getJdbcDb());
 		port.setText(String.valueOf(SysConfig.getJdbcPort()));

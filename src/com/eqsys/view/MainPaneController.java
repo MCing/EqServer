@@ -34,7 +34,7 @@ import javafx.util.Callback;
  * 主工作窗口
  *
  */
-public class MainPaneController {
+public class MainPaneController extends FXMLController {
 	
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
@@ -91,7 +91,7 @@ public class MainPaneController {
 	private Label dbState;
 	
 	@FXML
-	private void initialize() {
+	protected void initialize() {
 
 		// 添加各个分区到主窗口
 		createTree();

@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class LoginLayoutController {
+public class LoginLayoutController extends FXMLController {
 
 	private EqServer mainApp;
 	// test 测试使用固定账号密码
@@ -28,7 +28,7 @@ public class LoginLayoutController {
 	private Label errorLabel;
 
 	@FXML
-	private void initialize() {
+	protected void initialize() {
 		accountTf.setText(tmpAccount);
 		passwordPf.setText(tmpPassword);
 	}
@@ -82,7 +82,7 @@ public class LoginLayoutController {
 		errorLabel.setText("");
 	}
 
-	public void setMainApp(EqServer main) {
+	public void initController(EqServer main) {
 		this.mainApp = main;
 	}
 

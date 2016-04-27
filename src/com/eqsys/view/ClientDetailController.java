@@ -26,7 +26,7 @@ import javafx.stage.Window;
  * 客户端详情
  *
  */
-public class ClientDetailController {
+public class ClientDetailController extends FXMLController {
 
 	private ClientInfo client;
 	private Stage stage;
@@ -54,7 +54,7 @@ public class ClientDetailController {
 	private Button thresholdBtn;
 
 	@FXML
-	private void initialize() {
+	protected void initialize() {
 		initClientInfo();
 	}
 

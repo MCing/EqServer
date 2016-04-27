@@ -18,6 +18,7 @@ import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.LogUtil;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
+import com.eqsys.view.FXMLController;
 import com.eqsys.view.LoginLayoutController;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -79,9 +80,8 @@ public class EqServer extends Application {
 	private void globalInit() {
 		LogUtil.initLog();
 		SysConfig.preConfig(); // 配置文件
-		initView();
-		// 初始化数据库连接池
 		JDBCHelper.initDB();
+		initView();
 
 	}
 
@@ -106,40 +106,42 @@ public class EqServer extends Application {
 	/** 显示登录窗口 */
 	private void loadLoginPage() {
 
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ParseUtil.getFXMLURL(loginPath));
-		Node page = null;
-		try {
-			page = loader.load();
-			LoginLayoutController controller = loader.getController();
-			controller.setMainApp(EqServer.this);
-		} catch (IOException e) {
-			log.error("登录页面加载失败:" + e.getMessage());
-			return;
-		}
-		Scene scene = new Scene((Parent) page);
-		mPrimaryStage.setScene(scene);
+		LoginLayoutController controller = (LoginLayoutController) loadFxml(loginPath);
+		controller.initController(EqServer.this);
 	}
 
 	/** 显示主工作窗口 */
 	public void loadMainPage() {
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ParseUtil.getFXMLURL(mainPanePath));
-		Node page = null;
-		try {
-			page = loader.load();
-		} catch (IOException e) {
-			log.error("主页面加载失败:" + e.getMessage());
-			return;
-		}
-		Scene scene = new Scene((Parent) page, screenWidth * 0.8,
-				screenHeight * 0.8);
+		
+		mPrimaryStage.close();
+		loadFxml(mainPanePath);
+		
 		mPrimaryStage.setMinHeight(screenHeight * 0.8);
 		mPrimaryStage.setMinWidth(screenWidth * 0.8);
-		mPrimaryStage.setScene(scene);
 		mPrimaryStage.centerOnScreen();
+		mPrimaryStage.show();
 		initNetty();
+	}
+	
+	/**
+	 * 加载fxml
+	 * @param path	fxml全路径
+	 * @return		fxml的controller
+	 */
+	public FXMLController loadFxml(String path){
+		
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(path));
+		Parent page = null;
+		try {
+			page = loader.load();
+			mPrimaryStage.setScene(new Scene(page));
+			return loader.getController();
+		} catch (IOException e) {
+			log.error(path+"加载失败:" + e.getMessage());
+			return null;
+		}
+		
 	}
 
 	/**

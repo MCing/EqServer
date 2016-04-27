@@ -10,7 +10,7 @@ import com.eqsys.dao.ClientInfoDao;
 import com.eqsys.model.ClientInfo;
 import com.eqsys.util.ParseUtil;
 
-public class NodeEditController {
+public class NodeEditController extends FXMLController {
 	
 	private ClientInfo node;
 	private Stage dialogStage;
@@ -37,7 +37,7 @@ public class NodeEditController {
 	
 	
 	@FXML
-	private void initialize() {
+	protected void initialize() {
 		
 	}
 	
