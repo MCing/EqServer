@@ -113,9 +113,8 @@ public class EqServer extends Application {
 	/** 显示主工作窗口 */
 	public void loadMainPage() {
 		
-		mPrimaryStage.close();
+		mPrimaryStage.close();   //关闭登录窗口
 		loadFxml(mainPanePath);
-		
 		mPrimaryStage.setMinHeight(screenHeight * 0.8);
 		mPrimaryStage.setMinWidth(screenWidth * 0.8);
 		mPrimaryStage.centerOnScreen();
@@ -138,6 +137,7 @@ public class EqServer extends Application {
 			mPrimaryStage.setScene(new Scene(page));
 			return loader.getController();
 		} catch (IOException e) {
+			e.printStackTrace();
 			log.error(path+"加载失败:" + e.getMessage());
 			return null;
 		}

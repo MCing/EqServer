@@ -43,6 +43,112 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
+        <tabs>
+          <Tab text="异常信息">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView prefHeight="51.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn prefWidth="75.0" text="时间" />
+                              <TableColumn prefWidth="75.0" text="来自节点" />
+                              <TableColumn prefWidth="75.0" text="异常信息" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="5" GridPane.rowSpan="3">
+        <tabs>
+          <Tab text="接收数据信息">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="recvInfoTable" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="timeColumn" prefWidth="75.0" text="时间" />
+                              <TableColumn fx:id="srcColumn" prefWidth="75.0" text="来源" />
+                              <TableColumn fx:id="typeColumn" prefWidth="75.0" text="类型" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="3">
+        <tabs>
+          <Tab text="主页">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <GridPane AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+                           <children>
+                              <Label text="数据库信息" GridPane.columnSpan="2" GridPane.halignment="LEFT">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label text="服务器名称：" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                              <Label text="数据库类型：" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                              <Label fx:id="dbName" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="dbType" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="连接状态：" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+                              <Label fx:id="dbState" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="118.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.0" minWidth="10.0" prefWidth="82.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                        <GridPane layoutX="394.0" layoutY="-5.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                           <children>
+                              <Label text="台网服务器信息" GridPane.columnSpan="2" GridPane.halignment="LEFT">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label text="台网名称：" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                              <Label text="IP：" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                              <Label fx:id="serverId" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="serverIp" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="87.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="113.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
       <AnchorPane GridPane.columnSpan="11">
          <children>
             <HBox prefHeight="0.0" prefWidth="670.0">
@@ -90,55 +196,6 @@
             <TreeView fx:id="treeView" editable="true" />
          </children>
       </VBox>
-      <VBox prefHeight="239.0" prefWidth="791.0" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="5" GridPane.rowSpan="3">
-         <children>
-            <Label prefHeight="22.0" prefWidth="724.0" text="接受数据信息" />
-            <TableView fx:id="recvInfoTable">
-               <columns>
-                  <TableColumn fx:id="timeColumn" prefWidth="75.0" text="时间" />
-                  <TableColumn fx:id="srcColumn" prefWidth="75.0" text="来源" />
-                  <TableColumn fx:id="typeColumn" prefWidth="75.0" text="类型" />
-               </columns>
-            </TableView>
-         </children>
-      </VBox>
-      <VBox GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
-         <children>
-            <Label prefHeight="21.0" prefWidth="231.0" text="已连接客户端" />
-            <TableView fx:id="clientTable">
-               <columns>
-                  <TableColumn fx:id="stationId" prefWidth="60.0" text="站台ID" />
-                  <TableColumn fx:id="transMode" prefWidth="65.0" text="传输模式" />
-                  <TableColumn fx:id="sensitivity" prefWidth="65.0" text="灵敏度" />
-                  <TableColumn fx:id="triggerThreshold" prefWidth="60.0" text="触发阈值" />
-               </columns>
-            </TableView>
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
-         <children>
-            <Label prefHeight="15.0" prefWidth="443.0" text="  异常报警信息" />
-            <TableView>
-               <columns>
-                  <TableColumn prefWidth="75.0" text="时间" />
-                  <TableColumn prefWidth="75.0" text="来自节点" />
-                  <TableColumn prefWidth="75.0" text="异常信息" />
-               </columns>
-            </TableView>
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
-         <children>
-            <Label text="系统事件" />
-            <TableView fx:id="eventTable">
-              <columns>
-                <TableColumn fx:id="stimeColumn" prefWidth="75.0" text="时间" />
-                <TableColumn fx:id="ssrcColumn" prefWidth="75.0" text="来源" />
-                  <TableColumn fx:id="eventColumn" prefWidth="75.0" text="事件" />
-              </columns>
-            </TableView>
-         </children>
-      </VBox>
       <HBox GridPane.columnSpan="11" GridPane.rowIndex="1">
          <children>
             <Button mnemonicParsing="false" text="功能一" />
@@ -147,63 +204,44 @@
             <Button mnemonicParsing="false" text="功能四" />
          </children>
       </HBox>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="3">
-         <children>
-            <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="63.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="137.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="台网服务器信息" GridPane.columnSpan="2" GridPane.halignment="LEFT">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Label>
-                  <Label text="台网名称：" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <Label text="IP：" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                  <Label fx:id="serverId" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="serverIp" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-               </children>
-            </GridPane>
-            <GridPane layoutX="300.0" layoutY="-14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
-               <children>
-                  <Label text="数据库信息" GridPane.columnSpan="2" GridPane.halignment="LEFT">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Label>
-                  <Label text="服务器名称：" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <Label text="数据库类型：" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                  <Label fx:id="dbName" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="dbType" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="连接状态：" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-                  <Label fx:id="dbState" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-               </children>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="73.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.0" minWidth="10.0" prefWidth="127.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-         </children>
-      </AnchorPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
+        <tabs>
+          <Tab closable="false" text="已连接台站">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="clientTable" prefHeight="51.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="stationId" prefWidth="60.0" text="站台ID" />
+                              <TableColumn fx:id="transMode" prefWidth="65.0" text="传输模式" />
+                              <TableColumn fx:id="sensitivity" prefWidth="65.0" text="灵敏度" />
+                              <TableColumn fx:id="triggerThreshold" prefWidth="60.0" text="触发阈值" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
+        <tabs>
+          <Tab text="系统事件">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="eventTable" prefHeight="400.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn fx:id="stimeColumn" prefWidth="75.0" text="时间" />
+                            <TableColumn fx:id="ssrcColumn" prefWidth="75.0" text="来源" />
+                              <TableColumn fx:id="eventColumn" prefWidth="75.0" text="事件" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </GridPane>

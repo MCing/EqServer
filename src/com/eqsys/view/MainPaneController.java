@@ -1,6 +1,7 @@
 package com.eqsys.view;
 
 import java.io.IOException;
+
 import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.model.SysEvent;
@@ -10,6 +11,7 @@ import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
 import com.eqsys.util.TmpOblist;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -92,6 +96,9 @@ public class MainPaneController extends FXMLController {
 	
 	@FXML
 	protected void initialize() {
+		
+		 Tab tab1 = new Tab();
+		
 
 		// 添加各个分区到主窗口
 		createTree();
