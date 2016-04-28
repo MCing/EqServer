@@ -44,8 +44,8 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 		}else if(msgType.equals(MsgConstant.TYPE_WS)){    //时间段波形数据
 			log.info("时间段波形数据->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
 		}else if(msgType.equals(MsgConstant.TYPE_TI)){    //触发信息
-			typeStr = "时间段波形数据";
-			log.info("时间段波形数据->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
+			typeStr = "触发信息数据";
+			log.info("触发信息数据->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
 		}else if(msgType.equals(MsgConstant.TYPE_SI)){    //状态信息
 			typeStr = "状态信息";
 			log.info("状态信息包->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());

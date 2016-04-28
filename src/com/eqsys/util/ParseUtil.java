@@ -54,5 +54,23 @@ public class ParseUtil {
 		}
 		return url;
 	}
+	
+	/** 传输数据类型转换 */
+	public static String parseDataType(String type){
+		
+		String typeStr = null;
+		if(type.equals(MsgConstant.TYPE_WC)){    //连续波形数据
+			typeStr = "连续波形数据";
+		}else if(type.equals(MsgConstant.TYPE_WT)){	  //触发波形数据
+			typeStr = "触发波形数据";
+		}else if(type.equals(MsgConstant.TYPE_WS)){    //时间段波形数据
+			typeStr = "时间段波形数据";
+		}else if(type.equals(MsgConstant.TYPE_TI)){    //触发信息
+			typeStr = "触发信息数据";
+		}else if(type.equals(MsgConstant.TYPE_SI)){    //状态信息
+			typeStr = "状态信息数据";
+		}
+		return typeStr;
+	}
 
 }
