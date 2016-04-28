@@ -21,9 +21,6 @@ public class WavefDataDao {
 		boolean ret = false;
 		PreparedStatement preStat = null;
 		Connection conn = null;
-//		if (msg == null) {
-//			return false;
-//		}
 		try {
 			WavefData t = (WavefData) msg.getBody();
 			conn = JDBCHelper.getDBConnection();

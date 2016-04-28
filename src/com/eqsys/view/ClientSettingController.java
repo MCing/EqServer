@@ -66,7 +66,6 @@ public class ClientSettingController extends FXMLController{
 		Toggle selectedRb = transmodeGroup.getSelectedToggle();
 		if(selectedRb != null){
 			short selectMode = (short)selectedRb.getUserData();
-			System.err.println(selectMode);
 			if(selectMode != ParseUtil.parseTransMode(client.getTransMode())){
 				CtrlEvent transModeEvent = new CtrlEvent();
 				TransModeReq req = new TransModeReq();

@@ -34,7 +34,6 @@ public class RegRespHandler extends ChannelHandlerAdapter {
 		EqMessage eqMsg = (EqMessage) msg;
 		Header hMsg = eqMsg.getHeader();
 		String msgType = hMsg.getMsgType();
-//		System.err.println(msgType);
 		//处理注册信息
 		if (msgType.equals(MsgConstant.TYPE_RE)) {
 
