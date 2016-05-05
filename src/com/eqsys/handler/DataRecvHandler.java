@@ -2,6 +2,7 @@ package com.eqsys.handler;
 
 import org.apache.log4j.Logger;
 
+import com.eqsys.dao.StatusDataDao;
 import com.eqsys.dao.TrgDataDao;
 import com.eqsys.dao.WavefDataDao;
 import com.eqsys.msg.EqMessage;
@@ -24,6 +25,7 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 	
 	private WavefDataDao wavefDataDao = new WavefDataDao();
 	private TrgDataDao trgDataDao = new TrgDataDao();
+	private StatusDataDao statusDao = new StatusDataDao();
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
@@ -50,7 +52,7 @@ public class DataRecvHandler extends ChannelHandlerAdapter {
 			trgDataDao.save(eqMsg);
 			log.info("触发信息数据->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
 		}else if(msgType.equals(MsgConstant.TYPE_SI)){    //状态信息
-			
+			statusDao.save(eqMsg);
 			log.info("状态信息包->" + "stid:"+hMsg.getStationId()+" id:"+hMsg.getPid());
 		}
 		TmpOblist.addToRecvList(hMsg.getStationId(), ParseUtil.parseDataType(msgType));
