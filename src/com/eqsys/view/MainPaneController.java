@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
@@ -25,12 +26,16 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -94,6 +99,12 @@ public class MainPaneController extends FXMLController {
 	private Label dbType;
 	@FXML
 	private Label dbState;
+	
+	//快捷键
+	@FXML 
+	private Button connDbBtn;
+	@FXML
+	private Button nodeMgrBtn;
 
 	// 主页面
 	@FXML
@@ -104,7 +115,7 @@ public class MainPaneController extends FXMLController {
 
 	@FXML
 	protected void initialize() {
-
+		
 		workspSelectMode = mainTabPane.getSelectionModel();
 
 		// 添加各个分区到主窗口
@@ -167,7 +178,14 @@ public class MainPaneController extends FXMLController {
 						"event"));
 
 		eventTable.setItems(TmpOblist.getsysEventObserList());
-
+		
+		
+		//tooltip test
+		Tooltip tooltip = new Tooltip("连接数据库");  
+//        tooltip.setFont(new Font("Arial", 16));  
+        connDbBtn.setTooltip(tooltip);
+        
+        nodeMgrBtn.setTooltip(new Tooltip("节点管理"));
 	}
 
 	private void initDbInfo() {
@@ -323,15 +341,15 @@ public class MainPaneController extends FXMLController {
 	}
 
 	/** 关闭主工作无 tab */
-	@FXML
-	private void handleCloseTab() {
-		if (workspSelectMode.getSelectedIndex() == 0) { // 主页不可删除
-			return;
-		}
-		Tab delTab = workspSelectMode.getSelectedItem();
-		if (delTab != null) {
-			
-			mainTabPane.getTabs().remove(delTab);
-		}
-	}
+//	@FXML
+//	private void handleCloseTab() {
+//		if (workspSelectMode.getSelectedIndex() == 0) { // 主页不可删除
+//			return;
+//		}
+//		Tab delTab = workspSelectMode.getSelectedItem();
+//		if (delTab != null) {
+//			
+//			mainTabPane.getTabs().remove(delTab);
+//		}
+//	}
 }

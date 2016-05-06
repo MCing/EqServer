@@ -1,0 +1,243 @@
+
+.background {
+    -fx-background-color: #1d1d1d;
+}
+
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+/*
+.table-view {
+    -fx-base: #1d1d1d;
+    -fx-control-inner-background: #1d1d1d;
+    -fx-background-color: #1d1d1d;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color: 
+        transparent
+        transparent
+        derive(-fx-base, 80%) 
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+*/
+
+/*******************************************************************************
+ *                                                                             *
+ * 菜单栏                                                                     												   *
+ *                                                                             *
+ ******************************************************************************/
+/** 菜单栏背景色 */
+.menu-bar {
+    -fx-background-color: #3e9eff;
+}
+/** 下拉菜单背景色 */
+.context-menu {
+    -fx-background-color: white;
+}
+/** 一级菜单文字 */
+.menu-bar .label {
+    -fx-font-size: 10pt;
+    -fx-text-fill: white;
+}
+
+/** 二级菜单背景色 */
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background: -fx-selection-bar;
+    -fx-background-color: white;
+}
+/** 二级菜单背景色获得焦点时背景色 */
+.menu-bar > .container > .menu-button:hover > .label,
+.menu-bar > .container > .menu-button:focused > .label,
+.menu-bar > .container > .menu-button:showing  > .label {
+    -fx-text-fill: black;
+}
+/** 二级菜单文字 */
+.menu-item >.label {
+    -fx-padding: 0em 0.5em 0em 0em;
+    -fx-text-fill: #1d1d1d;
+}
+.menu-item:focused {
+     -fx-background: -fx-selection-bar;
+     -fx-background-color: derive(#3e9eff,50%);
+     -fx-text-fill:  -fx-text-background-color;
+}
+
+
+
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+
+/*******************************************************************************
+ *                                                                             *
+ * TabPane                                                                     *
+ *                                                                             *
+ ******************************************************************************/
+ 
+/** tab 文本  */
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: -fx-text-base-color;
+}
+/** tab 的方框形状 */
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-insets: 0 1 1 0, 1 2 1 1, 2 3 1 2;
+   /* -fx-background-radius: 3 3 0 0, 2 2 0 0, 1 1 0 0;*/
+    -fx-background-radius: 3 3 0 0, 0 0 0 0, 0 0 0 0;
+    -fx-padding: 0.083333em 0.5em 0.0769em 0.5em; /* 1 6 0.99 6 */
+}
+
+/** 顶部tab,未选中时的颜色 */
+.tab-pane > .tab-header-area > .headers-region > .tab:top {
+    /*-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;*/
+    -fx-background-color: #66b3ff;
+}
+/** 右部tab,未选中时的颜色 */
+.tab-pane > .tab-header-area > .headers-region > .tab:right {
+  /*  -fx-background-color: -fx-outer-border, -fx-inner-border-bottomup, -fx-body-color-bottomup;*/
+    -fx-background-color: #0080ff;
+}
+/** 底部tab,未选中时的颜色 */
+.tab-pane > .tab-header-area > .headers-region > .tab:bottom {
+   /* -fx-background-color: -fx-outer-border, -fx-inner-border-bottomup, -fx-body-color-bottomup;*/
+    -fx-background-color: #1d1d1d;
+}
+/** 左部tab,未选中时的颜色 */
+.tab-pane > .tab-header-area > .headers-region > .tab:left {
+   /* -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; */
+    -fx-background-color: #1d1d1d;
+}
+/** 鼠标在tab上面时*/
+.tab-pane > .tab-header-area > .headers-region > .tab:hover {
+    -fx-color: -fx-hover-base;
+}
+/** 当前被选中tab的颜色 */
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    /*-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-background;*/
+    -fx-background-color: #e8ffff;
+    -fx-background-insets: 0 1 1 0, 1 2 0 1, 2 3 0 2;
+}
+/** 选中tab 后的边框颜色 */
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-width: 1, 1;
+    /*-fx-border-color: -fx-focus-color, -fx-faint-focus-color;*/
+    -fx-border-color: #e8ffff;
+    -fx-border-insets: -4 -4 -6 -5, -2 -2 -5 -3;
+    -fx-border-radius: 2, 1; /* looks sharper if outer border has a tighter radius (2 instead of 3) */
+}
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:bottom:selected .focus-indicator {
+    -fx-border-insets: -6 -5 -4 -4, -5 -3 -2 -2;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:disabled:hover {
+    -fx-color: -fx-base;
+}
+/** 导航条背景色 */
+.tab-pane > .tab-header-area > .tab-header-background {
+    /* TODO should not be using text-box-border I think? */
+  /*  -fx-background-color:  
+        -fx-outer-border,
+        -fx-text-box-border, 
+        linear-gradient(from 0px 0px to 0px 5px, -fx-text-box-border, derive(-fx-text-box-border, 30%));
+   */
+     -fx-background-radius: 3 3 0 0, 0 0 0 0, 0 0 0 0;
+    -fx-background-color:  
+        linear-gradient(from 0px 0px to 0px 5px, #66b3ff, derive(#66b3ff, 30%));
+}
+/** 导航条背景 */
+.tab-pane:top > .tab-header-area > .tab-header-background {
+    -fx-background-insets: 0 5 0 0/*0, 0 0 1 0, 1;*/
+}
+/** 导航条大小  */
+.tab-pane:top > .tab-header-area {
+    /*-fx-padding: 0.416667em 0.166667em 0.0em 0.416667em; *//* 5 2 0 5 */
+    /*-fx-padding: 0.416667em 5 0.0em 0.416667em;  5 2 0 5 */
+    -fx-padding: 0.416em 5 0em 0.4em; /* 5 2 0 5 */
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * 快捷键                                                                     												   *
+ *                                                                             *
+ ******************************************************************************/
+/** 快捷键栏 */
+#shortkeybg{
+	-fx-border-color: transparent transparent #DCDCDC transparent;
+}
+
+/** 快捷键  
+ * 图片要求：40x40 物体居中
+ * */
+#shortkey1 {
+    
+-fx-background-color: null;
+-fx-background-image: url("images/conndb_btn.png");
+-fx-background-repeat:  stretch 
+}
+
+#shortkey2 {
+    
+-fx-background-color: null;
+-fx-background-image: url("images/client_btn.png");
+-fx-background-repeat:  no-repeat
+}
+/** 快捷键获得焦点时的状态  */
+#shortkey1:hover, #shortkey2:hover {
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.6) , 10, 0.5 , 0 , 0 );
+	-fx-border-color: #8B8970;
+    -fx-border-width: 0.5, 0.5;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+
+
+
+
+
