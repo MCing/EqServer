@@ -43,7 +43,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
         <tabs>
           <Tab text="异常信息">
             <content>
@@ -62,7 +62,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="5" GridPane.rowSpan="3">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="5" GridPane.rowSpan="3">
         <tabs>
           <Tab text="接收数据信息">
                <content>
@@ -81,7 +81,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="3">
+      <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" styleClass="workspace" GridPane.columnIndex="3" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="3">
         <tabs>
           <Tab closable="false" text="    主页    ">
                <content>
@@ -152,7 +152,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
             </Tab>
-            <Tab text="111111">
+            <Tab text="111">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
@@ -214,7 +214,7 @@
             <Insets />
          </GridPane.margin>
       </HBox>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
         <tabs>
           <Tab closable="false" text="已连接台站">
             <content>
@@ -234,7 +234,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
         <tabs>
           <Tab text="系统事件">
                <content>
