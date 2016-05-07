@@ -43,7 +43,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="3">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
         <tabs>
           <Tab text="异常信息">
             <content>
@@ -195,13 +195,6 @@
                </opaqueInsets>
             </MenuBar>
          </children></AnchorPane>
-      <VBox prefHeight="349.0" prefWidth="146.0" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
-         <children>
-            <Label prefHeight="29.0" prefWidth="146.0" text="节点布局信息" />
-            <Label prefHeight="18.0" prefWidth="95.0" text="      所有节点分布" />
-            <TreeView fx:id="treeView" editable="true" />
-         </children>
-      </VBox>
       <HBox id="shortkeybg" alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="1098.0" GridPane.columnSpan="12" GridPane.rowIndex="1">
          <children>
             <Button id="shortkey1" fx:id="connDbBtn" mnemonicParsing="false" onAction="#handleConnectDb" prefHeight="40.0" prefWidth="40.0">
@@ -214,7 +207,7 @@
             <Insets />
          </GridPane.margin>
       </HBox>
-      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="3">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="datatab" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="6">
         <tabs>
           <Tab closable="false" text="已连接台站">
             <content>

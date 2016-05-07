@@ -50,10 +50,6 @@ public class MainPaneController extends FXMLController {
 	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
 	private String dbSettingPath = "/com/eqsys/view/DatabaseSettingLayout.fxml";
 
-	// 左栏,节点树形
-	@FXML
-	private TreeView treeView;
-
 	// 客户端信息
 	@FXML
 	private TableView<ClientInfo> clientTable;
@@ -119,7 +115,7 @@ public class MainPaneController extends FXMLController {
 		workspSelectMode = mainTabPane.getSelectionModel();
 
 		// 添加各个分区到主窗口
-		createTree();
+//		createTree();
 
 		// init server info and database info
 		serverId.setText(SysConfig.serverId);
@@ -201,18 +197,18 @@ public class MainPaneController extends FXMLController {
 	}
 
 	/** 树形菜单 */
-	private void createTree() {
-
-		// create root
-		TreeItem<String> root = new TreeItem<String>("Root");
-		// root.setExpanded(true);
-		// create child
-		TreeItem<String> itemChild = new TreeItem<String>("Child");
-		itemChild.setExpanded(false);
-		// root is the parent of itemChild
-		root.getChildren().add(itemChild);
-		treeView.setRoot(root);
-	}
+//	private void createTree() {
+//
+//		// create root
+//		TreeItem<String> root = new TreeItem<String>("Root");
+//		// root.setExpanded(true);
+//		// create child
+//		TreeItem<String> itemChild = new TreeItem<String>("Child");
+//		itemChild.setExpanded(false);
+//		// root is the parent of itemChild
+//		root.getChildren().add(itemChild);
+//		treeView.setRoot(root);
+//	}
 
 	/**
 	 * 用于控制clientInfo table 的行(实现双击响应)
