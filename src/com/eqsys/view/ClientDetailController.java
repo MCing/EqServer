@@ -1,20 +1,12 @@
 package com.eqsys.view;
 
 import java.io.IOException;
+import java.util.List;
 
-import com.eqsys.model.ClientInfo;
-import com.eqsys.model.RecvInfo;
-import com.eqsys.model.WavefDataModel;
-import com.eqsys.util.ClientConnList;
-import com.eqsys.util.ClientWindowMgr;
-import com.eqsys.util.ParseUtil;
-import com.eqsys.util.TmpOblist;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,10 +18,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
+
+import com.eqsys.dao.WavefDataDao;
+import com.eqsys.model.ClientInfo;
+import com.eqsys.model.WavefDataModel;
+import com.eqsys.util.ParseUtil;
+import com.eqsys.util.UTCTimeUtil;
 
 /**
  * 客户端详情
@@ -40,6 +36,8 @@ public class ClientDetailController extends FXMLController {
 	private ClientInfo client;
 	private Stage stage;
 	private String settingPath = "/com/eqsys/view/ClientSettingLayout.fxml";
+	
+	private ObservableList<WavefDataModel> wavefDataList  = FXCollections.observableArrayList();
 
 	//控制 tab
 	@FXML
@@ -85,7 +83,7 @@ public class ClientDetailController extends FXMLController {
 	protected void initialize() {
 		initClientInfo();
 	}
-
+	//初始化数据
 	public void initController(Stage stage, ClientInfo client){
 		this.stage = stage;
 		this.client = client;
@@ -96,6 +94,7 @@ public class ClientDetailController extends FXMLController {
 	/** 初始化波形数据tab */
 	private void initWavefdataTab() {
 		
+		//init tableview
 		wavefId
 		.setCellValueFactory(new PropertyValueFactory<WavefDataModel, Integer>(
 				"id"));
@@ -105,8 +104,17 @@ public class ClientDetailController extends FXMLController {
 		wavefTime
 		.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>(
 				"time"));
-		//not finish
-		wavefTable.setItems(null);
+		wavefTable.setItems(wavefDataList);
+		//初始化数据
+		long starttime = UTCTimeUtil.getCurrUTCTime() - (10*60*1000);
+		long endtime =  UTCTimeUtil.getCurrUTCTime();
+		
+		int count = WavefDataDao.getCount(client.getStationId(), starttime, endtime);
+		List<WavefDataModel> list = WavefDataDao.getRecord(client.getStationId(), starttime, endtime);
+		wavefDataList.addAll(list);
+		System.err.println("initWavefdataTab count:"+count);
+		
+		
 	}
 
 	/** 设置ClientInfo(客户端信息值) */
@@ -149,11 +157,20 @@ public class ClientDetailController extends FXMLController {
 		return client.getPermit() == 0 ? true : false;
 	}
 
-	/** 处理 设置触发阈值 */
 	@FXML
-	private void handleThreshold() {
-//		new ModalDialog(permitLab.getScene().getWindow());
+	private void handleWavefQuery(){
+		
+		/**
+		 LocalDate date = datePicker.getValue();
+		 long time = date.toEpochDay() * 24 * 60 *60*1000;
+		 System.err.println(date.toString());
+		 System.err.println(UTCTimeUtil.parseUTCTime2Str(time));
+		 
+		 */
 	}
+	
+	
+	
 	
 	/** 打开客户端控制界面 */
 	private void openClientSetting() {

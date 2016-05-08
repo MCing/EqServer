@@ -32,11 +32,11 @@ public class ClientConnList {
 	 */
 	private Map<String, SocketChannel> map;
 	private ObservableList<ClientInfo> clientList;
-	private ClientInfoDao clientInfoDao;
+//	private ClientInfoDao clientInfoDao;
 	private ClientConnList(){
 		map = new ConcurrentHashMap<String, SocketChannel>();
 		clientList = FXCollections.observableArrayList();
-		clientInfoDao = new ClientInfoDao();
+//		clientInfoDao = new ClientInfoDao();
 	}
 	
 	public static ClientConnList getInstance(){
@@ -64,7 +64,7 @@ public class ClientConnList {
 		
 		clientList.add(info);
 		//加入数据库
-		clientInfoDao.add(info);
+		ClientInfoDao.add(info);
 	}
 	
 	public void remove(SocketChannel socketChannel){

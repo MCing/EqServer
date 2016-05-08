@@ -118,7 +118,7 @@
                      <children>
                         <Label text="起始时间:" />
                         <DatePicker fx:id="datePicker" promptText="请选择起始日期" />
-                        <Button fx:id="wavefQuery" mnemonicParsing="false" text="查询" />
+                        <Button fx:id="wavefQuery" mnemonicParsing="false" onAction="#handleWavefQuery" text="查询" />
                      </children>
                   </HBox>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">

@@ -24,15 +24,6 @@ public class ClientInfoDao {
 	private  static final String mUpdataTransModeSql = "update " + mTableName + " set transmode=? where stationid=?;";
 	private  static final String mUpdataThresholdSql = "update " + mTableName + " set trigglethreshold=? where stationid=?;";
 
-//	private static final String TableName = "triggerdata_t";
-//	private String insertSql = "insert into "+TableName+
-//			"(starttimesec, starttimemsec, relattime, stalta, initmotiondir, "
-//			+ "ud2pga, ud2pgv, ud2pgd, ew2pga, ew2pgv,ew2pgd, ns2pga, ns2pgv, ns2pgd,"
-//			+ "ud2psa03, ud2psa10, ud2psa30, ew2psa03, ew2psa10,ew2psa30, ns2psa03, ns2psa10, ns2psa30,"
-//			+ "intensity) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-	
-	public ClientInfoDao() {}
-	
 	/**
 	 * 在数据库中添加一条信息
 	 * 
@@ -268,7 +259,6 @@ public class ClientInfoDao {
 			conn = JDBCHelper.getDBConnection();
 			preStat = conn.prepareStatement(sql);
 			ResultSet results = preStat.executeQuery();
-			int i = 0; //_test
 			while(results.next()){
 				ClientInfo node = new ClientInfo();
 				node.setStationId(results.getString("stationid"));

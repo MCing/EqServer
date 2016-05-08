@@ -33,7 +33,7 @@ public class TmpOblist {
 	 */
 	public static void addToRecvList(String id, String type){
 		
-		RecvInfo info = new RecvInfo(id, type, UTCTimeUtil.getStringTime(new Date().getTime()));
+		RecvInfo info = new RecvInfo(id, type, UTCTimeUtil.timeFormat1(new Date().getTime()));
 		synchronized (recvInfoList) {
 			//列表超过一定数目后应该保存起来,然后清空
 			if(recvInfoList.size() > 1000){
@@ -52,7 +52,7 @@ public class TmpOblist {
 	 */
 	public static void addToSysEventList(String id, String eventStr){
 		
-		SysEvent event = new SysEvent(id, eventStr, UTCTimeUtil.getStringTime(new Date().getTime()));
+		SysEvent event = new SysEvent(id, eventStr, UTCTimeUtil.timeFormat1(new Date().getTime()));
 		synchronized (sysEventList) {
 			//列表超过一定数目后应该保存起来,然后清空
 			if(sysEventList.size() > 1000){
