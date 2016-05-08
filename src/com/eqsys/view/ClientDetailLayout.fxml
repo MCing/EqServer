@@ -92,14 +92,15 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="148.0" minHeight="10.0" prefHeight="148.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <BarChart fx:id="wavefBar" title="波形数据统计" GridPane.columnSpan="2" GridPane.rowSpan="2">
+                  <BarChart fx:id="wavefBar" title="波形数据统计" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
                     <xAxis>
                       <CategoryAxis fx:id="wavefXAxis" side="BOTTOM" />
                     </xAxis>
@@ -107,21 +108,26 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </BarChart>
-                  <TableView fx:id="wavefTable" prefHeight="353.0" prefWidth="424.0" GridPane.rowIndex="2" GridPane.rowSpan="3">
+                  <TableView fx:id="wavefTable" prefHeight="353.0" prefWidth="424.0" GridPane.rowIndex="3" GridPane.rowSpan="3">
                     <columns>
                       <TableColumn fx:id="wavefId" prefWidth="137.0" text="序号" />
                       <TableColumn fx:id="wavefType" prefWidth="88.0" text="类型" />
                         <TableColumn fx:id="wavefTime" prefWidth="223.0" text="时间" />
                     </columns>
                   </TableView>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="起始时间:" />
                         <DatePicker fx:id="datePicker" promptText="请选择起始日期" />
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <RadioButton fx:id="hourRb" mnemonicParsing="false" text="按小时" />
+                              <RadioButton fx:id="dayRb" mnemonicParsing="false" text="按   天" />
+                           </children>
+                        </VBox>
                         <Button fx:id="wavefQuery" mnemonicParsing="false" onAction="#handleWavefQuery" text="查询" />
                      </children>
                   </HBox>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <children>
                         <Label layoutX="30.0" layoutY="24.0" text="类型:" />
                         <ComboBox layoutX="25.0" layoutY="51.0" prefWidth="150.0" promptText="波形类型" />

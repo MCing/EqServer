@@ -1,6 +1,9 @@
 package com.eqsys.view;
 
 import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -12,11 +15,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -78,6 +85,19 @@ public class ClientDetailController extends FXMLController {
 	private Button wavefQuery;
 	@FXML
 	private DatePicker datePicker;
+	@FXML
+	private RadioButton hourRb;
+	@FXML
+	private RadioButton dayRb;
+	private ToggleGroup radioGroup;
+	//条状图初始化
+	private String[] hourStrs = {"1", "2","3","4","5","6","7","8","9","10",
+					"11", "12","13","14","15","16","17","18","19","20",
+					"21", "22","23","24"};
+	private String[] dayStrs = {"1", "2","3","4","5","6","7","8","9","10",
+			"11", "12","13","14","15","16","17","18","19","20",
+			"21", "22","23","24","25","26","27","28","29","30","31"};
+	private ObservableList<String> wavefXStrings = FXCollections.observableArrayList();
 
 	@FXML
 	protected void initialize() {
@@ -105,16 +125,31 @@ public class ClientDetailController extends FXMLController {
 		.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>(
 				"time"));
 		wavefTable.setItems(wavefDataList);
+		//条件初始化
+		radioGroup = new ToggleGroup();
+		hourRb.setToggleGroup(radioGroup);
+		dayRb.setToggleGroup(radioGroup);
+		hourRb.setSelected(true);
+		dayRb.setSelected(false);
+		hourRb.setUserData((short)1);
+		dayRb.setUserData((short)2);
+		datePicker.setValue(LocalDate.now());
+		
+		wavefXAxis.setCategories(wavefXStrings);
+		
 		//初始化数据
-		long starttime = UTCTimeUtil.getCurrUTCTime() - (10*60*1000);
-		long endtime =  UTCTimeUtil.getCurrUTCTime();
-		
-		int count = WavefDataDao.getCount(client.getStationId(), starttime, endtime);
-		List<WavefDataModel> list = WavefDataDao.getRecord(client.getStationId(), starttime, endtime);
-		wavefDataList.addAll(list);
-		System.err.println("initWavefdataTab count:"+count);
-		
-		
+//		long starttime = UTCTimeUtil.getCurrUTCTime() - (10*60*1000);
+//		long endtime =  UTCTimeUtil.getCurrUTCTime();
+//		long interval = 60*1000;	//间隔,单位毫秒
+//		int[] result = new int[strs.length];
+//		XYChart.Series<String, Integer> series = new XYChart.Series<>();
+//		for(int j = 0; j < strs.length; j++){
+//			result[j] = WavefDataDao.getCount(client.getStationId(), (starttime+j*interval), (starttime+(j+1)*interval));
+//			series.getData().add(new XYChart.Data<>(wavefXStrings.get(j), result[j]));
+//		}
+//		 wavefBar.getData().add(series);
+//		List<WavefDataModel> list = WavefDataDao.getRecord(client.getStationId(), starttime, endtime);
+//		wavefDataList.addAll(list);
 	}
 
 	/** 设置ClientInfo(客户端信息值) */
@@ -160,13 +195,42 @@ public class ClientDetailController extends FXMLController {
 	@FXML
 	private void handleWavefQuery(){
 		
-		/**
+		Toggle selectedRb = radioGroup.getSelectedToggle();
+		
+		//该时间不是UTC时间
 		 LocalDate date = datePicker.getValue();
-		 long time = date.toEpochDay() * 24 * 60 *60*1000;
-		 System.err.println(date.toString());
-		 System.err.println(UTCTimeUtil.parseUTCTime2Str(time));
-		 
-		 */
+		 long time = date.toEpochDay() * 24 * 60 * 60 * 1000;
+		 updataWavefBar((short)selectedRb.getUserData(), UTCTimeUtil.getUTCTimeLong(time));
+	}
+	
+	XYChart.Series<String, Integer> series = new XYChart.Series<>();
+	/** 更新波形数据统计条
+	 * 
+	 * @param type		1:按小时		2:按天
+	 * @param starttime	起始UTC时间(0点)
+	 */
+	private void updataWavefBar(short type, long starttime){
+		long interval = 0;	//间隔,单位毫秒
+		
+		int[] result = null;
+		if(type == 1){	//按小时
+			wavefXStrings.clear();
+			wavefXStrings.addAll(hourStrs);
+			interval = 60*60*1000;
+			result = new int[hourStrs.length];
+		}else if(type ==2){  //按天
+			wavefXStrings.clear();
+			wavefXStrings.addAll(dayStrs);
+			interval = 24*60*60*1000;
+			result = new int[dayStrs.length];
+		}
+		series.getData().clear();
+		for(int j = 0; j < hourStrs.length; j++){
+			result[j] = WavefDataDao.getCount(client.getStationId(), (starttime+j*interval), (starttime+(j+1)*interval));
+			series.getData().add(new XYChart.Data<>(wavefXStrings.get(j), result[j]));
+		}
+		 wavefBar.getData().clear();
+		 wavefBar.getData().add(series);
 	}
 	
 	
