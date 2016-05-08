@@ -1,10 +1,16 @@
 package com.eqsys.view;
 
 import java.io.IOException;
-import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+
+import com.eqsys.dao.WavefDataDao;
+import com.eqsys.model.ClientInfo;
+import com.eqsys.model.WavefDataModel;
+import com.eqsys.util.ParseUtil;
+import com.eqsys.util.UTCTimeUtil;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,12 +33,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import com.eqsys.dao.WavefDataDao;
-import com.eqsys.model.ClientInfo;
-import com.eqsys.model.WavefDataModel;
-import com.eqsys.util.ParseUtil;
-import com.eqsys.util.UTCTimeUtil;
 
 /**
  * 客户端详情
@@ -203,7 +203,7 @@ public class ClientDetailController extends FXMLController {
 		 updataWavefBar((short)selectedRb.getUserData(), UTCTimeUtil.getUTCTimeLong(time));
 	}
 	
-	XYChart.Series<String, Integer> series = new XYChart.Series<>();
+//	XYChart.Series<String, Integer> series = new XYChart.Series<>();
 	/** 更新波形数据统计条
 	 * 
 	 * @param type		1:按小时		2:按天
@@ -211,26 +211,39 @@ public class ClientDetailController extends FXMLController {
 	 */
 	private void updataWavefBar(short type, long starttime){
 		long interval = 0;	//间隔,单位毫秒
-		
 		int[] result = null;
-		if(type == 1){	//按小时
-			wavefXStrings.clear();
+		wavefXStrings.clear();
+		if(type == 1){		//按小时
 			wavefXStrings.addAll(hourStrs);
-			interval = 60*60*1000;
+			interval = 60*60*1000;	//时间间隔 为1小时
 			result = new int[hourStrs.length];
 		}else if(type ==2){  //按天
-			wavefXStrings.clear();
-			wavefXStrings.addAll(dayStrs);
-			interval = 24*60*60*1000;
-			result = new int[dayStrs.length];
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(starttime);
+			int year = cal.get(Calendar.YEAR);
+			int mon = cal.get(Calendar.MONTH);
+			int days = UTCTimeUtil.getDaysOfMonth(year, mon+1); //Calendar月份是从0开始算的
+			starttime = UTCTimeUtil.getFirstDayTime(starttime);
+//			System.err.println(days+"  begin:"+UTCTimeUtil.timeFormat1(starttime));
+			wavefXStrings.addAll(Arrays.copyOf(dayStrs, days));  //根据月份天数，截取与该月份天数同样长度的数组
+			interval = 24*60*60*1000;   //时间间隔为1天
+			result = new int[days];
 		}
-		series.getData().clear();
-		for(int j = 0; j < hourStrs.length; j++){
+		XYChart.Series<String, Integer> series = new XYChart.Series<>();
+//		series.getData().clear();
+		wavefBar.getData().clear();
+		for(int j = 0; j < result.length; j++){
+			System.err.println(UTCTimeUtil.timeFormat1((starttime+j*interval))+"------"+UTCTimeUtil.timeFormat1((starttime+(j+1)*interval)));
 			result[j] = WavefDataDao.getCount(client.getStationId(), (starttime+j*interval), (starttime+(j+1)*interval));
 			series.getData().add(new XYChart.Data<>(wavefXStrings.get(j), result[j]));
 		}
-		 wavefBar.getData().clear();
 		 wavefBar.getData().add(series);
+	}
+	
+	@FXML
+	private void handleTest(){
+		wavefBar.getData().clear();
 	}
 	
 	

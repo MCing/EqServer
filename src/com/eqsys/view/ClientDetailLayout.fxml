@@ -125,6 +125,7 @@
                            </children>
                         </VBox>
                         <Button fx:id="wavefQuery" mnemonicParsing="false" onAction="#handleWavefQuery" text="查询" />
+                        <Button mnemonicParsing="false" onAction="#handleTest" text="Test" />
                      </children>
                   </HBox>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
