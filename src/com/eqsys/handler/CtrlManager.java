@@ -27,7 +27,7 @@ public class CtrlManager {
 
 	private static CtrlManager mThis;
 	
-	private ClientInfoDao clientInfoDao;
+//	private ClientInfoDao clientInfoDao;
 	private LinkedList<CtrlEvent> list;
 	
 	public static CtrlManager getMagager(){
@@ -40,7 +40,6 @@ public class CtrlManager {
 	private CtrlManager(){
 		
 		list = new LinkedList<CtrlEvent>();
-		clientInfoDao = new ClientInfoDao();
 	}
 	
 	/** 负责记录并发送控制命令 
@@ -93,11 +92,11 @@ public class CtrlManager {
 			if(resp.getSubCommand() == MsgConstant.CMD_TRANSMODE){
 				TransModeReq req = (TransModeReq) event.getReqMsg().getBody();
 				client.setTransMode(ParseUtil.parseTransMode(req.getSubTransMode()));
-				clientInfoDao.updateTransMode(client.getStationId(), req.getSubTransMode());
+				ClientInfoDao.updateTransMode(client.getStationId(), req.getSubTransMode());
 			}else{
 				ThresholdReq req = (ThresholdReq) event.getReqMsg().getBody();
 				client.setThreshold(req.getTriggleThreshold());
-				clientInfoDao.updateThreshold(client.getStationId(), req.getTriggleThreshold());
+				ClientInfoDao.updateThreshold(client.getStationId(), req.getTriggleThreshold());
 			}
 			//update clientinfo tableview
 			obList.set(index, client);

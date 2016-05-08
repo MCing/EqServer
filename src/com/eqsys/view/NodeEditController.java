@@ -14,7 +14,7 @@ public class NodeEditController extends FXMLController {
 	
 	private ClientInfo node;
 	private Stage dialogStage;
-	private ClientInfoDao dao = new ClientInfoDao();
+//	private ClientInfoDao dao = new ClientInfoDao();
 	
 	@FXML
 	private TextField stationIdTf;
@@ -71,7 +71,7 @@ public class NodeEditController extends FXMLController {
 		//以下节点属性的值没有提供修改的接口,为了不覆盖之前的值将之前的值(如果存在)赋给现在的值
 		node.setPermit(node.getPermit());
 		node.setTransMode(node.getTransMode());
-		dao.add(node);
+		ClientInfoDao.add(node);
 		dialogStage.close();
 	}
 	

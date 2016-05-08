@@ -11,12 +11,12 @@ import com.eqsys.util.JDBCHelper;
 
 public class WavefDataDao {
 
-	private String mTableName = "wavefdata_t";
-	private String mInsertSql = "insert into " + mTableName
+	private static String mTableName = "wavefdata_t";
+	private static String mInsertSql = "insert into " + mTableName
 			+ "(id, type, qid, stationid, localid, channid, starttime, samcount, samfactor, sammul, actid, iocflag, dataqflag, blockcount, timecorr, dataoffs, subblockoffs, subheadtype, nextblockid, codeformat, byteorder, datalen, subblocktype, dimension, sensfactor, datablock) "
 			+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-	public boolean save(EqMessage msg) {
+	public  static boolean save(EqMessage msg) {
 
 		boolean ret = false;
 		PreparedStatement preStat = null;

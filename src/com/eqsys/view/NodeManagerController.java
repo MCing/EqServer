@@ -31,7 +31,7 @@ import javafx.util.Callback;
 public class NodeManagerController extends FXMLController {
 	
 	private ObservableList<ClientInfo> nodeList = FXCollections.observableArrayList();
-	private ClientInfoDao nodeInfoDao = new ClientInfoDao();
+//	private ClientInfoDao nodeInfoDao = new ClientInfoDao();
 	private String nodeEditPath = "/com/eqsys/view/NodeEditLayout.fxml";
 	
 	@FXML
@@ -117,7 +117,7 @@ public class NodeManagerController extends FXMLController {
 		int index = nodeTable.getSelectionModel().getSelectedIndex();
 		if(index >=0 && index < nodeList.size()){
 			ClientInfo delItem = nodeTable.getSelectionModel().getSelectedItem();
-			if(nodeInfoDao.del(delItem.getStationId())){
+			if(ClientInfoDao.del(delItem.getStationId())){
 				nodeList.remove(delItem);
 			}
 		}
@@ -168,7 +168,7 @@ public class NodeManagerController extends FXMLController {
 	/** 从数据库更新列表 */
 	private void updateList(){
 		
-		List<ClientInfo> list = nodeInfoDao.get();
+		List<ClientInfo> list = ClientInfoDao.get();
 		nodeList.clear();
 		nodeList.addAll(list);
 	}

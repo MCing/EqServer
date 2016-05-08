@@ -11,7 +11,7 @@ import com.eqsys.util.JDBCHelper;
 public class TrgDataDao{
 
 	private static final String TableName = "triggerdata_t";
-	private String insertSql = "insert into "+TableName+
+	private static String insertSql = "insert into "+TableName+
 			"(pid, stationid, starttimesec, starttimemsec, relattime, stalta, initmotiondir, "
 			+ "ud2pga, ud2pgv, ud2pgd, ew2pga, ew2pgv,ew2pgd, ns2pga, ns2pgv, ns2pgd,"
 			+ "ud2psa03, ud2psa10, ud2psa30, ew2psa03, ew2psa10,ew2psa30, ns2psa03, ns2psa10, ns2psa30,"
@@ -20,10 +20,7 @@ public class TrgDataDao{
 	private String deleteSql = "delete from "+ TableName+ " where packetid=?;";
 	
 	
-	
-	public TrgDataDao() { }
-	
-	public boolean save(EqMessage msg) {
+	public  static boolean save(EqMessage msg) {
 		
 		boolean ret = false;
 		PreparedStatement preStat = null;

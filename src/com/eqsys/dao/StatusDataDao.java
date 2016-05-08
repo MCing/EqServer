@@ -12,22 +12,20 @@ import com.eqsys.util.JDBCHelper;
 public class StatusDataDao {
 
 	// 峰峰值类型 分别为：ew,ns,ud
-	private short[] pvType = { 0, 1, 2 };
+	private static short[] pvType = { 0, 1, 2 };
 
 	private static final String TableName = "statusdata_t";
 	private static final String PVTableName = "peakvalue_t";
 
-	private String insertSql = "insert into " + TableName + "(pid, stationid, starttime, duration)" + " values(?,?,?,?);";
+	private static String insertSql = "insert into " + TableName + "(pid, stationid, starttime, duration)" + " values(?,?,?,?);";
 
-	private String pvInsertSql = "insert into " + PVTableName
+	private static String pvInsertSql = "insert into " + PVTableName
 			+ "(pid, stationid, pvtype, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10) "
 			+ " values(?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-	public StatusDataDao() {
-	}
 
 	/** 存状态信息到数据库 */
-	public boolean save(EqMessage msg) {
+	public  static boolean save(EqMessage msg) {
 
 		boolean ret = false;
 		PreparedStatement preStat = null;
@@ -86,7 +84,7 @@ public class StatusDataDao {
 	}
 	
 	/** 存峰峰值数组到数据库  */
-	private boolean savePeakValue(EqMessage msg){
+	private  static boolean savePeakValue(EqMessage msg){
 		boolean ret = false;
 		PreparedStatement preStat = null;
 		Connection conn = null;

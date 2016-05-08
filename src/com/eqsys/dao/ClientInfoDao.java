@@ -15,14 +15,14 @@ import com.eqsys.util.ParseUtil;
 
 public class ClientInfoDao {
 
-	private String mTableName = "clientinfo_t";
-	private String mInsertSql = "replace into " + mTableName
+	private static final String mTableName = "clientinfo_t";
+	private  static final String mInsertSql = "replace into " + mTableName
 			+ "(stationid, permit, longitude, latitude, altitude, sensitivity, transmode, threshold, lastpid) "
 			+ "values( ?, ?,?,?,?,?,?,?,?);";
-	private String mFindIdSql = "select stationid from " + mTableName + " where stationid=?";
-	private String mUpdataPermitSql = "update " + mTableName + " set permit=? where stationid=?;";
-	private String mUpdataTransModeSql = "update " + mTableName + " set transmode=? where stationid=?;";
-	private String mUpdataThresholdSql = "update " + mTableName + " set trigglethreshold=? where stationid=?;";
+	private  static final String mFindIdSql = "select stationid from " + mTableName + " where stationid=?";
+	private  static final String mUpdataPermitSql = "update " + mTableName + " set permit=? where stationid=?;";
+	private  static final String mUpdataTransModeSql = "update " + mTableName + " set transmode=? where stationid=?;";
+	private  static final String mUpdataThresholdSql = "update " + mTableName + " set trigglethreshold=? where stationid=?;";
 
 //	private static final String TableName = "triggerdata_t";
 //	private String insertSql = "insert into "+TableName+
@@ -81,7 +81,7 @@ public class ClientInfoDao {
 //		}
 //	}
 	
-	public void add(ClientInfo info){
+	public  static void add(ClientInfo info){
 		
 		PreparedStatement preStat = null;
 		Connection conn = null;
@@ -116,7 +116,7 @@ public class ClientInfoDao {
 	/**
 	 * 查询数据库中是否已存在某条数据
 	 */
-	private boolean isExist(String stId) {
+	private  static boolean isExist(String stId) {
 		boolean ret = false;
 		PreparedStatement preStat = null;
 		Connection conn = JDBCHelper.getDBConnection();
@@ -152,7 +152,7 @@ public class ClientInfoDao {
 	 * @param newValue
 	 *            permit值
 	 */
-	private void updatePermit(String id, short newValue) {
+	private  static void updatePermit(String id, short newValue) {
 		PreparedStatement preStat = null;
 		Connection conn = JDBCHelper.getDBConnection();
 		try {
@@ -175,7 +175,7 @@ public class ClientInfoDao {
 			JDBCHelper.closeDBConnection(conn);
 		}
 	}
-	public void updateTransMode(String id, short newValue) {
+	public  static void updateTransMode(String id, short newValue) {
 		PreparedStatement preStat = null;
 		Connection conn = JDBCHelper.getDBConnection();
 		try {
@@ -198,7 +198,7 @@ public class ClientInfoDao {
 			JDBCHelper.closeDBConnection(conn);
 		}
 	}
-	public void updateThreshold(String id, short newValue) {
+	public  static void updateThreshold(String id, short newValue) {
 		PreparedStatement preStat = null;
 		Connection conn = JDBCHelper.getDBConnection();
 		try {
@@ -227,7 +227,7 @@ public class ClientInfoDao {
 	 * @param id 要删除记录的Id
 	 * @return 删除成功 true, 反之false
 	 */
-	public boolean del(String id){
+	public  static boolean del(String id){
 		
 		String sql = "delete from " + mTableName + " where stationid=?;";
 		PreparedStatement preStat = null;
@@ -258,7 +258,7 @@ public class ClientInfoDao {
 	 * 
 	 * @return
 	 */
-	public List<ClientInfo> get(){
+	public  static List<ClientInfo> get(){
 		String sql = "select * from " + mTableName + ";";
 		
 		PreparedStatement preStat = null;

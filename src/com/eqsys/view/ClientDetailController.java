@@ -3,9 +3,12 @@ package com.eqsys.view;
 import java.io.IOException;
 
 import com.eqsys.model.ClientInfo;
+import com.eqsys.model.RecvInfo;
+import com.eqsys.model.WavefDataModel;
 import com.eqsys.util.ClientConnList;
 import com.eqsys.util.ClientWindowMgr;
 import com.eqsys.util.ParseUtil;
+import com.eqsys.util.TmpOblist;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,8 +18,14 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,6 +41,7 @@ public class ClientDetailController extends FXMLController {
 	private Stage stage;
 	private String settingPath = "/com/eqsys/view/ClientSettingLayout.fxml";
 
+	//控制 tab
 	@FXML
 	private Label stationIdLab;
 	@FXML
@@ -52,6 +62,24 @@ public class ClientDetailController extends FXMLController {
 	private Button transModeBtn;
 	@FXML
 	private Button thresholdBtn;
+	
+	//波形数据tab
+	@FXML
+	private BarChart<String, Integer> wavefBar;
+	@FXML
+	private CategoryAxis wavefXAxis;
+	@FXML
+	private TableView<WavefDataModel> wavefTable;
+	@FXML
+	private TableColumn<WavefDataModel, Integer> wavefId;
+	@FXML
+	private TableColumn<WavefDataModel, String> wavefType;
+	@FXML
+	private TableColumn<WavefDataModel, String> wavefTime;
+	@FXML
+	private Button wavefQuery;
+	@FXML
+	private DatePicker datePicker;
 
 	@FXML
 	protected void initialize() {
@@ -62,6 +90,23 @@ public class ClientDetailController extends FXMLController {
 		this.stage = stage;
 		this.client = client;
 		initClientInfo();
+		initWavefdataTab();
+	}
+
+	/** 初始化波形数据tab */
+	private void initWavefdataTab() {
+		
+		wavefId
+		.setCellValueFactory(new PropertyValueFactory<WavefDataModel, Integer>(
+				"id"));
+		wavefType
+		.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>(
+				"type"));
+		wavefTime
+		.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>(
+				"time"));
+		//not finish
+		wavefTable.setItems(null);
 	}
 
 	/** 设置ClientInfo(客户端信息值) */
