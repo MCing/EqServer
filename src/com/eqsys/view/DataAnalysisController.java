@@ -31,7 +31,6 @@ import com.eqsys.util.ParseUtil;
 public class DataAnalysisController extends FXMLController {
 	
 	private ObservableList<ClientInfo> nodeList = FXCollections.observableArrayList();
-	private MainPaneController parentController;
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 	
 	@FXML
@@ -67,6 +66,7 @@ public class DataAnalysisController extends FXMLController {
 		
 	}
 	
+	/** 从数据库更新数据  */
 	private void updateList() {
 		//获取stationid
 		List<ClientInfo> list = ClientInfoDao.get();
@@ -117,6 +117,10 @@ public class DataAnalysisController extends FXMLController {
 			ClientInfo clientInfo = listTable.getSelectionModel().getSelectedItem();
 			openClientDetail(clientInfo);
 		}
+	}
+	@FXML
+	private void handleRefresh(){
+		updateList();
 	}
 	
 	/** 打开客户端详情窗口 */

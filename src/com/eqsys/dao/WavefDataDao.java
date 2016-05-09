@@ -82,7 +82,8 @@ public class WavefDataDao {
 		return ret;
 	}
 
-	/** 获取时间段波形数据记录 */
+	/** 获取时间段波形数据记录 
+	 * @param type */
 	public static List<WavefDataModel> getRecord(String stationid, long starttime, long endtime) {
 
 		String sql = "select id, type, starttime  from " + mTableName
