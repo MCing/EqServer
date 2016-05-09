@@ -15,7 +15,7 @@ public class ClientInfo {
 	private StringProperty transMode;
 	private FloatProperty longitude;			//经度 度＊100000
 	private FloatProperty latitude;				//纬度 度＊100000
-	private IntegerProperty altitude;				//高程 单位M
+	private IntegerProperty altitude;			//高程 单位M(高程本应该时short类型,但没有对应ShortProperty,所以这里用IntegerProperty)
 	private IntegerProperty sensitivity;			//灵敏度
 	private IntegerProperty threshold;				//触发阀值
 	

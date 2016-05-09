@@ -144,7 +144,7 @@ public class WavefDataDao {
 			if (results.next()) {
 				count = results.getInt(1);
 				//test
-				System.err.println("getCount:"+count);
+//				System.err.println("getCount:"+count);
 			}
 
 		} catch (SQLException e) {

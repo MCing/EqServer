@@ -137,17 +137,6 @@ public class ClientDetailController extends FXMLController {
 		
 		wavefXAxis.setCategories(wavefXStrings);
 		
-		//初始化数据
-//		long starttime = UTCTimeUtil.getCurrUTCTime() - (10*60*1000);
-//		long endtime =  UTCTimeUtil.getCurrUTCTime();
-//		long interval = 60*1000;	//间隔,单位毫秒
-//		int[] result = new int[strs.length];
-//		XYChart.Series<String, Integer> series = new XYChart.Series<>();
-//		for(int j = 0; j < strs.length; j++){
-//			result[j] = WavefDataDao.getCount(client.getStationId(), (starttime+j*interval), (starttime+(j+1)*interval));
-//			series.getData().add(new XYChart.Data<>(wavefXStrings.get(j), result[j]));
-//		}
-//		 wavefBar.getData().add(series);
 //		List<WavefDataModel> list = WavefDataDao.getRecord(client.getStationId(), starttime, endtime);
 //		wavefDataList.addAll(list);
 	}
@@ -203,7 +192,6 @@ public class ClientDetailController extends FXMLController {
 		 updataWavefBar((short)selectedRb.getUserData(), UTCTimeUtil.getUTCTimeLong(time));
 	}
 	
-//	XYChart.Series<String, Integer> series = new XYChart.Series<>();
 	/** 更新波形数据统计条
 	 * 
 	 * @param type		1:按小时		2:按天
@@ -225,16 +213,15 @@ public class ClientDetailController extends FXMLController {
 			int mon = cal.get(Calendar.MONTH);
 			int days = UTCTimeUtil.getDaysOfMonth(year, mon+1); //Calendar月份是从0开始算的
 			starttime = UTCTimeUtil.getFirstDayTime(starttime);
-//			System.err.println(days+"  begin:"+UTCTimeUtil.timeFormat1(starttime));
 			wavefXStrings.addAll(Arrays.copyOf(dayStrs, days));  //根据月份天数，截取与该月份天数同样长度的数组
 			interval = 24*60*60*1000;   //时间间隔为1天
 			result = new int[days];
 		}
 		XYChart.Series<String, Integer> series = new XYChart.Series<>();
-//		series.getData().clear();
 		wavefBar.getData().clear();
 		for(int j = 0; j < result.length; j++){
-			System.err.println(UTCTimeUtil.timeFormat1((starttime+j*interval))+"------"+UTCTimeUtil.timeFormat1((starttime+(j+1)*interval)));
+//			System.err.println(UTCTimeUtil.timeFormat1((starttime+j*interval))+"------"+UTCTimeUtil.timeFormat1((starttime+(j+1)*interval)));
+//			System.err.println((starttime+j*interval)+"------"+(starttime+(j+1)*interval));
 			result[j] = WavefDataDao.getCount(client.getStationId(), (starttime+j*interval), (starttime+(j+1)*interval));
 			series.getData().add(new XYChart.Data<>(wavefXStrings.get(j), result[j]));
 		}

@@ -14,7 +14,6 @@ public class NodeEditController extends FXMLController {
 	
 	private ClientInfo node;
 	private Stage dialogStage;
-//	private ClientInfoDao dao = new ClientInfoDao();
 	
 	@FXML
 	private TextField stationIdTf;
