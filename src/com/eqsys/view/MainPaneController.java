@@ -49,6 +49,8 @@ import javafx.util.Callback;
  *
  */
 public class MainPaneController extends FXMLController {
+	
+	private EqServer main;
 
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
@@ -102,132 +104,139 @@ public class MainPaneController extends FXMLController {
 	private Label dbType;
 	@FXML
 	private Label dbState;
-	
-	//快捷键
-	@FXML 
+
+	// 快捷键
+	@FXML
 	private Button connDbBtn;
 	@FXML
 	private Button nodeMgrBtn;
 	@FXML
 	private Button analysisyBtn;
-	
+
 	@FXML
 	private Label utcTimeLabel;
 
 	// 主页面
 	@FXML
 	private TabPane mainTabPane;
-
-	SingleSelectionModel<Tab> workspSelectMode;// =
-												// mainTabPane.getSelectionModel();
+	private Tab dataAnalysisTab;
+	private Tab nodeMgrTab;
+	private SingleSelectionModel<Tab> workspSelectMode;
 
 	@FXML
 	protected void initialize() {
+	}
+
+	public void initController(EqServer main){
+		this.main = main;
+		
+		initWorkspace();
+		initDbInfo();
+		initTableView();
+		initShortKey();
+	}
+	/** 初始化主工作区(主页) */
+	private void initWorkspace(){
 		
 		workspSelectMode = mainTabPane.getSelectionModel();
-
-		// init server info and database info
 		serverId.setText(SysConfig.serverId);
 		serverIp.setText(SysConfig.serverIp);
 		onLineLabel.textProperty().bind(ClientConnList.getInstance().getOnlineNumber());
-		initDbInfo();
-		// initialize recv data
-		timeColumn
-				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
-						"time"));
-		srcColumn
-				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
-						"srcId"));
-		typeColumn
-				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
-						"type"));
+	}
+	/** 初始换全部TableView */
+	private void initTableView() {
 
+		// 数据接收tableview
+		timeColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("time"));
+		srcColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("srcId"));
+		typeColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("type"));
 		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 
-		// Initialize client info
-		stationId
-				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
-						"stationId"));
-		transMode
-				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
-						"transMode"));
-		sensitivity
-				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
-						"sensitivity"));
-		triggerThreshold
-				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
-						"threshold"));
-		transMode
-				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
-						"transMode"));
+		// 已连接台站信息tableview
+		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("stationId"));
+		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
+		sensitivity.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("sensitivity"));
+		triggerThreshold.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("threshold"));
+		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
 		// 实现对ClientInfo中一行的双击响应
-		clientTable
-				.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
+		clientTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
 
-					@Override
-					public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
-						return new TableRowControl();
-					}
-				});
+			@Override
+			public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
+				return new TableRowControl();
+			}
+		});
 		clientTable.setItems(ClientConnList.getInstance().getObservableList());
 
-		// initialize system event
-		stimeColumn
-				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
-						"time"));
-		ssrcColumn
-				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
-						"srcId"));
-		eventColumn
-				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
-						"event"));
+		// 系统事件tableview
+		stimeColumn.setCellValueFactory(new PropertyValueFactory<SysEvent, String>("time"));
+		ssrcColumn.setCellValueFactory(new PropertyValueFactory<SysEvent, String>("srcId"));
+		eventColumn.setCellValueFactory(new PropertyValueFactory<SysEvent, String>("event"));
 
 		eventTable.setItems(TmpOblist.getsysEventObserList());
-		
-		//快捷键提示
-        connDbBtn.setTooltip(new Tooltip("连接数据库"));
-        nodeMgrBtn.setTooltip(new Tooltip("节点管理"));
-        analysisyBtn.setTooltip(new Tooltip("数据分析"));
-        
-        utcTimeLabel.textProperty().bind(EqServer.utcTime);
+
 	}
 
-	private void initDbInfo() {
-		dbName.setText(SysConfig.jdbcServerName);
-		dbType.setText("mysql");
-		if (JDBCHelper.getDbState()) {
-			dbState.setText("已连接");
-			dbState.setTextFill(Color.GREEN);
-		} else {
-			dbState.setText("未连接");
-			dbState.setTextFill(Color.RED);
+	/** 初始化快捷键区 */
+	private void initShortKey() {
+
+		// 快捷键提示
+		connDbBtn.setTooltip(new Tooltip("连接数据库"));
+		nodeMgrBtn.setTooltip(new Tooltip("台站管理"));
+		analysisyBtn.setTooltip(new Tooltip("数据分析"));
+
+		utcTimeLabel.textProperty().bind(main.getUTCTime());
+	}
+
+	/********************************************************************
+	 * 
+	 * 菜单+快捷键 区
+	 * 
+	 ********************************************************************/
+	/** 连接数据库 */
+	@FXML
+	private void handleConnectDb() {
+
+		if (JDBCHelper.initDB()) {
+			initDbInfo();
 		}
 	}
 
-	/**
-	 * 用于控制clientInfo table 的行(实现双击响应)
-	 *
-	 */
-	class TableRowControl extends TableRow<ClientInfo> {
-
-		public TableRowControl() {
-			super();
-			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					if (event.getButton().equals(MouseButton.PRIMARY) // 左键
-							&& event.getClickCount() == 2 // 双击
-							&& TableRowControl.this.getIndex() < clientTable
-									.getItems().size()) {
-						ClientInfo clientInfo = clientTable.getSelectionModel()
-								.getSelectedItem();
-						openClientDetail(clientInfo);
-					}
-				}
-			});
-		}
+	/** 数据库配置 */
+	@FXML
+	private void handleDbSetting() {
+		openDbSettingDialog();
 	}
 
+	/** 打开数据库设置对话框 */
+	private void openDbSettingDialog() {
+
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(dbSettingPath));
+		Node page = null;
+		try {
+			page = loader.load();
+			DatabaseSettingController controller = loader.getController();
+			controller.initController(stage);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		stage.initModality(Modality.APPLICATION_MODAL); // 模态窗口
+		stage.initOwner(clientTable.getScene().getWindow()); // 任意一个控件可获得其所属窗口对象
+		Scene scene = new Scene((Parent) page);
+		stage.setTitle("数据库设置");
+		stage.setScene(scene);
+		stage.centerOnScreen();
+		stage.show();
+	}
+
+	/********************************************************************
+	 * 
+	 * 已连接台站区
+	 * 
+	 ********************************************************************/
 	/** 打开客户端详情窗口 */
 	private void openClientDetail(ClientInfo clientInfo) {
 
@@ -259,18 +268,57 @@ public class MainPaneController extends FXMLController {
 		manager.add(clientInfo.getStationId(), controller);
 	}
 
-	private Tab nodeMgrTab;
-	/** 打开节点管理界面  */
+	/**
+	 * 用于控制clientInfo table 的行(实现双击响应)
+	 *
+	 */
+	class TableRowControl extends TableRow<ClientInfo> {
+
+		public TableRowControl() {
+			super();
+			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (event.getButton().equals(MouseButton.PRIMARY) // 左键
+							&& event.getClickCount() == 2 // 双击
+							&& TableRowControl.this.getIndex() < clientTable.getItems().size()) {
+						ClientInfo clientInfo = clientTable.getSelectionModel().getSelectedItem();
+						openClientDetail(clientInfo);
+					}
+				}
+			});
+		}
+	}
+
+	/********************************************************************
+	 * 
+	 * 主工作区
+	 * 
+	 ********************************************************************/
+	private void initDbInfo() {
+		dbName.setText(SysConfig.jdbcServerName);
+		dbType.setText("mysql");
+		if (JDBCHelper.getDbState()) {
+			dbState.setText("已连接");
+			dbState.setTextFill(Color.GREEN);
+		} else {
+			dbState.setText("未连接");
+			dbState.setTextFill(Color.RED);
+		}
+	}
+	
+
+	/** 打开节点管理界面 */
 	@FXML
 	private void handleNodeMgr() {
-		
-		if(nodeMgrTab == null){
+
+		if (nodeMgrTab == null) {
 			nodeMgrTab = new Tab();
 			nodeMgrTab.setContent(getNodeFromFXML(nodeMgrPath));
-			nodeMgrTab.setText("节点管理");
+			nodeMgrTab.setText("台站管理");
 		}
-		if(!mainTabPane.getTabs().contains(nodeMgrTab)){
-			
+		if (!mainTabPane.getTabs().contains(nodeMgrTab)) {
+
 			mainTabPane.getTabs().add(nodeMgrTab);
 		}
 		workspSelectMode.select(nodeMgrTab);
@@ -289,57 +337,20 @@ public class MainPaneController extends FXMLController {
 		}
 	}
 
-	/** 连接数据库 */
-	@FXML
-	private void handleConnectDb() {
-
-		if (JDBCHelper.initDB()) {
-			initDbInfo();
-		}
-	}
-
-	/** 数据库配置 */
-	@FXML
-	private void handleDbSetting() {
-		openDbSettingDialog();
-	}
 	
-	private Tab dataAnalysisTab;
+
 	@FXML
-	private void handleDataAnalysis(){
-		if(dataAnalysisTab == null){
+	private void handleDataAnalysis() {
+		if (dataAnalysisTab == null) {
 			dataAnalysisTab = new Tab();
 			dataAnalysisTab.setContent(getNodeFromFXML(dataAnalyPath));
 			dataAnalysisTab.setText("数据分析");
 		}
-		if(!mainTabPane.getTabs().contains(dataAnalysisTab)){
-			
+		if (!mainTabPane.getTabs().contains(dataAnalysisTab)) {
+
 			mainTabPane.getTabs().add(dataAnalysisTab);
 		}
 		workspSelectMode.select(dataAnalysisTab);
 	}
 
-	/** 打开数据库设置对话框 */
-	private void openDbSettingDialog() {
-
-		Stage stage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ParseUtil.getFXMLURL(dbSettingPath));
-		Node page = null;
-		try {
-			page = loader.load();
-			DatabaseSettingController controller = loader.getController();
-			controller.initController(stage);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		stage.initModality(Modality.APPLICATION_MODAL); // 模态窗口
-		stage.initOwner(clientTable.getScene().getWindow()); // 任意一个控件可获得其所属窗口对象
-		Scene scene = new Scene((Parent) page);
-		stage.setTitle("数据库设置");
-		stage.setScene(scene);
-		stage.centerOnScreen();
-		stage.show();
-	}
 }

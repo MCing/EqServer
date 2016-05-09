@@ -147,7 +147,7 @@ public class DataAnalysisController extends FXMLController {
 			return;
 		}
 		Scene scene = new Scene((Parent) page);
-		stage.setTitle("客户端详情");
+		stage.setTitle("台站详情");
 		stage.setScene(scene);
 		stage.centerOnScreen();
 		stage.show();

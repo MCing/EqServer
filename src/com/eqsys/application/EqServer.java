@@ -20,6 +20,7 @@ import com.eqsys.util.SysConfig;
 import com.eqsys.util.UTCTimeUtil;
 import com.eqsys.view.FXMLController;
 import com.eqsys.view.LoginLayoutController;
+import com.eqsys.view.MainPaneController;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -56,7 +57,7 @@ public class EqServer extends Application {
 	private String mainPanePath = "/com/eqsys/view/MainPaneLayout.fxml";
 	
 	private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-	public static StringProperty utcTime = new SimpleStringProperty();
+	private StringProperty utcTime = new SimpleStringProperty();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -121,7 +122,8 @@ public class EqServer extends Application {
 	public void loadMainPage() {
 		
 		mPrimaryStage.close();   //关闭登录窗口
-		loadFxml(mainPanePath);
+		MainPaneController controller = (MainPaneController) loadFxml(mainPanePath);
+		controller.initController(EqServer.this);
 		mPrimaryStage.setMinHeight(screenHeight * 0.8);
 		mPrimaryStage.setMinWidth(screenWidth * 0.8);
 		mPrimaryStage.centerOnScreen();
@@ -211,17 +213,20 @@ public class EqServer extends Application {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
+			
 			Platform.runLater(new Runnable() {
 				
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					utcTime.set(UTCTimeUtil.timeFormat2(UTCTimeUtil.getCurrUTCTime()));
 				}
 			});
 		}
 		
+	}
+	
+	public StringProperty getUTCTime(){
+		return this.utcTime;
 	}
 
 }

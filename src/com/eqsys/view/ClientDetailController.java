@@ -47,7 +47,7 @@ public class ClientDetailController extends FXMLController {
 	private String settingPath = "/com/eqsys/view/ClientSettingLayout.fxml";
 
 	private ObservableList<WavefDataModel> wavefDataList = FXCollections.observableArrayList();
-
+	private ObservableList<String> wavefXStrings = FXCollections.observableArrayList();
 	// 控制 tab
 	@FXML
 	private Label stationIdLab;
@@ -97,36 +97,16 @@ public class ClientDetailController extends FXMLController {
 			"17", "18", "19", "20", "21", "22", "23", "24" };
 	private String[] dayStrs = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
 			"17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
-	private ObservableList<String> wavefXStrings = FXCollections.observableArrayList();
-
+	
 	@FXML
 	private DatePicker starttimeDp;
 	@FXML
 	private DatePicker endtimeDp;
 	@FXML
-	private ComboBox<String> typeCb;
-
-	/** 波形数据 表格查询 */
-	@FXML
-	private void handleWavefQuery2() {
-
-		LocalDate localstarttime = starttimeDp.getValue();
-		LocalDate localendtime = endtimeDp.getValue();
-		if (localstarttime != null && localendtime != null) {
-			
-			long starttime = localstarttime.toEpochDay() * 24 * 60 * 60 * 1000;
-			long endtime = localendtime.toEpochDay() * 24 * 60 * 60 * 1000;
-			if (starttime == endtime) {
-				endtime = (localendtime.toEpochDay() + 1) * 24 * 60 * 60 * 1000;
-			}
-			updateWavefTable(starttime, endtime);
-		}
-
-	}
+	private Label wavefResultLabel;
 
 	@FXML
 	protected void initialize() {
-		initClientInfo();
 	}
 
 	// 初始化数据
@@ -136,30 +116,24 @@ public class ClientDetailController extends FXMLController {
 		initClientInfo();
 		initWavefdataTab();
 	}
-
-	/** 初始化波形数据tab */
-	private void initWavefdataTab() {
-
-		// init tableview
-		wavefId.setCellValueFactory(new PropertyValueFactory<WavefDataModel, Integer>("id"));
-		wavefType.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>("type"));
-		wavefTime.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>("time"));
-		wavefTable.setItems(wavefDataList);
-		// 条件初始化
-		radioGroup = new ToggleGroup();
-		hourRb.setToggleGroup(radioGroup);
-		dayRb.setToggleGroup(radioGroup);
-		hourRb.setSelected(true);
-		dayRb.setSelected(false);
-		hourRb.setUserData((short) 1);
-		dayRb.setUserData((short) 2);
-		datePicker.setValue(LocalDate.now());
-
-		wavefXAxis.setCategories(wavefXStrings);
-		endtimeDp.setValue(LocalDate.now());
-
+	/** 客户端参数修改成功后更新该窗口 */
+	public void update(ClientInfo client) {
+		this.client = client;
+		initClientInfo();
 	}
 
+	public void show() {
+		if (stage.isShowing()) {
+			stage.toFront();
+		} else {
+			stage.show();
+		}
+	}
+
+	/*********************************************************************************
+	 * 控制 tab
+	 * 
+	 *********************************************************************************/
 	/** 设置ClientInfo(客户端信息值) */
 	private void initClientInfo() {
 		if (client == null) {
@@ -183,7 +157,6 @@ public class ClientDetailController extends FXMLController {
 			permitLab.setText(String.valueOf(client.getPermit()));
 		}
 	}
-
 	/** 处理 设置传输模式 */
 	@FXML
 	private void handleTransMode() {
@@ -199,7 +172,73 @@ public class ClientDetailController extends FXMLController {
 
 		return client.getPermit() == 0 ? true : false;
 	}
+	/** 打开客户端控制界面 */
+	private void openClientSetting() {
 
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(ParseUtil.getFXMLURL(settingPath));
+		Node page = null;
+		try {
+			page = loader.load();
+			ClientSettingController controller = loader.getController();
+			controller.initController(client, stage);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		stage.initModality(Modality.APPLICATION_MODAL); // 模态窗口
+		stage.initOwner(permitLab.getScene().getWindow()); // 任意一个控件可获得其所属窗口对象
+		stage.setTitle("台站控制");
+		Scene scene = new Scene((Parent) page);
+		stage.setScene(scene);
+		stage.centerOnScreen();
+		stage.showAndWait();
+	}
+	/*********************************************************************************
+	 * 
+	 * 波形数据 tab
+	 * 
+	 *********************************************************************************/
+	@FXML
+	/** 波形数据 表格查询 */
+	private void handleWavefQuery2() {
+
+		LocalDate localstarttime = starttimeDp.getValue();
+		LocalDate localendtime = endtimeDp.getValue();
+		if (localstarttime != null && localendtime != null) {
+
+			long starttime = localstarttime.toEpochDay() * 24 * 60 * 60 * 1000;
+			long endtime = localendtime.toEpochDay() * 24 * 60 * 60 * 1000;
+			if (starttime == endtime) { // 如果是同一天则查当天的记录
+				endtime = (localendtime.toEpochDay() + 1) * 24 * 60 * 60 * 1000;
+			}
+			updateWavefTable(starttime, endtime);
+		}
+	}
+	/** 初始化波形数据tab */
+	private void initWavefdataTab() {
+
+		// init tableview
+		wavefId.setCellValueFactory(new PropertyValueFactory<WavefDataModel, Integer>("id"));
+		wavefType.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>("type"));
+		wavefTime.setCellValueFactory(new PropertyValueFactory<WavefDataModel, String>("time"));
+		wavefTable.setItems(wavefDataList);
+		// 条件初始化
+		radioGroup = new ToggleGroup();
+		hourRb.setToggleGroup(radioGroup);
+		dayRb.setToggleGroup(radioGroup);
+		hourRb.setSelected(true);
+		dayRb.setSelected(false);
+		hourRb.setUserData((short) 1);
+		dayRb.setUserData((short) 2);
+		datePicker.setValue(LocalDate.now());
+
+		wavefXAxis.setCategories(wavefXStrings);
+		starttimeDp.setValue(LocalDate.now());
+		endtimeDp.setValue(LocalDate.now());
+	}
 	/** 查询 */
 	@FXML
 	private void handleWavefQuery() {
@@ -256,6 +295,7 @@ public class ClientDetailController extends FXMLController {
 		wavefDataList.clear();
 		List<WavefDataModel> list = WavefDataDao.getRecord(client.getStationId(), starttime, endtime);
 		wavefDataList.addAll(list);
+		wavefResultLabel.setText(String.valueOf(list.size()));
 	}
 
 	@FXML
@@ -263,42 +303,21 @@ public class ClientDetailController extends FXMLController {
 		wavefBar.getData().clear();
 	}
 
-	/** 打开客户端控制界面 */
-	private void openClientSetting() {
+	/*********************************************************************************
+	 * 触发数据 tab
+	 * 
+	 *********************************************************************************/
+	
 
-		Stage stage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ParseUtil.getFXMLURL(settingPath));
-		Node page = null;
-		try {
-			page = loader.load();
-			ClientSettingController controller = loader.getController();
-			controller.initController(client, stage);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+	
 
-		stage.initModality(Modality.APPLICATION_MODAL); // 模态窗口
-		stage.initOwner(permitLab.getScene().getWindow()); // 任意一个控件可获得其所属窗口对象
-		stage.setTitle("台站控制");
-		Scene scene = new Scene((Parent) page);
-		stage.setScene(scene);
-		stage.centerOnScreen();
-		stage.showAndWait();
-	}
+	
 
-	/** 客户端参数修改成功后更新该窗口 */
-	public void update(ClientInfo client) {
-		this.client = client;
-		initClientInfo();
-	}
+	
 
-	public void show() {
-		if (stage.isShowing()) {
-			stage.toFront();
-		} else {
-			stage.show();
-		}
-	}
+	
+
+	
+
+	
 }
