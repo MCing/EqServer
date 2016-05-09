@@ -2,6 +2,7 @@ package com.eqsys.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.eqsys.msg.EqMessage;
@@ -76,5 +77,41 @@ public class TrgDataDao{
 			JDBCHelper.closeDBConnection(conn);
 		}
 		return ret;
+	}
+	
+	/** 获取记录数量  
+	 * 
+	 * @param stationid	指定台站
+	 * @return			总记录数量
+	 */
+	public static int getCount(String stationid) {
+
+		String sql = "select count(pid)  from " + TableName
+				+ " where stationid = ?;";
+		PreparedStatement preStat = null;
+		Connection conn = null;
+		int count = 0;
+		try {
+			conn = JDBCHelper.getDBConnection();
+			preStat = conn.prepareStatement(sql);
+			preStat.setString(1, stationid);
+			ResultSet results = preStat.executeQuery();
+			if (results.next()) {
+				count = results.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+		return count;
 	}
 }

@@ -42,6 +42,9 @@ public class ClientInfo {
 		this.altitude = new SimpleIntegerProperty();
 		this.sensitivity = new SimpleIntegerProperty();
 		this.threshold = new SimpleIntegerProperty();
+		wavefDataCount = new SimpleIntegerProperty();
+		triDataCount = new SimpleIntegerProperty();
+		statusDataCount = new SimpleIntegerProperty();
 	}
 	
 	//getter , settr and propertygeter
@@ -126,4 +129,39 @@ public class ClientInfo {
 	public void setLastPid(int lastPid) {
 		this.lastPid = lastPid;
 	}
+	
+	//用于数据分析
+	private IntegerProperty wavefDataCount;
+	private IntegerProperty triDataCount;
+	private IntegerProperty statusDataCount;
+	
+	public int getWavefDataCount() {
+		return wavefDataCount.get();
+	}
+	public void setWavefDataCount(int value) {
+		this.wavefDataCount.set(value);
+	}
+	public IntegerProperty wavefDataCountProperty(){
+		return wavefDataCount;
+	}
+	
+	public int getTriDataCount() {
+		return triDataCount.get();
+	}
+	public void setTriDataCount(int value) {
+		this.triDataCount.set(value);
+	}
+	public IntegerProperty triDataCountProperty(){
+		return triDataCount;
+	}
+	
+	public int getStatusDataCount() {
+		return statusDataCount.get();
+	}
+	public void setStatusDataCount(int value) {
+		this.statusDataCount.set(value);
+	}
+	public IntegerProperty statusDataCountProperty(){
+		return statusDataCount;
+	}	
 }

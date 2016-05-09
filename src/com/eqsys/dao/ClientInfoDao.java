@@ -343,6 +343,8 @@ public class ClientInfoDao {
 				node.setAltitude(results.getShort("altitude"));
 				node.setThreshold(results.getShort("threshold"));
 				node.setSensitivity(results.getInt("sensitivity"));
+				node.setTransMode(ParseUtil.parseTransMode(results.getShort("transmode")));
+				node.setPermit(results.getShort("permit"));
 				list.add(node);
 			}
 

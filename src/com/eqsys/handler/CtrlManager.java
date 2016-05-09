@@ -88,7 +88,7 @@ public class CtrlManager {
 			ObservableList<ClientInfo> obList = ClientConnList.getInstance().getObservableList();
 			ClientInfo client = event.getClient();
 			int index = obList.indexOf(client);
-			//update clientinfo database
+//			update clientinfo database
 			if(resp.getSubCommand() == MsgConstant.CMD_TRANSMODE){
 				TransModeReq req = (TransModeReq) event.getReqMsg().getBody();
 				client.setTransMode(ParseUtil.parseTransMode(req.getSubTransMode()));

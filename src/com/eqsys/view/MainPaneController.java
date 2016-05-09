@@ -11,6 +11,7 @@ import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
 import com.eqsys.util.TmpOblist;
+import com.sun.jmx.remote.internal.ClientListenerInfo;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
@@ -50,6 +52,7 @@ public class MainPaneController extends FXMLController {
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
 	private String nodeMgrPath = "/com/eqsys/view/NodeManagerLayout.fxml";
 	private String dbSettingPath = "/com/eqsys/view/DatabaseSettingLayout.fxml";
+	private String dataAnalyPath = "/com/eqsys/view/DataAnalysisLayout.fxml";
 
 	// 客户端信息
 	@FXML
@@ -104,6 +107,8 @@ public class MainPaneController extends FXMLController {
 	private Button connDbBtn;
 	@FXML
 	private Button nodeMgrBtn;
+	@FXML
+	private Button analysisyBtn;
 
 	// 主页面
 	@FXML
@@ -122,7 +127,6 @@ public class MainPaneController extends FXMLController {
 		serverIp.setText(SysConfig.serverIp);
 		onLineLabel.textProperty().bind(ClientConnList.getInstance().getOnlineNumber());
 		initDbInfo();
-
 		// initialize recv data
 		timeColumn
 				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
@@ -179,6 +183,7 @@ public class MainPaneController extends FXMLController {
 		//快捷键提示
         connDbBtn.setTooltip(new Tooltip("连接数据库"));
         nodeMgrBtn.setTooltip(new Tooltip("节点管理"));
+        analysisyBtn.setTooltip(new Tooltip("数据分析"));
 	}
 
 	private void initDbInfo() {
@@ -192,20 +197,6 @@ public class MainPaneController extends FXMLController {
 			dbState.setTextFill(Color.RED);
 		}
 	}
-
-	/** 树形菜单 */
-//	private void createTree() {
-//
-//		// create root
-//		TreeItem<String> root = new TreeItem<String>("Root");
-//		// root.setExpanded(true);
-//		// create child
-//		TreeItem<String> itemChild = new TreeItem<String>("Child");
-//		itemChild.setExpanded(false);
-//		// root is the parent of itemChild
-//		root.getChildren().add(itemChild);
-//		treeView.setRoot(root);
-//	}
 
 	/**
 	 * 用于控制clientInfo table 的行(实现双击响应)
@@ -227,7 +218,6 @@ public class MainPaneController extends FXMLController {
 						openClientDetail(clientInfo);
 					}
 				}
-
 			});
 		}
 	}
@@ -270,7 +260,7 @@ public class MainPaneController extends FXMLController {
 		
 		if(nodeMgrTab == null){
 			nodeMgrTab = new Tab();
-			nodeMgrTab.setContent(getNodeFromFXML());
+			nodeMgrTab.setContent(getNodeFromFXML(nodeMgrPath));
 			nodeMgrTab.setText("节点管理");
 		}
 		if(!mainTabPane.getTabs().contains(nodeMgrTab)){
@@ -281,10 +271,10 @@ public class MainPaneController extends FXMLController {
 	}
 
 	/** 打开节点管理窗口 */
-	private Node getNodeFromFXML() {
+	private Node getNodeFromFXML(String path) {
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ParseUtil.getFXMLURL(nodeMgrPath));
+		loader.setLocation(ParseUtil.getFXMLURL(path));
 		try {
 			return loader.load();
 		} catch (IOException e) {
@@ -306,6 +296,21 @@ public class MainPaneController extends FXMLController {
 	@FXML
 	private void handleDbSetting() {
 		openDbSettingDialog();
+	}
+	
+	private Tab dataAnalysisTab;
+	@FXML
+	private void handleDataAnalysis(){
+		if(dataAnalysisTab == null){
+			dataAnalysisTab = new Tab();
+			dataAnalysisTab.setContent(getNodeFromFXML(dataAnalyPath));
+			dataAnalysisTab.setText("数据分析");
+		}
+		if(!mainTabPane.getTabs().contains(dataAnalysisTab)){
+			
+			mainTabPane.getTabs().add(dataAnalysisTab);
+		}
+		workspSelectMode.select(dataAnalysisTab);
 	}
 
 	/** 打开数据库设置对话框 */

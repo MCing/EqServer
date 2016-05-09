@@ -270,8 +270,14 @@
 -fx-background-image: url("images/client_btn.png");
 -fx-background-repeat:  no-repeat
 }
+#shortkey3 {
+    
+-fx-background-color: null;
+-fx-background-image: url("images/data_btn.png");
+-fx-background-repeat:  no-repeat
+}
 /** 快捷键获得焦点时的状态  */
-#shortkey1:hover, #shortkey2:hover {
+#shortkey1:hover, #shortkey2:hover, #shortkey3:hover {
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.6) , 10, 0.5 , 0 , 0 );
 	-fx-border-color: #8B8970;
     -fx-border-width: 0.5, 0.5;

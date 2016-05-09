@@ -96,7 +96,6 @@ public class NodeManagerController extends FXMLController {
                     	openNodeEditDialog(clientInfo);
                     }  
                 }
-
             });  
         }
        }
@@ -127,11 +126,6 @@ public class NodeManagerController extends FXMLController {
 	private void handleAddNode(){
 		ClientInfo newNode = new ClientInfo();
 		openNodeEditDialog(newNode);
-	}
-	
-	@FXML
-	private void handleDataAnalysis(){
-		
 	}
 	
 	/**

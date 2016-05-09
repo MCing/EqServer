@@ -196,6 +196,7 @@
                   <Insets />
                </HBox.margin></Button>
             <Button id="shortkey2" fx:id="nodeMgrBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleNodeMgr" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" />
+            <Button id="shortkey3" fx:id="analysisyBtn" mnemonicParsing="false" onAction="#handleDataAnalysis" prefHeight="40.0" prefWidth="40.0" />
          </children>
          <GridPane.margin>
             <Insets />
