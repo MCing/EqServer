@@ -233,9 +233,6 @@ public class ClientDetailController extends FXMLController {
 		wavefBar.getData().clear();
 	}
 	
-	
-	
-	
 	/** 打开客户端控制界面 */
 	private void openClientSetting() {
 

@@ -31,7 +31,6 @@ import javafx.util.Callback;
 public class NodeManagerController extends FXMLController {
 	
 	private ObservableList<ClientInfo> nodeList = FXCollections.observableArrayList();
-//	private ClientInfoDao nodeInfoDao = new ClientInfoDao();
 	private String nodeEditPath = "/com/eqsys/view/NodeEditLayout.fxml";
 	
 	@FXML
@@ -128,6 +127,11 @@ public class NodeManagerController extends FXMLController {
 	private void handleAddNode(){
 		ClientInfo newNode = new ClientInfo();
 		openNodeEditDialog(newNode);
+	}
+	
+	@FXML
+	private void handleDataAnalysis(){
+		
 	}
 	
 	/**

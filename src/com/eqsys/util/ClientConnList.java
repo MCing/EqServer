@@ -10,8 +10,13 @@ import com.eqsys.dao.ClientInfoDao;
 import com.eqsys.model.ClientInfo;
 import com.eqsys.msg.EqMessage;
 import com.eqsys.msg.RegReq;
+import com.sun.media.jfxmediaimpl.platform.Platform;
 
 import io.netty.channel.socket.SocketChannel;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -32,11 +37,11 @@ public class ClientConnList {
 	 */
 	private Map<String, SocketChannel> map;
 	private ObservableList<ClientInfo> clientList;
-//	private ClientInfoDao clientInfoDao;
+	//用于显示在线数量
+	private StringProperty onLineNumber = new SimpleStringProperty("0");  
 	private ClientConnList(){
 		map = new ConcurrentHashMap<String, SocketChannel>();
 		clientList = FXCollections.observableArrayList();
-//		clientInfoDao = new ClientInfoDao();
 	}
 	
 	public static ClientConnList getInstance(){
@@ -65,6 +70,7 @@ public class ClientConnList {
 		clientList.add(info);
 		//加入数据库
 		ClientInfoDao.add(info);
+		updateOnlineNumber();
 	}
 	
 	public void remove(SocketChannel socketChannel){
@@ -77,13 +83,13 @@ public class ClientConnList {
 						it.remove();
 						TmpOblist.addToSysEventList(entry.getKey(), "退出");
 						log.error("客户端: "+entry.getKey()+" 退出");
+						updateOnlineNumber();
 						break;
 					}
 				}
 				break;
 			}
 		}
-//		log.error("客户端数量: "+map.size());
 	}
 	
 	public ObservableList<ClientInfo> getObservableList(){
@@ -108,5 +114,21 @@ public class ClientConnList {
 	
 	public SocketChannel getChannelById(String id){
 		return map.get(id);
+	}
+	
+	public StringProperty getOnlineNumber(){
+		
+		return onLineNumber;
+	}
+	
+	private void updateOnlineNumber(){
+		javafx.application.Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				onLineNumber.setValue(String.valueOf(clientList.size()));
+			}
+		});
 	}
 }

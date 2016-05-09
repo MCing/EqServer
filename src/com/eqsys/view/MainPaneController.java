@@ -20,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -87,6 +88,8 @@ public class MainPaneController extends FXMLController {
 	private Label serverId;
 	@FXML
 	private Label serverIp;
+	@FXML
+	private Label onLineLabel;
 
 	// 数据库信息
 	@FXML
@@ -114,12 +117,10 @@ public class MainPaneController extends FXMLController {
 		
 		workspSelectMode = mainTabPane.getSelectionModel();
 
-		// 添加各个分区到主窗口
-//		createTree();
-
 		// init server info and database info
 		serverId.setText(SysConfig.serverId);
 		serverIp.setText(SysConfig.serverIp);
+		onLineLabel.textProperty().bind(ClientConnList.getInstance().getOnlineNumber());
 		initDbInfo();
 
 		// initialize recv data
@@ -175,12 +176,8 @@ public class MainPaneController extends FXMLController {
 
 		eventTable.setItems(TmpOblist.getsysEventObserList());
 		
-		
-		//tooltip test
-		Tooltip tooltip = new Tooltip("连接数据库");  
-//        tooltip.setFont(new Font("Arial", 16));  
-        connDbBtn.setTooltip(tooltip);
-        
+		//快捷键提示
+        connDbBtn.setTooltip(new Tooltip("连接数据库"));
         nodeMgrBtn.setTooltip(new Tooltip("节点管理"));
 	}
 
@@ -288,7 +285,6 @@ public class MainPaneController extends FXMLController {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(nodeMgrPath));
-		Node page = null;
 		try {
 			return loader.load();
 		} catch (IOException e) {
@@ -335,17 +331,4 @@ public class MainPaneController extends FXMLController {
 		stage.centerOnScreen();
 		stage.show();
 	}
-
-	/** 关闭主工作无 tab */
-//	@FXML
-//	private void handleCloseTab() {
-//		if (workspSelectMode.getSelectedIndex() == 0) { // 主页不可删除
-//			return;
-//		}
-//		Tab delTab = workspSelectMode.getSelectedItem();
-//		if (delTab != null) {
-//			
-//			mainTabPane.getTabs().remove(delTab);
-//		}
-//	}
 }
