@@ -2,6 +2,7 @@ package com.eqsys.view;
 
 import java.io.IOException;
 
+import com.eqsys.application.EqServer;
 import com.eqsys.model.ClientInfo;
 import com.eqsys.model.RecvInfo;
 import com.eqsys.model.SysEvent;
@@ -109,6 +110,9 @@ public class MainPaneController extends FXMLController {
 	private Button nodeMgrBtn;
 	@FXML
 	private Button analysisyBtn;
+	
+	@FXML
+	private Label utcTimeLabel;
 
 	// 主页面
 	@FXML
@@ -184,6 +188,8 @@ public class MainPaneController extends FXMLController {
         connDbBtn.setTooltip(new Tooltip("连接数据库"));
         nodeMgrBtn.setTooltip(new Tooltip("节点管理"));
         analysisyBtn.setTooltip(new Tooltip("数据分析"));
+        
+        utcTimeLabel.textProperty().bind(EqServer.utcTime);
 	}
 
 	private void initDbInfo() {

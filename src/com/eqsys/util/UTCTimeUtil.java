@@ -49,7 +49,7 @@ public class UTCTimeUtil {
 	public static String timeFormat2(long time){
 		
 		String timeStr;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		timeStr = sdf.format(new Date(time));
 		
 		return timeStr;

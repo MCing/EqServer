@@ -189,7 +189,7 @@
                </opaqueInsets>
             </MenuBar>
          </children></AnchorPane>
-      <HBox id="shortkeybg" alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="1098.0" GridPane.columnSpan="12" GridPane.rowIndex="1">
+      <HBox id="shortkeybg" alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="1098.0" GridPane.columnSpan="9" GridPane.rowIndex="1">
          <children>
             <Button id="shortkey1" fx:id="connDbBtn" mnemonicParsing="false" onAction="#handleConnectDb" prefHeight="40.0" prefWidth="40.0">
                <HBox.margin>
@@ -241,5 +241,15 @@
             </Tab>
         </tabs>
       </TabPane>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+         <children>
+            <Label text="UTC 时间:" />
+            <Label fx:id="utcTimeLabel" text="Label" textFill="#07b21b">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
    </children>
 </GridPane>

@@ -3,10 +3,9 @@ package com.eqsys.application;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -18,6 +17,7 @@ import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.LogUtil;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
+import com.eqsys.util.UTCTimeUtil;
 import com.eqsys.view.FXMLController;
 import com.eqsys.view.LoginLayoutController;
 
@@ -36,8 +36,10 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -52,6 +54,9 @@ public class EqServer extends Application {
 	private String loginPath = "/com/eqsys/view/LoginLayout.fxml";
 	private String maxIconPath = "/com/eqsys/view/images/icon_max.png";
 	private String mainPanePath = "/com/eqsys/view/MainPaneLayout.fxml";
+	
+	private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+	public static StringProperty utcTime = new SimpleStringProperty();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -68,6 +73,8 @@ public class EqServer extends Application {
 	public void stop() throws Exception {
 
 		log.info("服务器退出");
+		stopUTCTime();
+		executor.shutdown();
 		JDBCHelper.closeDB();
 	}
 
@@ -82,7 +89,7 @@ public class EqServer extends Application {
 		SysConfig.preConfig(); // 配置文件
 		JDBCHelper.initDB();
 		initView();
-
+		startUTCTime();
 	}
 
 	private int screenWidth;
@@ -187,6 +194,34 @@ public class EqServer extends Application {
 			pipeline.addLast(new CmdRespHandler());
 			pipeline.addLast(new DataRecvHandler());
 		}
+	}
+	
+	private ScheduledFuture timerFuture;
+	/** 启动定时更新UTC时间 任务 */
+	private void startUTCTime(){
+		timerFuture = executor.scheduleAtFixedRate(new UTCTimerTask(), 1000, 1000, TimeUnit.MILLISECONDS);
+	}
+	/** 关闭更新UTC时间 任务 */
+	private void stopUTCTime(){
+		if(timerFuture != null){
+			timerFuture.cancel(true);
+		}
+	}
+	private class UTCTimerTask implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					utcTime.set(UTCTimeUtil.timeFormat2(UTCTimeUtil.getCurrUTCTime()));
+				}
+			});
+		}
+		
 	}
 
 }
