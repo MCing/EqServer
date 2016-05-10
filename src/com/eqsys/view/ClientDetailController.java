@@ -8,8 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.eqsys.dao.WavefDataDao;
+import com.eqsys.handler.CtrlManager;
 import com.eqsys.model.ClientInfo;
+import com.eqsys.model.CtrlEvent;
 import com.eqsys.model.WavefDataModel;
+import com.eqsys.msg.MsgConstant;
+import com.eqsys.msg.TransModeReq;
+import com.eqsys.util.DataBuilder;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.UTCTimeUtil;
 
@@ -69,6 +74,14 @@ public class ClientDetailController extends FXMLController {
 	private Button transModeBtn;
 	@FXML
 	private Button thresholdBtn;
+	//传输模式控制
+	private ToggleGroup transmodeGroup;
+	@FXML
+	private RadioButton consRb;
+	@FXML
+	private RadioButton triWNRb;
+	@FXML
+	private RadioButton triWRb;
 
 	// 波形数据tab
 	@FXML
@@ -115,6 +128,7 @@ public class ClientDetailController extends FXMLController {
 		this.client = client;
 		initClientInfo();
 		initWavefdataTab();
+		initCtrlData();
 	}
 	/** 客户端参数修改成功后更新该窗口 */
 	public void update(ClientInfo client) {
@@ -157,44 +171,49 @@ public class ClientDetailController extends FXMLController {
 			permitLab.setText(String.valueOf(client.getPermit()));
 		}
 	}
-	/** 处理 设置传输模式 */
-	@FXML
-	private void handleTransMode() {
-		if (verifyPermit()) {
-			openClientSetting();
-		} else {
-			// 没有控制权限
-		}
-	}
 
 	/** 验证该服务端是否有控制权限 */
 	private boolean verifyPermit() {
 
 		return client.getPermit() == 0 ? true : false;
 	}
-	/** 打开客户端控制界面 */
-	private void openClientSetting() {
 
-		Stage stage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ParseUtil.getFXMLURL(settingPath));
-		Node page = null;
-		try {
-			page = loader.load();
-			ClientSettingController controller = loader.getController();
-			controller.initController(client, stage);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
+	/** 台站控制  */
+	private void initCtrlData(){
+		transmodeGroup = new ToggleGroup();
+		consRb.setToggleGroup(transmodeGroup);
+		triWNRb.setToggleGroup(transmodeGroup);
+		triWRb.setToggleGroup(transmodeGroup);
+		switch(ParseUtil.parseTransMode(client.getTransMode())){
+			case 1:
+				consRb.setSelected(true);
+				break;
+			case 2:
+				triWNRb.setSelected(true);
+				break;
+			case 3:
+				triWRb.setSelected(true);
+				break;
 		}
-
-		stage.initModality(Modality.APPLICATION_MODAL); // 模态窗口
-		stage.initOwner(permitLab.getScene().getWindow()); // 任意一个控件可获得其所属窗口对象
-		stage.setTitle("台站控制");
-		Scene scene = new Scene((Parent) page);
-		stage.setScene(scene);
-		stage.centerOnScreen();
-		stage.showAndWait();
+		consRb.setUserData((short)1);
+		triWNRb.setUserData((short)2);
+		triWRb.setUserData((short)3);
+	}
+	@FXML
+	private void handleTranMode(){
+		Toggle selectedRb = transmodeGroup.getSelectedToggle();
+		if(selectedRb != null){
+			short selectMode = (short)selectedRb.getUserData();
+			if(selectMode != ParseUtil.parseTransMode(client.getTransMode())){
+				CtrlEvent transModeEvent = new CtrlEvent();
+				TransModeReq req = new TransModeReq();
+				req.setSubCommand(MsgConstant.CMD_TRANSMODE);
+				req.setSubTransMode(selectMode);
+				transModeEvent.setClient(client);
+				transModeEvent.setReqMsg(DataBuilder.buildCtrlReq(client.getStationId(), req));
+				CtrlManager.getMagager().ctrlReq(transModeEvent);
+			}
+		}
 	}
 	/*********************************************************************************
 	 * 
@@ -304,6 +323,7 @@ public class ClientDetailController extends FXMLController {
 	}
 
 	/*********************************************************************************
+	 * 
 	 * 触发数据 tab
 	 * 
 	 *********************************************************************************/

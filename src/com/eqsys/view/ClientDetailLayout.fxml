@@ -53,24 +53,37 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <Button mnemonicParsing="false" onAction="#handleTransMode" text="    设置    " GridPane.rowIndex="2" />
-                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4" GridPane.rowSpan="2">
+                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.rowSpan="2">
                            <children>
-                              <Label layoutX="11.0" layoutY="43.0" styleClass="label-header" text="模式控制" />
+                              <Label layoutX="52.0" layoutY="33.0" styleClass="label-header" text="模式控制" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="8" GridPane.rowIndex="4" GridPane.rowSpan="2">
                            <children>
-                              <RadioButton layoutX="122.0" layoutY="66.0" mnemonicParsing="false" text="连续波形传输" />
-                              <RadioButton layoutX="122.0" layoutY="42.0" mnemonicParsing="false" text="触发传波形" />
-                              <RadioButton layoutX="122.0" layoutY="16.0" mnemonicParsing="false" text="触发不传波形" />
-                              <Button layoutX="320.0" layoutY="44.0" mnemonicParsing="false" text="确定" />
-                              <Button layoutX="411.0" layoutY="44.0" mnemonicParsing="false" text="取消" />
+                              <RadioButton fx:id="consRb" layoutX="122.0" layoutY="66.0" mnemonicParsing="false" text="连续波形传输" />
+                              <RadioButton fx:id="triWRb" layoutX="122.0" layoutY="42.0" mnemonicParsing="false" text="触发传波形" />
+                              <RadioButton fx:id="triWNRb" layoutX="122.0" layoutY="16.0" mnemonicParsing="false" text="触发不传波形" />
+                              <Button layoutX="320.0" layoutY="44.0" mnemonicParsing="false" onAction="#handleTransMode" text="确定" />
                            </children>
                         </AnchorPane>
                         <AnchorPane id="main_background2" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="9" GridPane.rowIndex="3">
                            <children>
-                              <Label layoutX="400.0" layoutY="10.0" styleClass="label-header" text="台站控制" />
+                              <Label layoutX="360.0" layoutY="9.0" prefHeight="30.0" prefWidth="86.0" styleClass="label-header" text="台站控制" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="8" GridPane.rowIndex="6" GridPane.rowSpan="2">
+                           <children>
+                              <Label layoutX="8.0" layoutY="35.0" styleClass="label-header" text="阈值设定" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="8" GridPane.rowSpan="2">
+                           <children>
+                              <Label layoutX="19.0" layoutY="34.0" styleClass="label-header" text="申请时间段数据" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="8" GridPane.rowIndex="10" GridPane.rowSpan="2">
+                           <children>
+                              <Label layoutX="7.0" layoutY="34.0" styleClass="label-header" text="触发控制" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -87,6 +100,12 @@
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
