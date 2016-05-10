@@ -131,4 +131,13 @@ public class ClientConnList {
 			}
 		});
 	}
+	
+	/** 
+	 * 获取客户端状态
+	 * @param stationid	台站号
+	 * @return	true:已连接	false:未连接
+	 */
+	public boolean getState(String stationid){
+		return map.containsKey(stationid);
+	}
 }

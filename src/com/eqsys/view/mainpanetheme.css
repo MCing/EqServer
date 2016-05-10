@@ -349,6 +349,22 @@
 	
 }
 
+/*******************************
+ * 
+ * 台站控制界面
+ * 
+ */
+ .title{
+ 	-fx-background-color: #53C3B0;
+ 	-fx-border-color: #F1CF92 transparent #F1CF92 transparent;
+ 	-fx-border-width: 5;
+ }
+ .title_background{
+ 	-fx-background-color: #81DECE;
+ }
+ .bar_background{
+ 	-fx-border-color: transparent transparent #8B8970 transparent;
+ }
 
 
 

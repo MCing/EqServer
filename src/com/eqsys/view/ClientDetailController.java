@@ -14,6 +14,7 @@ import com.eqsys.model.CtrlEvent;
 import com.eqsys.model.WavefDataModel;
 import com.eqsys.msg.MsgConstant;
 import com.eqsys.msg.TransModeReq;
+import com.eqsys.util.ClientConnList;
 import com.eqsys.util.DataBuilder;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.UTCTimeUtil;
@@ -49,11 +50,12 @@ public class ClientDetailController extends FXMLController {
 
 	private ClientInfo client;
 	private Stage stage;
-	private String settingPath = "/com/eqsys/view/ClientSettingLayout.fxml";
 
 	private ObservableList<WavefDataModel> wavefDataList = FXCollections.observableArrayList();
 	private ObservableList<String> wavefXStrings = FXCollections.observableArrayList();
 	// 控制 tab
+	@FXML
+	private Label errorLabel;
 	@FXML
 	private Label stationIdLab;
 	@FXML
@@ -129,6 +131,9 @@ public class ClientDetailController extends FXMLController {
 		initClientInfo();
 		initWavefdataTab();
 		initCtrlData();
+		if(!ClientConnList.getInstance().getState(client.getStationId())){
+			updateErrorTip("未连接，无法控制！");
+		}
 	}
 	/** 客户端参数修改成功后更新该窗口 */
 	public void update(ClientInfo client) {
@@ -168,7 +173,11 @@ public class ClientDetailController extends FXMLController {
 			altitudeLab.setText(String.valueOf(client.getAltitude()));
 			sensitivityLab.setText(String.valueOf(client.getSensitivity()));
 			thresholdLab.setText(String.valueOf(client.getThreshold()));
-			permitLab.setText(String.valueOf(client.getPermit()));
+			if(verifyPermit()){
+				permitLab.setText("可控制");
+			}else{
+				permitLab.setText("不可控制");
+			}
 		}
 	}
 
@@ -214,6 +223,10 @@ public class ClientDetailController extends FXMLController {
 				CtrlManager.getMagager().ctrlReq(transModeEvent);
 			}
 		}
+	}
+	private void updateErrorTip(String msg){
+		
+		errorLabel.setText(msg);
 	}
 	/*********************************************************************************
 	 * 
@@ -327,14 +340,6 @@ public class ClientDetailController extends FXMLController {
 	 * 触发数据 tab
 	 * 
 	 *********************************************************************************/
-	
-
-	
-
-	
-
-	
-
 	
 
 	
