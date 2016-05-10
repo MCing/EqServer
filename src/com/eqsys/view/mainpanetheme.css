@@ -1,13 +1,26 @@
 
+/*******************************************************************
+ * 
+ * 登录界面
+ * 
+ *******************************************************************/
+#login-background{
+	
+-fx-background-image: url("images/login_background.jpg");
+-fx-background-repeat:no-repeat;
+-fx-background-size:cover;
+}
+
 .background {
     -fx-background-color: #1d1d1d;
 }
 
-
+/* 
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
 }
+*/
 
 .label-bright {
     -fx-font-size: 11pt;
@@ -17,7 +30,7 @@
 }
 
 .label-header {
-    -fx-font-size: 32pt;
+    -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Light";
     -fx-text-fill: white;
     -fx-opacity: 1;
@@ -27,11 +40,10 @@
     -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Semibold";
 }
-/*
+
 .table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
+    -fx-base: #E3F5FF;
+   /*  -fx-background-color: #E3F5FF;*/
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 5;
@@ -41,6 +53,7 @@
     -fx-background-color: transparent;
 }
 
+/*
 .table-view .column-header, .table-view .filler {
     -fx-size: 35;
     -fx-border-width: 0 0 1 0;
@@ -53,13 +66,7 @@
     -fx-border-insets: 0 10 1 0;
 }
 
-.table-view .column-header .label {
-    -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-alignment: center-left;
-    -fx-opacity: 1;
-}
+
 
 .table-view:focused .table-row-cell:filled:focused:selected {
     -fx-background-color: -fx-focus-color;
@@ -74,7 +81,7 @@
  ******************************************************************************/
 /** 菜单栏背景色 */
 .menu-bar {
-    -fx-background-color: linear-gradient(from 0px 0px to 0px 20px, #CEE5F7, derive(#3190F5, 10%));
+    -fx-background-color: linear-gradient(from 0px 0px to 0px 10px, #CEE5F7, derive(#3190F5, 10%));
 }
 /** 下拉菜单背景色 */
 .context-menu {
@@ -114,13 +121,27 @@
 
 
 
-
 /*******************************************************************************
  *                                                                             *
  * 主工作区                                                                     												   *
  *                                                                             *
  ******************************************************************************/
 
+/** 主页 */
+#main_background1 {
+    -fx-background-color: #3E9EFF;
+}
+#main_background2 {
+    -fx-background-color: #53C3B0;
+}
+#main_background1_2 {
+	-fx-border-color: transparent #8E8B8B transparent #8E8B8B;
+    -fx-background-color: white;/*#95C9ED;derive(#3e9eff, 60%);*/
+}
+#main_background2_2 {
+	-fx-border-color: transparent #8E8B8B transparent #8E8B8B;
+    -fx-background-color: white;/*#AFF2E8;derive(#53C3B0, 60%);*/
+}
 /** tab 的方框形状 */
 .tab-pane > .tab-header-area > .headers-region > .tab {
     -fx-background-insets: 0 1 1 0, 1 2 1 1, 2 3 1 2;
@@ -162,11 +183,12 @@
    */
      -fx-background-radius: 3 3 0 0, 0 0 0 0, 0 0 0 0;
     -fx-background-color:  
-        linear-gradient(from 0px 0px to 0px 5px, #CEE5F7, derive(#3e9eff, 30%));
+        linear-gradient(from 0px 0px to 0px 5px, #CEE5F7, derive(#317FB7, 30%));
+        /*linear-gradient(from 0px 0px to 0px 5px, #CEE5F7, derive(#3e9eff, 30%));*/
 }
 /** 导航条背景 */
 .tab-pane:top > .tab-header-area > .tab-header-background {
-    -fx-background-insets: 0 5 0 0/*0, 0 0 1 0, 1;*/
+    -fx-background-insets: 0 0 0 0/*0, 0 0 1 0, 1;*/
 }
 /** 导航条大小  */
 .tab-pane:top > .tab-header-area {
@@ -250,8 +272,9 @@
  *                                                                             *
  ******************************************************************************/
 /** 快捷键栏 */
-#shortkeybg{
-	-fx-border-color: transparent transparent #DCDCDC transparent;
+.shortkeybg{
+	-fx-background-color: #E5F1FA;
+	-fx-border-color: transparent transparent #8E8B8B transparent;
 }
 
 /** 快捷键  
