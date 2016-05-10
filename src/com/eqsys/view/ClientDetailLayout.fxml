@@ -20,13 +20,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eqsys.view.ClientDetailController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@mainpanetheme.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eqsys.view.ClientDetailController">
   <tabs>
-    <Tab text="控制">
+    <Tab text="台站控制">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <GridPane gridLinesVisible="true">
+                  <GridPane prefHeight="571.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label text="台站ID" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Label text="传输模式" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
@@ -42,38 +42,37 @@
                         <Label fx:id="latitudeLab" text="Label" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Label fx:id="altitudeLab" text="Label" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Label fx:id="sensitivityLab" text="Label" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <GridPane GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                        <Label fx:id="transModeLab" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label fx:id="thresholdLab" text="Label" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="2">
                            <children>
-                              <Label fx:id="transModeLab" text="Label" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                              <Label id="main_" layoutX="10.0" layoutY="33.0" styleClass="label-header" text="台站信息">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
                            </children>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                        </GridPane>
-                        <GridPane GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                        </AnchorPane>
+                        <Button mnemonicParsing="false" onAction="#handleTransMode" text="    设置    " GridPane.rowIndex="2" />
+                        <AnchorPane id="main_background1" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4" GridPane.rowSpan="2">
                            <children>
-                              <Label fx:id="thresholdLab" text="Label" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                              <Label layoutX="11.0" layoutY="43.0" styleClass="label-header" text="模式控制" />
                            </children>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                        </GridPane>
-                        <Button mnemonicParsing="false" onAction="#handleTransMode" text="设置" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Label text="台站信息" GridPane.halignment="CENTER">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="8" GridPane.rowIndex="4" GridPane.rowSpan="2">
+                           <children>
+                              <RadioButton layoutX="122.0" layoutY="66.0" mnemonicParsing="false" text="连续波形传输" />
+                              <RadioButton layoutX="122.0" layoutY="42.0" mnemonicParsing="false" text="触发传波形" />
+                              <RadioButton layoutX="122.0" layoutY="16.0" mnemonicParsing="false" text="触发不传波形" />
+                              <Button layoutX="320.0" layoutY="44.0" mnemonicParsing="false" text="确定" />
+                              <Button layoutX="411.0" layoutY="44.0" mnemonicParsing="false" text="取消" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="main_background2" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="9" GridPane.rowIndex="3">
+                           <children>
+                              <Label layoutX="400.0" layoutY="10.0" styleClass="label-header" text="台站控制" />
+                           </children>
+                        </AnchorPane>
                      </children>
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -88,6 +87,10 @@
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                   </GridPane>
@@ -141,11 +144,11 @@
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="3">
                      <children>
                         <DatePicker fx:id="starttimeDp" layoutX="44.0" layoutY="35.0" />
-                        <DatePicker fx:id="endtimeDp" layoutX="44.0" layoutY="86.0" />
+                        <DatePicker fx:id="endtimeDp" layoutX="44.0" layoutY="106.0" />
                         <Label layoutX="44.0" layoutY="14.0" text="开始时间：" />
-                        <Label layoutX="44.0" layoutY="67.0" text="结束时间：" />
-                        <Button layoutX="54.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleWavefQuery2" text="查询" />
-                        <Label layoutX="44.0" layoutY="117.0" text="查询结果：" />
+                        <Label layoutX="44.0" layoutY="83.0" text="结束时间：" />
+                        <Button layoutX="74.0" layoutY="174.0" mnemonicParsing="false" onAction="#handleWavefQuery2" text="查询" />
+                        <Label layoutX="167.0" layoutY="181.0" text="查询结果：" />
                         <Label fx:id="wavefResultLabel" layoutX="104.0" layoutY="117.0" />
                      </children>
                   </AnchorPane>

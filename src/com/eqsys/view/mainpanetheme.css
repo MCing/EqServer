@@ -2,7 +2,7 @@
 
 .button {
 	
-    -fx-padding: 5 0 5 0;   
+      
     -fx-background-radius: 0;
     -fx-background-color: #3E9EFF;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
@@ -10,6 +10,7 @@
     -fx-text-fill: white;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
     /*
+     * -fx-padding: 5 0 5 0; 
      *  -fx-border-color: #3E9EFF;
      * 	-fx-border-width: 2;
      */
