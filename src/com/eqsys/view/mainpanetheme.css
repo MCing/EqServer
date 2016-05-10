@@ -1,4 +1,24 @@
 
+
+.button {
+	
+    -fx-padding: 5 0 5 0;   
+    -fx-background-radius: 0;
+    -fx-background-color: #3E9EFF;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: white;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+    /*
+     *  -fx-border-color: #3E9EFF;
+     * 	-fx-border-width: 2;
+     */
+}
+
+.button:hover {
+    -fx-background-color: derive(#B7D1F5,10%);
+}
+
 /*******************************************************************
  * 
  * 登录界面
@@ -30,7 +50,7 @@
 }
 
 .label-header {
-    -fx-font-size: 20pt;
+    -fx-font-size: 15pt;
     -fx-font-family: "Segoe UI Light";
     -fx-text-fill: white;
     -fx-opacity: 1;
@@ -310,6 +330,23 @@
 }
 
 
+/*******************************************************************
+*
+* 台站信息编辑
+* 
+*********************************************************************/
+#edit_background{
+	
+	-fx-background-image: url("images/edit_bg.jpg");
+	-fx-background-repeat:no-repeat;
+	-fx-background-size:cover;
+	
+	/* 
+	 * 
+	 * -fx-background-color: linear-gradient(from 0px 0px to 5px 5px, #8E8B8B, derive(#8E8B8B, 30%));;
+	 */
+	
+}
 
 
 
