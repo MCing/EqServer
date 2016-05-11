@@ -30,8 +30,8 @@
       <PasswordField fx:id="passwordPf" promptText="输入密码" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="4">
          <children>
-            <Button fx:id="loginBtn" defaultButton="true" layoutX="93.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleLogin" text="    进入系统    " AnchorPane.topAnchor="5.0" />
-            <Button fx:id="resetBtn" layoutX="233.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleReset" text="    重置    " AnchorPane.topAnchor="5.0" />
+            <Button fx:id="loginBtn" defaultButton="true" layoutX="93.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleLogin" text="进入系统" AnchorPane.topAnchor="5.0" />
+            <Button fx:id="resetBtn" layoutX="233.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleReset" text="重置" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
       <Label fx:id="errorLabel" textFill="#ee0000" GridPane.columnIndex="1" GridPane.rowIndex="3" />

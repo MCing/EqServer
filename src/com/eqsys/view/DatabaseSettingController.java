@@ -1,25 +1,24 @@
 package com.eqsys.view;
 
-import com.eqsys.util.JDBCHelper;
-import com.eqsys.util.SysConfig;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import com.eqsys.util.SysConfig;
 
 public class DatabaseSettingController extends FXMLController {
 
 	private Stage stage;
 	
 	@FXML
-	private TextField serverName;
-	@FXML
-	private TextField dbName;
-	@FXML
-	private TextField port;
-	@FXML
-	private TextField user;
+	private TextField serverName,dbName,port,user;
+//	@FXML
+//	private TextField dbName;
+//	@FXML
+//	private TextField port;
+//	@FXML
+//	private TextField user;
 	@FXML
 	private PasswordField password;
 	

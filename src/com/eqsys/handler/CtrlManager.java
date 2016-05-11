@@ -101,7 +101,7 @@ public class CtrlManager {
 			//update clientinfo tableview
 			obList.set(index, client);
 			
-			ClientWindowMgr.getClientWindowMgr().update(client);
+			ClientWindowMgr.getClientWindowMgr().update(client, resp.getStateDetil());
 		}
 		list.remove(event);
 	}

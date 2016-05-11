@@ -27,14 +27,14 @@ public class ClientWindowMgr {
 	}
 	
 	
-	public void update(final ClientInfo client){
+	public void update(final ClientInfo client, final String msg){
 		final ClientDetailController controller = windowMap.get(client.getStationId());
 		if(controller != null){
 			Platform.runLater(new Runnable() {
 				
 				@Override
 				public void run() {
-					controller.update(client);
+					controller.update(client, msg);
 				}
 			});
 			

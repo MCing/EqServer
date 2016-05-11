@@ -1,12 +1,28 @@
 package com.eqsys.view;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+
+import com.eqsys.consts.Constants;
 import com.eqsys.dao.WavefDataDao;
 import com.eqsys.handler.CtrlManager;
 import com.eqsys.model.ClientInfo;
@@ -18,29 +34,6 @@ import com.eqsys.util.ClientConnList;
 import com.eqsys.util.DataBuilder;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.UTCTimeUtil;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 /**
  * 客户端详情
@@ -55,35 +48,35 @@ public class ClientDetailController extends FXMLController {
 	private ObservableList<String> wavefXStrings = FXCollections.observableArrayList();
 	// 控制 tab
 	@FXML
-	private Label errorLabel;
+	private Label errorLabel, stationIdLab, transModeLab, longtitudeLab, latitudeLab, altitudeLab, sensitivityLab,thresholdLab, permitLab;
+//	@FXML
+//	private Label stationIdLab;
+//	@FXML
+//	private Label transModeLab;
+//	@FXML
+//	private Label longtitudeLab;
+//	@FXML
+//	private Label latitudeLab;
+//	@FXML
+//	private Label altitudeLab;
+//	@FXML
+//	private Label sensitivityLab;
+//	@FXML
+//	private Label thresholdLab;
+//	@FXML
+//	private Label permitLab;
 	@FXML
-	private Label stationIdLab;
-	@FXML
-	private Label transModeLab;
-	@FXML
-	private Label longtitudeLab;
-	@FXML
-	private Label latitudeLab;
-	@FXML
-	private Label altitudeLab;
-	@FXML
-	private Label sensitivityLab;
-	@FXML
-	private Label thresholdLab;
-	@FXML
-	private Label permitLab;
-	@FXML
-	private Button transModeBtn;
-	@FXML
-	private Button thresholdBtn;
+	private Button transModeBtn, thresholdBtn;
+//	@FXML
+//	private Button thresholdBtn;
 	//传输模式控制
 	private ToggleGroup transmodeGroup;
 	@FXML
-	private RadioButton consRb;
-	@FXML
-	private RadioButton triWNRb;
-	@FXML
-	private RadioButton triWRb;
+	private RadioButton consRb, triWNRb, triWRb;
+//	@FXML
+//	private RadioButton triWNRb;
+//	@FXML
+//	private RadioButton triWRb;
 
 	// 波形数据tab
 	@FXML
@@ -95,17 +88,17 @@ public class ClientDetailController extends FXMLController {
 	@FXML
 	private TableColumn<WavefDataModel, Integer> wavefId;
 	@FXML
-	private TableColumn<WavefDataModel, String> wavefType;
-	@FXML
-	private TableColumn<WavefDataModel, String> wavefTime;
+	private TableColumn<WavefDataModel, String> wavefType, wavefTime;
+//	@FXML
+//	private TableColumn<WavefDataModel, String> wavefTime;
 	@FXML
 	private Button wavefQuery;
 	@FXML
 	private DatePicker datePicker;
 	@FXML
-	private RadioButton hourRb;
-	@FXML
-	private RadioButton dayRb;
+	private RadioButton hourRb, dayRb;
+//	@FXML
+//	private RadioButton dayRb;
 	private ToggleGroup radioGroup;
 	// 条状图初始化
 	private String[] hourStrs = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
@@ -114,9 +107,9 @@ public class ClientDetailController extends FXMLController {
 			"17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
 	
 	@FXML
-	private DatePicker starttimeDp;
-	@FXML
-	private DatePicker endtimeDp;
+	private DatePicker starttimeDp, endtimeDp;
+//	@FXML
+//	private DatePicker endtimeDp;
 	@FXML
 	private Label wavefResultLabel;
 
@@ -135,10 +128,12 @@ public class ClientDetailController extends FXMLController {
 			updateErrorTip("未连接，无法控制！");
 		}
 	}
-	/** 客户端参数修改成功后更新该窗口 */
-	public void update(ClientInfo client) {
+	/** 客户端参数修改成功后更新该窗口 
+	 * @param msg */
+	public void update(ClientInfo client, String msg) {
 		this.client = client;
 		initClientInfo();
+		updateErrorTip(msg);
 	}
 
 	public void show() {
@@ -198,15 +193,15 @@ public class ClientDetailController extends FXMLController {
 				consRb.setSelected(true);
 				break;
 			case 2:
-				triWNRb.setSelected(true);
+				triWRb.setSelected(true);
 				break;
 			case 3:
-				triWRb.setSelected(true);
+				triWNRb.setSelected(true);
 				break;
 		}
 		consRb.setUserData((short)1);
-		triWNRb.setUserData((short)2);
-		triWRb.setUserData((short)3);
+		triWRb.setUserData((short)2);
+		triWNRb.setUserData((short)3);
 	}
 	@FXML
 	private void handleTranMode(){

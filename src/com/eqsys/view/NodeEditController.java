@@ -16,21 +16,21 @@ public class NodeEditController extends FXMLController {
 	private Stage dialogStage;
 	
 	@FXML
-	private TextField stationIdTf;
+	private TextField stationIdTf,longitudeTf,latitudeTf,altitudeTf,sensitivityTf,triggerThresholdTf;
+//	@FXML
+//	private TextField longitudeTf;
+//	@FXML
+//	private TextField latitudeTf;
+//	@FXML
+//	private TextField altitudeTf;
+//	@FXML
+//	private TextField sensitivityTf;
+//	@FXML
+//	private TextField triggerThresholdTf;
 	@FXML
-	private TextField longitudeTf;
-	@FXML
-	private TextField latitudeTf;
-	@FXML
-	private TextField altitudeTf;
-	@FXML
-	private TextField sensitivityTf;
-	@FXML
-	private TextField triggerThresholdTf;
-	@FXML
-	private Button okBtn;
-	@FXML
-	private Button cancelBtn;
+	private Button okBtn,cancelBtn;
+//	@FXML
+//	private Button cancelBtn;
 	@FXML
 	private Label errorLab;
 	

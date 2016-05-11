@@ -38,15 +38,15 @@ public class NodeManagerController extends FXMLController {
 	@FXML
 	private TableColumn<ClientInfo, String> stationId;
 	@FXML
-	private TableColumn<ClientInfo, Integer> triggerThreshold;
-	@FXML
-	private TableColumn<ClientInfo, Integer> sensitivity;
-	@FXML
-	private TableColumn<ClientInfo, Integer> longitude;
-	@FXML
-	private TableColumn<ClientInfo, Integer> latitude;
-	@FXML
-	private TableColumn<ClientInfo, Integer> altitude;
+	private TableColumn<ClientInfo, Integer> triggerThreshold,sensitivity,longitude,latitude,altitude;
+//	@FXML
+//	private TableColumn<ClientInfo, Integer> sensitivity;
+//	@FXML
+//	private TableColumn<ClientInfo, Integer> longitude;
+//	@FXML
+//	private TableColumn<ClientInfo, Integer> latitude;
+//	@FXML
+//	private TableColumn<ClientInfo, Integer> altitude;
 	
 	@FXML
 	protected void initialize() {
@@ -72,10 +72,7 @@ public class NodeManagerController extends FXMLController {
 				return new TableRowControl(); 
 			}
 		});
-		
-		
 		updateList();
-		
 	}
 	
 	/**

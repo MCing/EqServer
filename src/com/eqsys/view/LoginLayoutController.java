@@ -21,9 +21,9 @@ public class LoginLayoutController extends FXMLController {
 	@FXML
 	private PasswordField passwordPf;
 	@FXML
-	private Button loginBtn;
-	@FXML
-	private Button resetBtn;
+	private Button loginBtn,resetBtn;
+//	@FXML
+//	private Button resetBtn;
 	@FXML
 	private Label errorLabel;
 

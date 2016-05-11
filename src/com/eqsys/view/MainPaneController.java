@@ -14,6 +14,7 @@ import com.eqsys.util.SysConfig;
 import com.eqsys.util.TmpOblist;
 import com.sun.jmx.remote.internal.ClientListenerInfo;
 
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +43,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 /**
@@ -49,7 +51,7 @@ import javafx.util.Callback;
  *
  */
 public class MainPaneController extends FXMLController {
-	
+
 	private EqServer main;
 
 	private String clientDetailPath = "/com/eqsys/view/ClientDetailLayout.fxml";
@@ -61,57 +63,57 @@ public class MainPaneController extends FXMLController {
 	@FXML
 	private TableView<ClientInfo> clientTable;
 	@FXML
-	private TableColumn<ClientInfo, String> stationId;
+	private TableColumn<ClientInfo, String> stationId, transMode;
+	// @FXML
+	// private TableColumn<ClientInfo, String> transMode;
 	@FXML
-	private TableColumn<ClientInfo, String> transMode;
-	@FXML
-	private TableColumn<ClientInfo, Integer> sensitivity;
-	@FXML
-	private TableColumn<ClientInfo, Integer> triggerThreshold;
+	private TableColumn<ClientInfo, Integer> sensitivity, triggerThreshold;
+	// @FXML
+	// private TableColumn<ClientInfo, Integer> triggerThreshold;
 
 	// 接收消息信息
 	@FXML
 	private TableView<RecvInfo> recvInfoTable;
 	@FXML
-	private TableColumn<RecvInfo, String> timeColumn;
-	@FXML
-	private TableColumn<RecvInfo, String> srcColumn;
-	@FXML
-	private TableColumn<RecvInfo, String> typeColumn;
+	private TableColumn<RecvInfo, String> timeColumn, srcColumn, typeColumn;
+	// @FXML
+	// private TableColumn<RecvInfo, String> srcColumn;
+	// @FXML
+	// private TableColumn<RecvInfo, String> typeColumn;
 
 	// 系统事件
 	@FXML
 	private TableView<SysEvent> eventTable;
 	@FXML
-	private TableColumn<SysEvent, String> stimeColumn;
-	@FXML
-	private TableColumn<SysEvent, String> ssrcColumn;
-	@FXML
-	private TableColumn<SysEvent, String> eventColumn;
+	private TableColumn<SysEvent, String> stimeColumn, ssrcColumn, eventColumn;
+	// @FXML
+	// private TableColumn<SysEvent, String> ssrcColumn;
+	// @FXML
+	// private TableColumn<SysEvent, String> eventColumn;
 
 	// 台网信息
 	@FXML
-	private Label serverId;
-	@FXML
-	private Label serverIp;
-	@FXML
-	private Label onLineLabel;
+	private Label serverId, serverIp, onLineLabel;
+	// @FXML
+	// private Label serverIp;
+	// @FXML
+	// private Label onLineLabel;
 
 	// 数据库信息
 	@FXML
-	private Label dbName;
-	@FXML
-	private Label dbType;
-	@FXML
-	private Label dbState;
+	private Label dbName, dbType, dbState;
+	// @FXML
+	// private Label dbType;
+	// @FXML
+	// private Label dbState;
 
 	// 快捷键
 	@FXML
-	private Button connDbBtn;
-	@FXML
-	private Button nodeMgrBtn;
-	@FXML
-	private Button analysisyBtn;
+	private Button connDbBtn, nodeMgrBtn, analysisyBtn;
+	// @FXML
+	// private Button nodeMgrBtn;
+	// @FXML
+	// private Button analysisyBtn;
 
 	@FXML
 	private Label utcTimeLabel;
@@ -127,51 +129,77 @@ public class MainPaneController extends FXMLController {
 	protected void initialize() {
 	}
 
-	public void initController(EqServer main){
+	public void initController(EqServer main) {
 		this.main = main;
-		
+
 		initWorkspace();
 		initDbInfo();
 		initTableView();
 		initShortKey();
 	}
+
 	/** 初始化主工作区(主页) */
-	private void initWorkspace(){
-		
+	private void initWorkspace() {
+
 		workspSelectMode = mainTabPane.getSelectionModel();
 		serverId.setText(SysConfig.serverId);
 		serverIp.setText(SysConfig.serverIp);
-		onLineLabel.textProperty().bind(ClientConnList.getInstance().getOnlineNumber());
+		onLineLabel.textProperty().bind(
+				ClientConnList.getInstance().getOnlineNumber());
 	}
+
 	/** 初始换全部TableView */
 	private void initTableView() {
 
 		// 数据接收tableview
-		timeColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("time"));
-		srcColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("srcId"));
-		typeColumn.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>("type"));
+		timeColumn
+				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
+						"time"));
+		srcColumn
+				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
+						"srcId"));
+		typeColumn
+				.setCellValueFactory(new PropertyValueFactory<RecvInfo, String>(
+						"type"));
 		recvInfoTable.setItems(TmpOblist.getRecvObserList());
 
 		// 已连接台站信息tableview
-		stationId.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("stationId"));
-		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
-		sensitivity.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("sensitivity"));
-		triggerThreshold.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>("threshold"));
-		transMode.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("transMode"));
+		stationId
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
+						"stationId"));
+		transMode
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
+						"transMode"));
+		sensitivity
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
+						"sensitivity"));
+		triggerThreshold
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, Integer>(
+						"threshold"));
+		transMode
+				.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>(
+						"transMode"));
 		// 实现对ClientInfo中一行的双击响应
-		clientTable.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
+		clientTable
+				.setRowFactory(new Callback<TableView<ClientInfo>, TableRow<ClientInfo>>() {
 
-			@Override
-			public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
-				return new TableRowControl();
-			}
-		});
+					@Override
+					public TableRow<ClientInfo> call(TableView<ClientInfo> param) {
+						return new TableRowControl();
+					}
+				});
 		clientTable.setItems(ClientConnList.getInstance().getObservableList());
 
 		// 系统事件tableview
-		stimeColumn.setCellValueFactory(new PropertyValueFactory<SysEvent, String>("time"));
-		ssrcColumn.setCellValueFactory(new PropertyValueFactory<SysEvent, String>("srcId"));
-		eventColumn.setCellValueFactory(new PropertyValueFactory<SysEvent, String>("event"));
+		stimeColumn
+				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+						"time"));
+		ssrcColumn
+				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+						"srcId"));
+		eventColumn
+				.setCellValueFactory(new PropertyValueFactory<SysEvent, String>(
+						"event"));
 
 		eventTable.setItems(TmpOblist.getsysEventObserList());
 
@@ -237,33 +265,40 @@ public class MainPaneController extends FXMLController {
 	 * 已连接台站区
 	 * 
 	 ********************************************************************/
-	/** 打开客户端详情窗口 */
-	private void openClientDetail(ClientInfo clientInfo) {
+	/** 打开台站详情窗口 */
+	public void openClientDetail(final ClientInfo clientInfo) {
 
 		ClientWindowMgr manager = ClientWindowMgr.getClientWindowMgr();
 		if (manager.isExist(clientInfo.getStationId())) {
 			manager.open(clientInfo.getStationId());
 			return;
 		}
-
-		Stage stage = new Stage();
+		final Stage stage = new Stage();
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(clientDetailPath));
 		Node page = null;
-		ClientDetailController controller = null;
+		final ClientDetailController controller;
 		try {
 			page = loader.load();
 			controller = loader.getController();
-			controller.initController(stage, clientInfo);
+//			controller.initController(stage, clientInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
 		Scene scene = new Scene((Parent) page);
-		stage.setTitle("客户端详情");
+		stage.setTitle("台站详情");
 		stage.setScene(scene);
 		stage.centerOnScreen();
+		stage.setOnShown(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				//每次从新打开窗口都要更新数据
+				controller.initController(stage, clientInfo);
+			}
+		});
 		stage.show();
 		manager.add(clientInfo.getStationId(), controller);
 	}
@@ -281,8 +316,10 @@ public class MainPaneController extends FXMLController {
 				public void handle(MouseEvent event) {
 					if (event.getButton().equals(MouseButton.PRIMARY) // 左键
 							&& event.getClickCount() == 2 // 双击
-							&& TableRowControl.this.getIndex() < clientTable.getItems().size()) {
-						ClientInfo clientInfo = clientTable.getSelectionModel().getSelectedItem();
+							&& TableRowControl.this.getIndex() < clientTable
+									.getItems().size()) {
+						ClientInfo clientInfo = clientTable.getSelectionModel()
+								.getSelectedItem();
 						openClientDetail(clientInfo);
 					}
 				}
@@ -290,6 +327,16 @@ public class MainPaneController extends FXMLController {
 		}
 	}
 
+	/** 右键菜单,查看详情 */
+	@FXML
+	private void handleDetail(){
+		
+		int index = clientTable.getSelectionModel().getSelectedIndex();
+		if(index >=0 && index < clientTable.getItems().size()){
+			ClientInfo clientInfo = clientTable.getSelectionModel().getSelectedItem();
+			openClientDetail(clientInfo);
+		}
+	}
 	/********************************************************************
 	 * 
 	 * 主工作区
@@ -306,7 +353,6 @@ public class MainPaneController extends FXMLController {
 			dbState.setTextFill(Color.RED);
 		}
 	}
-	
 
 	/** 打开节点管理界面 */
 	@FXML
@@ -337,8 +383,7 @@ public class MainPaneController extends FXMLController {
 		}
 	}
 
-	
-
+	/** 打开数据分析tab */
 	@FXML
 	private void handleDataAnalysis() {
 		if (dataAnalysisTab == null) {

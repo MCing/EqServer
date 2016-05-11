@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 import com.eqsys.dao.ClientInfoDao;
@@ -38,11 +39,11 @@ public class DataAnalysisController extends FXMLController {
 	@FXML
 	private TableColumn<ClientInfo, String> idColumn;
 	@FXML
-	private TableColumn<ClientInfo, Integer> wavefColumn;
-	@FXML
-	private TableColumn<ClientInfo, Integer> triColumn;
-	@FXML
-	private TableColumn<ClientInfo, Integer> statusColumn;
+	private TableColumn<ClientInfo, Integer> wavefColumn, triColumn, statusColumn;
+//	@FXML
+//	private TableColumn<ClientInfo, Integer> triColumn;
+//	@FXML
+//	private TableColumn<ClientInfo, Integer> statusColumn;
 	
 	@FXML
 	protected void initialize() {
@@ -124,24 +125,23 @@ public class DataAnalysisController extends FXMLController {
 	}
 	
 	/** 打开客户端详情窗口 */
-	public void openClientDetail(ClientInfo clientInfo) {
+	public void openClientDetail(final ClientInfo clientInfo) {
 
 		ClientWindowMgr manager = ClientWindowMgr.getClientWindowMgr();
 		if (manager.isExist(clientInfo.getStationId())) {
 			manager.open(clientInfo.getStationId());
 			return;
 		}
-
-		Stage stage = new Stage();
+		final Stage stage = new Stage();
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(ParseUtil.getFXMLURL(clientDetailPath));
 		Node page = null;
-		ClientDetailController controller = null;
+		final ClientDetailController controller;
 		try {
 			page = loader.load();
 			controller = loader.getController();
-			controller.initController(stage, clientInfo);
+//			controller.initController(stage, clientInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -150,6 +150,14 @@ public class DataAnalysisController extends FXMLController {
 		stage.setTitle("台站详情");
 		stage.setScene(scene);
 		stage.centerOnScreen();
+		stage.setOnShown(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				//每次从新打开窗口都要更新数据
+				controller.initController(stage, clientInfo);
+			}
+		});
 		stage.show();
 		manager.add(clientInfo.getStationId(), controller);
 	}

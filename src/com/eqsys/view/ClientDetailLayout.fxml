@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
@@ -69,7 +70,7 @@
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="title" GridPane.columnSpan="9" GridPane.rowIndex="3">
                            <children>
                               <Label layoutX="360.0" layoutY="9.0" prefHeight="30.0" prefWidth="86.0" styleClass="label-header" text="台站控制" />
-                              <Label fx:id="errorLabel" layoutX="464.0" layoutY="21.0" text="Label" textFill="#f80000" />
+                              <Label fx:id="errorLabel" layoutX="464.0" layoutY="21.0" textFill="#f80000" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="title_background" GridPane.rowIndex="6" GridPane.rowSpan="2">
@@ -94,10 +95,10 @@
                      </children>
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="84.0" minWidth="10.0" prefWidth="81.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="107.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="86.0" minWidth="10.0" prefWidth="77.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="81.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -137,7 +138,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <BarChart fx:id="wavefBar" title="波形数据统计" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                  <BarChart fx:id="wavefBar" styleClass="bar_background" title="波形数据统计" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
                     <xAxis>
                       <CategoryAxis fx:id="wavefXAxis" side="BOTTOM" />
                     </xAxis>
@@ -167,13 +168,25 @@
                   </HBox>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="3">
                      <children>
-                        <DatePicker fx:id="starttimeDp" layoutX="44.0" layoutY="35.0" />
-                        <DatePicker fx:id="endtimeDp" layoutX="44.0" layoutY="106.0" />
-                        <Label layoutX="44.0" layoutY="14.0" text="开始时间：" />
-                        <Label layoutX="44.0" layoutY="83.0" text="结束时间：" />
-                        <Button layoutX="74.0" layoutY="174.0" mnemonicParsing="false" onAction="#handleWavefQuery2" text="查询" />
-                        <Label layoutX="167.0" layoutY="181.0" text="查询结果：" />
-                        <Label fx:id="wavefResultLabel" layoutX="104.0" layoutY="117.0" />
+                        <HBox layoutX="69.0" layoutY="180.0" prefHeight="13.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#handleWavefQuery2" text="查询" />
+                              <Label text="查询结果：">
+                                 <HBox.margin>
+                                    <Insets left="50.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="wavefResultLabel" prefHeight="19.0" />
+                           </children>
+                        </HBox>
+                        <VBox layoutX="49.0" layoutY="29.0" prefHeight="118.0" prefWidth="279.0">
+                           <children>
+                              <Label text="开始时间：" />
+                              <DatePicker fx:id="starttimeDp" />
+                              <Label text="结束时间：" />
+                              <DatePicker fx:id="endtimeDp" />
+                           </children>
+                        </VBox>
                      </children>
                   </AnchorPane>
                </children>
