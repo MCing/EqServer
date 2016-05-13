@@ -143,7 +143,7 @@
                       <CategoryAxis fx:id="wavefXAxis" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis label="总数" side="LEFT" />
                     </yAxis>
                   </BarChart>
                   <TableView fx:id="wavefTable" prefHeight="353.0" prefWidth="424.0" GridPane.rowIndex="3" GridPane.rowSpan="3">
@@ -155,7 +155,7 @@
                   </TableView>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <DatePicker fx:id="datePicker" promptText="请选择起始日期" />
+                        <DatePicker fx:id="datePicker" editable="false" promptText="请选择起始日期" />
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <RadioButton fx:id="hourRb" mnemonicParsing="false" text="按小时" />
@@ -168,7 +168,7 @@
                   </HBox>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="3">
                      <children>
-                        <HBox layoutX="69.0" layoutY="180.0" prefHeight="13.0" prefWidth="200.0">
+                        <HBox layoutX="57.0" layoutY="180.0" prefHeight="29.0" prefWidth="292.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#handleWavefQuery2" text="查询" />
                               <Label text="查询结果：">
@@ -201,37 +201,55 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="189.0" minHeight="10.0" prefHeight="189.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="132.0" minHeight="5.0" prefHeight="132.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="119.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <LineChart GridPane.columnSpan="2" GridPane.rowIndex="1">
+                  <BarChart fx:id="triBarChart" prefHeight="263.0" prefWidth="546.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis fx:id="triXAxis" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
                     </yAxis>
-                  </LineChart>
-                  <LineChart GridPane.columnSpan="2" GridPane.rowIndex="2">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </LineChart>
-                  <LineChart GridPane.columnSpan="2" GridPane.rowIndex="3">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </LineChart>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                  </BarChart>
+                  <HBox prefHeight="33.0" prefWidth="474.0" GridPane.valignment="CENTER">
+                     <children>
+                        <DatePicker fx:id="triBarDp" promptText="选择查询日期">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin></DatePicker>
+                        <Button mnemonicParsing="false" onAction="#handleTriQuery" text="查询">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin></Button>
+                     </children>
+                  </HBox>
+                  <AnchorPane fx:id="lcParentPane" prefHeight="73.0" prefWidth="387.0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                     <children>
+                        <HBox layoutX="400.0" layoutY="10.0" prefHeight="29.0" prefWidth="398.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#handleTriPrevPage" text="上一页" />
+                              <Button mnemonicParsing="false" onAction="#handleTriNextPage" text="下一页">
+                                 <HBox.margin>
+                                    <Insets left="40.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label text=" 共 " />
+                              <Label fx:id="totalLabel" text="Label" />
+                              <Label text=" 页     " />
+                              <Label text="第 " />
+                              <Label fx:id="indexLabel" text="Label" />
+                              <Label text=" 页" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
                </children>
             </GridPane>
          </content>

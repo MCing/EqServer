@@ -143,7 +143,7 @@ public class AdvancedStockLineChartSample extends Application {
     @Override public void start(Stage primaryStage) throws Exception {
         init(primaryStage);
         primaryStage.show();
-//        play();
+        play();
     }
     public static void main(String[] args) { launch(args); }
 }

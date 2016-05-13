@@ -54,6 +54,14 @@ public class UTCTimeUtil {
 		
 		return timeStr;
 	}
+	public static String timeFormat3(long time){
+			
+			String timeStr;
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			timeStr = sdf.format(new Date(time));
+			
+			return timeStr;
+		}
 	
 	/** 计算某年某个月的天数 */
 	public static int getDaysOfMonth(int year,int month){

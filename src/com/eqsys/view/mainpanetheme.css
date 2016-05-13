@@ -57,10 +57,12 @@
     -fx-opacity: 1;
 }
 
+/*
 .text-field {
     -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Semibold";
 }
+*/
 
 .table-view {
     -fx-base: #E3F5FF;
@@ -349,11 +351,11 @@
 	
 }
 
-/*******************************
+/***************************************************
  * 
  * 台站控制界面
  * 
- */
+ *************************************************/
  .title{
  	-fx-background-color: #53C3B0;
  	-fx-border-color: #F1CF92 transparent #F1CF92 transparent;
@@ -365,6 +367,23 @@
  .bar_background{
  	-fx-border-color: transparent transparent #8B8970 transparent;
  }
+ 
+/***************************************************
+ * 
+ * 触发数据界面
+ * 
+ *************************************************/
+ .chart-line-symbol {
+    -fx-background-color: CHART_COLOR_1, white;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 0px;
+    -fx-padding: 0px;
+}
+ .chart-series-line {
+    -fx-stroke: CHART_COLOR_1;
+    -fx-stroke-width: 1px;
+}
+ 
 
 
 
