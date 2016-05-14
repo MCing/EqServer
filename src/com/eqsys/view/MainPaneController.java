@@ -288,7 +288,7 @@ public class MainPaneController extends FXMLController {
 			return;
 		}
 		Scene scene = new Scene((Parent) page);
-		stage.setTitle("台站详情");
+		stage.setTitle("台站:"+clientInfo.getStationId());
 		stage.setScene(scene);
 		stage.centerOnScreen();
 		stage.setOnShown(new EventHandler<WindowEvent>() {

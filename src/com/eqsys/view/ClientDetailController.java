@@ -327,6 +327,7 @@ public class ClientDetailController extends FXMLController {
 			wavefXStrings.addAll(hourStrs);
 			interval = 60 * 60 * 1000; // 时间间隔 为1小时
 			result = new int[hourStrs.length];
+			wavefXAxis.setLabel("小时");
 		} else if (type == 2) { // 按天
 
 			Calendar cal = Calendar.getInstance();
@@ -338,6 +339,7 @@ public class ClientDetailController extends FXMLController {
 			wavefXStrings.addAll(Arrays.copyOf(dayStrs, days)); // 根据月份天数，截取与该月份天数同样长度的数组
 			interval = 24 * 60 * 60 * 1000; // 时间间隔为1天
 			result = new int[days];
+			wavefXAxis.setLabel("天");
 		}
 		XYChart.Series<String, Integer> series = new XYChart.Series<>();
 		wavefBar.getData().clear();
@@ -412,6 +414,10 @@ public class ClientDetailController extends FXMLController {
 		//
 		triBarDp.setValue(LocalDate.now());
 		triBarXAxis.setCategories(triXStrings);
+//		triBarXAxis.setLabel("天");
+		
+		updateTriBar(UTCTimeUtil.getCurrUTCTime());
+		updateTriLineChart(UTCTimeUtil.getCurrUTCTime());
 	}
 
 	/** 触发数据查询 */
@@ -446,6 +452,7 @@ public class ClientDetailController extends FXMLController {
 		interval = 24 * 60 * 60 * 1000; // 时间间隔为1天
 		result = new int[days];
 
+		triBarChart.setTitle(String.valueOf(mon+1)+"月 触发数据统计");
 		XYChart.Series<String, Integer> series = new XYChart.Series<>();
 		triBarChart.getData().clear();
 		for (int j = 0; j < result.length; j++) {
@@ -460,15 +467,18 @@ public class ClientDetailController extends FXMLController {
 
 	/**
 	 * 更新触发数据折线图
-	 * 
 	 * @param time
 	 */
 	private void updateTriLineChart(long time) {
 		
-		StringBuilder dateBuilder = new StringBuilder();
-		triLc.getData().clear();
+		
 		trgResult = TrgDataDao.getRecord(client.getStationId(), time, time + 24
 				* 60 * 60 * 1000);
+		if(trgResult.size() == 0){
+			return ;
+		}
+		StringBuilder dateBuilder = new StringBuilder();
+		triLc.getData().clear();
 		LineChart.Series<Integer, Double> series1 = new LineChart.Series<Integer, Double>();
 		dateBuilder.append(UTCTimeUtil.timeFormat3(trgResult.get(0)
 				.getStartTimeSec()));
@@ -481,17 +491,21 @@ public class ClientDetailController extends FXMLController {
 		}
 		pageIndex = i;
 		totalLabel.setText(String.valueOf((trgResult.size()+lineChartTotal)/lineChartTotal));
-		indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal)));
+		if(pageIndex % lineChartTotal > 0){
+			indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal + 1)));
+		}else{
+			indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal)));
+		}
 		dateBuilder.append(UTCTimeUtil.timeFormat3(trgResult.get(i - 1)
 				.getStartTimeSec()));
 		dateBuilder.append("烈度图");
 		triLc.setTitle(dateBuilder.toString());
 		triLc.getData().add(series1);
 	}
-
+	/** 下一页 */
 	@FXML
 	private void handleTriNextPage() {
-		if (trgResult != null && trgResult.size() - pageIndex > lineChartTotal) {
+		if (trgResult != null && trgResult.size() - pageIndex > 0) {
 			triLc.getData().clear();
 			StringBuilder dateBuilder = new StringBuilder();
 			LineChart.Series<Integer, Double> series1 = new LineChart.Series<Integer, Double>();
@@ -500,14 +514,17 @@ public class ClientDetailController extends FXMLController {
 			dateBuilder.append("-");
 			int i = pageIndex;
 			
-			for (int j = 0; i < pageIndex+lineChartTotal && i < trgResult.size(); i++,j++) {
+			for (int j = 0; j < lineChartTotal && i < trgResult.size(); i++,j++) {
 				XYChart.Data<Integer, Double> data = new XYChart.Data<Integer, Double>(
 						j, (double) trgResult.get(i).getIntensity() / 10);
 				series1.getData().add(data);
 			}
 			pageIndex = i;
-			totalLabel.setText(String.valueOf((trgResult.size()+lineChartTotal)/lineChartTotal));
-			indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal)));
+			if(pageIndex % lineChartTotal > 0){
+				indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal + 1)));
+			}else{
+				indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal)));
+			}
 			dateBuilder.append(UTCTimeUtil.timeFormat3(trgResult.get(i - 1)
 					.getStartTimeSec()));
 			dateBuilder.append(" 烈度图");
@@ -516,24 +533,32 @@ public class ClientDetailController extends FXMLController {
 		}
 	}
 
+	/** 上一页 */
 	@FXML
 	private void handleTriPrevPage() {
 		if (trgResult != null && pageIndex > lineChartTotal) {
 			StringBuilder dateBuilder = new StringBuilder();
 			LineChart.Series<Integer, Double> series1 = new LineChart.Series<Integer, Double>();
-			dateBuilder.append(UTCTimeUtil.timeFormat3(trgResult.get(pageIndex)
+			int i = pageIndex  - lineChartTotal;
+			if(pageIndex % lineChartTotal > 0){
+				i -= pageIndex % lineChartTotal;
+			}else{
+				i -= lineChartTotal;
+			}
+			dateBuilder.append(UTCTimeUtil.timeFormat3(trgResult.get(i)
 					.getStartTimeSec()));
 			dateBuilder.append("-");
-			int i = pageIndex - lineChartTotal;
-			
-			for (int j = 0; i < pageIndex; i++,j++) {
+			for (int j = 0; j < lineChartTotal; i++,j++) {
 				XYChart.Data<Integer, Double> data = new XYChart.Data<Integer, Double>(
 						j, (double) trgResult.get(i).getIntensity() / 10);
 				series1.getData().add(data);
 			}
-			pageIndex = pageIndex - lineChartTotal;
-			totalLabel.setText(String.valueOf((trgResult.size()+lineChartTotal)/lineChartTotal));
-			indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal)));
+			pageIndex = i;
+			if(pageIndex % lineChartTotal > 0){
+				indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal + 1)));
+			}else{
+				indexLabel.setText(String.valueOf(String.valueOf(pageIndex/lineChartTotal)));
+			}
 			dateBuilder.append(UTCTimeUtil.timeFormat3(trgResult.get(i - 1)
 					.getStartTimeSec()));
 			dateBuilder.append("烈度图");
@@ -542,5 +567,4 @@ public class ClientDetailController extends FXMLController {
 			triLc.getData().add(series1);
 		}
 	}
-
 }
