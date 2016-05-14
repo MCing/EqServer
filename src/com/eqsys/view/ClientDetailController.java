@@ -202,8 +202,8 @@ public class ClientDetailController extends FXMLController {
 		triWRb.setUserData((short) 2);
 		triWNRb.setUserData((short) 3);
 		//申请时间段数据
-		starttimeDp.setValue(LocalDate.now());
-		endtimeDp.setValue(LocalDate.now());
+		dataReqDp1.setValue(LocalDate.now());
+		dataReqDp2.setValue(LocalDate.now());
 		startTp = new CalendarTimePicker();
 		endTp = new CalendarTimePicker();
 		dataReqPane1.getChildren().add(startTp);
