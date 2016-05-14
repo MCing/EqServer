@@ -1,6 +1,5 @@
 package com.eqsys.view;
 
-import java.awt.Insets;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -9,7 +8,6 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -27,8 +25,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import jfxtras.scene.control.CalendarTimePicker;
 
-import com.eqsys.consts.Constants;
 import com.eqsys.dao.StatusDataDao;
 import com.eqsys.dao.TrgDataDao;
 import com.eqsys.dao.WavefDataDao;
@@ -37,6 +35,7 @@ import com.eqsys.model.ClientInfo;
 import com.eqsys.model.CtrlEvent;
 import com.eqsys.model.WavefDataModel;
 import com.eqsys.msg.MsgConstant;
+import com.eqsys.msg.PeriodDataReq;
 import com.eqsys.msg.TransModeReq;
 import com.eqsys.msg.data.StatusData;
 import com.eqsys.msg.data.TrgData;
@@ -108,6 +107,8 @@ public class ClientDetailController extends FXMLController {
 		initStatusTab();
 		if (!ClientConnList.getInstance().getState(client.getStationId())) {
 			updateErrorTip("未连接，无法控制！");
+		}else{
+			updateErrorTip("");
 		}
 	}
 
@@ -119,7 +120,7 @@ public class ClientDetailController extends FXMLController {
 	public void update(ClientInfo client, String msg) {
 		this.client = client;
 		initClientInfo();
-		updateErrorTip(msg);
+//		updateErrorTip(msg);
 	}
 
 	public void show() {
@@ -134,6 +135,17 @@ public class ClientDetailController extends FXMLController {
 	 * 控制 tab
 	 * 
 	 *********************************************************************************/
+	@FXML
+	private HBox dataReqPane1;
+	@FXML
+	private HBox dataReqPane2;
+	@FXML
+	private DatePicker dataReqDp1;
+	@FXML
+	private DatePicker dataReqDp2;
+	
+	private CalendarTimePicker startTp;
+	private CalendarTimePicker endTp;
 	/** 设置ClientInfo(客户端信息值) */
 	private void initClientInfo() {
 		if (client == null) {
@@ -170,6 +182,7 @@ public class ClientDetailController extends FXMLController {
 
 	/** 台站控制 */
 	private void initCtrlData() {
+		//模式控制
 		transmodeGroup = new ToggleGroup();
 		consRb.setToggleGroup(transmodeGroup);
 		triWNRb.setToggleGroup(transmodeGroup);
@@ -188,6 +201,44 @@ public class ClientDetailController extends FXMLController {
 		consRb.setUserData((short) 1);
 		triWRb.setUserData((short) 2);
 		triWNRb.setUserData((short) 3);
+		//申请时间段数据
+		starttimeDp.setValue(LocalDate.now());
+		endtimeDp.setValue(LocalDate.now());
+		startTp = new CalendarTimePicker();
+		endTp = new CalendarTimePicker();
+		dataReqPane1.getChildren().add(startTp);
+		dataReqPane2.getChildren().add(endTp);
+	}
+	@FXML
+	private void handleDataReq(){
+		
+		//获取开始和结束时间
+		long starttime = 0;
+		long endtime = 0;
+		LocalDate startdate = dataReqDp1.getValue();
+		LocalDate enddate = dataReqDp2.getValue();
+		Calendar startCal = startTp.getCalendar();
+		startCal.set(Calendar.YEAR, startdate.getYear());
+		startCal.set(Calendar.MONTH, startdate.getMonthValue()-1);
+		startCal.set(Calendar.DATE, startdate.getDayOfMonth());
+		starttime = UTCTimeUtil.getUTCTimeLong(startCal.getTimeInMillis());
+		Calendar endCal = endTp.getCalendar();
+		endCal.set(Calendar.YEAR, enddate.getYear());
+		endCal.set(Calendar.MONTH, enddate.getMonthValue()-1);
+		endCal.set(Calendar.DATE, enddate.getDayOfMonth());
+		endtime = UTCTimeUtil.getUTCTimeLong(endCal.getTimeInMillis());
+		System.err.println(UTCTimeUtil.timeFormat1(starttime));
+		System.err.println(UTCTimeUtil.timeFormat1(endtime));
+		//发送请求
+		CtrlEvent transModeEvent = new CtrlEvent();
+		PeriodDataReq req = new PeriodDataReq();
+		req.setSubCommand(MsgConstant.CMD_PERIODDATA);
+		req.setTimeCode(starttime);
+		req.setPeriod((int)(endtime - starttime));
+		transModeEvent.setClient(client);
+		transModeEvent.setReqMsg(DataBuilder.buildCtrlReq(
+				client.getStationId(), req));
+		CtrlManager.getMagager().ctrlReq(transModeEvent);
 	}
 
 	@FXML
@@ -206,6 +257,7 @@ public class ClientDetailController extends FXMLController {
 				CtrlManager.getMagager().ctrlReq(transModeEvent);
 			}
 		}
+		updateErrorTip("请求发送成功,请注意查看系统事件");
 	}
 
 	private void updateErrorTip(String msg) {

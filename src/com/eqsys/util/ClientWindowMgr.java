@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.eqsys.model.ClientInfo;
 import com.eqsys.view.ClientDetailController;
-import com.sun.java.swing.plaf.windows.WindowsOptionPaneUI;
 
 import javafx.application.Platform;
 

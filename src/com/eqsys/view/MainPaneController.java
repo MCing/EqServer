@@ -12,9 +12,6 @@ import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.ParseUtil;
 import com.eqsys.util.SysConfig;
 import com.eqsys.util.TmpOblist;
-import com.sun.jmx.remote.internal.ClientListenerInfo;
-
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
