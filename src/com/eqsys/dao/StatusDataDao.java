@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.eqsys.msg.EqMessage;
 import com.eqsys.msg.data.StatusData;
@@ -176,5 +178,142 @@ public class StatusDataDao {
 			JDBCHelper.closeDBConnection(conn);
 		}
 		return count;
+	}
+	
+	/**
+	 * 获取数据
+	 * @param stationid
+	 * @param starttime
+	 * @param endtime
+	 * @return
+	 */
+	public static List<StatusData> getRecord(String stationid, long starttime, long endtime){
+		ArrayList<StatusData> list = new ArrayList<StatusData>();
+		String sql = "select * from "+ TableName+" where stationid=? and starttime>? and starttime<?;";
+		PreparedStatement preStat = null;
+		Connection conn = null;
+		try {
+			conn = JDBCHelper.getDBConnection();
+			preStat = conn.prepareStatement(sql);
+			preStat.setString(1, stationid);
+			preStat.setLong(2, starttime);
+			preStat.setLong(3, endtime);
+			ResultSet results = preStat.executeQuery();
+			List<int[]> ewpvResult = getPeakValue(conn, stationid, pvType[0], starttime, endtime);
+			List<int[]> nspvResult = getPeakValue(conn, stationid, pvType[1], starttime, endtime);
+			List<int[]> udpvResult = getPeakValue(conn, stationid, pvType[2], starttime, endtime);
+			int i = 0;
+			while (results.next()) {
+				StatusData data = new StatusData();
+				data.setId(results.getInt("pid"));
+				data.setStartTime(results.getLong("starttime"));
+				data.setDur(results.getInt("duration"));
+				data.setUdPeakValue(udpvResult.get(i));
+				data.setEwPeakValue(ewpvResult.get(i));
+				data.setNsPeakValue(nspvResult.get(i));
+				list.add(data);
+				i++;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+		return list;
+	}
+	/** 获取时间段内的记录数量  
+	 * 
+	 * @param stationid	指定台站
+	 * @param starttiem	指定开始时间,毫秒
+	 * @param endtime	指定结束时间,毫秒
+	 * @return			总记录数量
+	 */
+	public static int getCount(String stationid, long starttime, long endtime) {
+
+		String sql = "select count(pid)  from " + TableName
+				+ " where stationid = ? and starttime > ? and starttime < ?;";
+		PreparedStatement preStat = null;
+		Connection conn = null;
+		int count = 0;
+		try {
+			conn = JDBCHelper.getDBConnection();
+			preStat = conn.prepareStatement(sql);
+			preStat.setString(1, stationid);
+			preStat.setLong(2, starttime);
+			preStat.setLong(3, endtime);
+			ResultSet results = preStat.executeQuery();
+			if (results.next()) {
+				count = results.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			JDBCHelper.closeDBConnection(conn);
+		}
+		return count;
+	}
+	
+	/**
+	 * 获取峰峰值
+	 * @param conn		连接对象,由调用者提供和负责关闭
+	 * @param stationid	台站ID
+	 * @param i		峰峰值类型
+	 * @param starttime	起始时间
+	 * @param endtime	结束时间
+	 * @return
+	 */
+	private static List<int[]> getPeakValue(Connection conn, String stationid, short type, long starttime, long endtime){
+		String sql = "select * from " + PVTableName + " where stationid=? and pvtype=? and pid in (select pid from "+TableName+" where stationid=? and starttime>? and starttime<?);";
+		PreparedStatement preStat = null;
+		List<int[]> list = new ArrayList<int[]>();
+		ResultSet results = null;
+//		Connection conn = null;
+		try {
+//			conn = JDBCHelper.getDBConnection();
+			preStat = conn.prepareStatement(sql);
+			preStat.setString(1, stationid);
+			preStat.setShort(2, type);
+			preStat.setString(3, stationid);
+			preStat.setLong(4, starttime);
+			preStat.setLong(5, endtime);
+			results = preStat.executeQuery();
+			while(results.next()){
+				int[] pv = new int[10];
+				for(int i = 0; i < 10; i++){
+					pv[i] = results.getInt("value"+(i+1));
+				}
+				list.add(pv);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preStat != null) {
+					preStat.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+//			JDBCHelper.closeDBConnection(conn);
+		}
+//		return results;
+		return list;
 	}
 }

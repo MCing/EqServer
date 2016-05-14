@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import com.eqsys.dao.StatusDataDao;
+import com.eqsys.msg.data.StatusData;
 import com.eqsys.util.JDBCHelper;
 import com.eqsys.util.SysConfig;
 
@@ -13,9 +16,25 @@ public class JDBCTest {
 	public static void main(String[] args) {
 		SysConfig.preConfig();
 		JDBCHelper.initDB();
-		testJDBConnection();
+		//testJDBConnection();
+		getStatusData();
 	}
 	
+	/** 获取statusdata_t 数据 */
+	private static void getStatusData() {
+		List<StatusData> list = StatusDataDao.getRecord("18373", 1463178267544l, 1463178297518l);
+		System.err.println("list size:"+list.size());
+		if(list.size() != 0){
+			StatusData data = list.get(0);
+			System.err.println("id:"+data.getId());
+			System.err.println("duration:"+data.getDur());
+			System.err.println("starttime:"+data.getStartTime());
+			System.err.println("ew:"+data.getEwPeakValue()[0]);
+			System.err.println("ns:"+data.getNsPeakValue()[0]);
+			System.err.println("ud:"+data.getUdPeakValue()[0]);
+		}
+	}
+
 	/** 测试一个数据库连接是否能用两次 */
 	public static void testJDBConnection(){
 		String sql1 = "select stationid from clientinfo_t where stationid=?";

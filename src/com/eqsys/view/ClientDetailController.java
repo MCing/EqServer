@@ -29,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import com.eqsys.consts.Constants;
+import com.eqsys.dao.StatusDataDao;
 import com.eqsys.dao.TrgDataDao;
 import com.eqsys.dao.WavefDataDao;
 import com.eqsys.handler.CtrlManager;
@@ -37,6 +38,7 @@ import com.eqsys.model.CtrlEvent;
 import com.eqsys.model.WavefDataModel;
 import com.eqsys.msg.MsgConstant;
 import com.eqsys.msg.TransModeReq;
+import com.eqsys.msg.data.StatusData;
 import com.eqsys.msg.data.TrgData;
 import com.eqsys.util.ClientConnList;
 import com.eqsys.util.DataBuilder;
@@ -89,42 +91,7 @@ public class ClientDetailController extends FXMLController {
 	// @FXML
 	// private RadioButton triWRb;
 
-	// 波形数据tab
-	@FXML
-	private BarChart<String, Integer> wavefBar;
-	@FXML
-	private CategoryAxis wavefXAxis;
-	@FXML
-	private TableView<WavefDataModel> wavefTable;
-	@FXML
-	private TableColumn<WavefDataModel, Integer> wavefId;
-	@FXML
-	private TableColumn<WavefDataModel, String> wavefType, wavefTime;
-	// @FXML
-	// private TableColumn<WavefDataModel, String> wavefTime;
-	@FXML
-	private Button wavefQuery;
-	@FXML
-	private DatePicker datePicker;
-	@FXML
-	private RadioButton hourRb, dayRb;
-	// @FXML
-	// private RadioButton dayRb;
-	private ToggleGroup radioGroup;
-	// 条状图初始化
-	private String[] hourStrs = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
-			"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-			"21", "22", "23", "24" };
-	private String[] dayStrs = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
-			"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-			"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
-
-	@FXML
-	private DatePicker starttimeDp, endtimeDp;
-	// @FXML
-	// private DatePicker endtimeDp;
-	@FXML
-	private Label wavefResultLabel;
+	
 
 	@FXML
 	protected void initialize() {
@@ -138,6 +105,7 @@ public class ClientDetailController extends FXMLController {
 		initWavefdataTab();
 		initCtrlData();
 		initTriTab();
+		initStatusTab();
 		if (!ClientConnList.getInstance().getState(client.getStationId())) {
 			updateErrorTip("未连接，无法控制！");
 		}
@@ -250,6 +218,42 @@ public class ClientDetailController extends FXMLController {
 	 * 波形数据 tab
 	 * 
 	 *********************************************************************************/
+	// 波形数据tab
+		@FXML
+		private BarChart<String, Integer> wavefBar;
+		@FXML
+		private CategoryAxis wavefXAxis;
+		@FXML
+		private TableView<WavefDataModel> wavefTable;
+		@FXML
+		private TableColumn<WavefDataModel, Integer> wavefId;
+		@FXML
+		private TableColumn<WavefDataModel, String> wavefType, wavefTime;
+		// @FXML
+		// private TableColumn<WavefDataModel, String> wavefTime;
+		@FXML
+		private Button wavefQuery;
+		@FXML
+		private DatePicker datePicker;
+		@FXML
+		private RadioButton hourRb, dayRb;
+		// @FXML
+		// private RadioButton dayRb;
+		private ToggleGroup radioGroup;
+		// 条状图初始化
+		private String[] hourStrs = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
+				"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+				"21", "22", "23", "24" };
+		private String[] dayStrs = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
+				"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+				"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
+
+		@FXML
+		private DatePicker starttimeDp, endtimeDp;
+		// @FXML
+		// private DatePicker endtimeDp;
+		@FXML
+		private Label wavefResultLabel;
 	@FXML
 	/** 波形数据 表格查询 */
 	private void handleWavefQuery2() {
@@ -414,7 +418,6 @@ public class ClientDetailController extends FXMLController {
 		//
 		triBarDp.setValue(LocalDate.now());
 		triBarXAxis.setCategories(triXStrings);
-//		triBarXAxis.setLabel("天");
 		
 		updateTriBar(UTCTimeUtil.getCurrUTCTime());
 		updateTriLineChart(UTCTimeUtil.getCurrUTCTime());
@@ -565,6 +568,268 @@ public class ClientDetailController extends FXMLController {
 			triLc.setTitle(dateBuilder.toString());
 			triLc.getData().clear();
 			triLc.getData().add(series1);
+		}
+	}
+	
+	/***************************************************************************************
+	 * 
+	 * 状态信息tab
+	 * 
+	 **************************************************************************************/
+	@FXML
+	private BarChart<String, Integer> statusBarChart;
+	@FXML
+	private CategoryAxis statusBarXAxis;
+	@FXML
+	private DatePicker statusBarDp;
+	@FXML
+	private AnchorPane statusLcParentPane1;
+	@FXML
+	private AnchorPane statusLcParentPane2;
+	@FXML
+	private AnchorPane statusLcParentPane3;
+	@FXML
+	private Label statusTotalLabel;
+	@FXML
+	private Label statusIndexLabel;
+	@FXML
+	private Label pvTitleLabel;
+	
+	private ObservableList<String> statusXStrings = FXCollections
+			.observableArrayList();
+
+	private LineChart<Integer, Integer> statusLc1;
+	private LineChart<Integer, Integer> statusLc2;
+	private LineChart<Integer, Integer> statusLc3;
+	private int statuslineChartTotal = 100; //峰峰值折线图横坐标最多显示多少个statusdata数据(每个数据中有10个数据)
+	private List<StatusData> statusResult;	//缓存触发数据结果,用于分页显示
+	private int statusPageIndex;	//折线图当前页的最大值
+	
+	
+	/** 初始化触发数据tab */
+	private void initStatusTab() {
+
+		NumberAxis statusyAxis1 = new NumberAxis();
+		NumberAxis statusxAxis1 = new NumberAxis("序号", 0, statuslineChartTotal*10, 100);
+		NumberAxis statusyAxis2 = new NumberAxis();
+		NumberAxis statusxAxis2 = new NumberAxis("序号", 0, statuslineChartTotal*10, 100);
+		NumberAxis statusyAxis3 = new NumberAxis();
+		NumberAxis statusxAxis3 = new NumberAxis("序号", 0, statuslineChartTotal*10, 100);
+		statusyAxis1.setLabel("峰峰值");
+		statusyAxis2.setLabel("峰峰值");
+		statusyAxis3.setLabel("峰峰值");
+		
+//		
+//		//峰峰值
+		statusLc1 = new LineChart(statusxAxis1, statusyAxis1);
+		AnchorPane.setBottomAnchor(statusLc1, 10d);
+		AnchorPane.setTopAnchor(statusLc1, 5d);
+		AnchorPane.setLeftAnchor(statusLc1, 10d);
+		AnchorPane.setRightAnchor(statusLc1, 10d);
+		statusLcParentPane1.getChildren().add(statusLc1);
+		statusLc2 = new LineChart(statusxAxis2, statusyAxis2);
+		AnchorPane.setBottomAnchor(statusLc2, 10d);
+		AnchorPane.setTopAnchor(statusLc2, 5d);
+		AnchorPane.setLeftAnchor(statusLc2, 10d);
+		AnchorPane.setRightAnchor(statusLc2, 10d);
+		statusLcParentPane2.getChildren().add(statusLc2);
+		statusLc3 = new LineChart(statusxAxis3, statusyAxis3);
+		AnchorPane.setBottomAnchor(statusLc3, 10d);
+		AnchorPane.setTopAnchor(statusLc3, 5d);
+		AnchorPane.setLeftAnchor(statusLc3, 10d);
+		AnchorPane.setRightAnchor(statusLc3, 10d);
+		statusLcParentPane3.getChildren().add(statusLc3);
+		statusLc1.setTitle("EW峰峰值");
+		statusLc2.setTitle("NS峰峰值");
+		statusLc3.setTitle("UD峰峰值");
+//
+		statusBarDp.setValue(LocalDate.now());
+		statusBarXAxis.setCategories(statusXStrings);
+//		
+		updateStatusBar(UTCTimeUtil.getCurrUTCTime());
+		updateStatusLineChart(UTCTimeUtil.getCurrUTCTime());
+	}
+
+	/** 触发数据查询 */
+	@FXML
+	private void handleStatusQuery() {
+		LocalDate date = statusBarDp.getValue();
+		if (date != null) {
+			long time = date.toEpochDay() * 24 * 60 * 60 * 1000;
+			updateStatusBar(UTCTimeUtil.getUTCTimeLong(time));
+			updateStatusLineChart(UTCTimeUtil.getUTCTimeLong(time));
+		}
+	}
+
+	/**
+	 * 更新波形数据统计条
+	 *
+	 * @param starttime
+	 *            起始UTC时间(0点)
+	 */
+	private void updateStatusBar(long starttime) {
+		long interval = 0; // 间隔,单位毫秒
+		int[] result = null;
+		statusXStrings.clear();
+//
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(starttime);
+		int year = cal.get(Calendar.YEAR);
+		int mon = cal.get(Calendar.MONTH);
+		int days = UTCTimeUtil.getDaysOfMonth(year, mon + 1); // Calendar月份是从0开始算的
+		starttime = UTCTimeUtil.getFirstDayTime(starttime);
+		statusXStrings.addAll(Arrays.copyOf(dayStrs, days)); // 根据月份天数，截取与该月份天数同样长度的数组
+		interval = 24 * 60 * 60 * 1000; // 时间间隔为1天
+		result = new int[days];
+//
+		statusBarChart.setTitle(String.valueOf(mon+1)+"月 状态数据统计");
+		XYChart.Series<String, Integer> series = new XYChart.Series<>();
+		statusBarChart.getData().clear();
+		for (int j = 0; j < result.length; j++) {
+			result[j] = StatusDataDao.getCount(client.getStationId(),
+					(starttime + j * interval),
+					(starttime + (j + 1) * interval));
+			series.getData().add(
+					new XYChart.Data<>(statusXStrings.get(j), result[j]));
+		}
+		statusBarChart.getData().add(series);
+	}
+
+	/**
+	 * 更新触发数据折线图
+	 * @param time
+	 */
+	private void updateStatusLineChart(long time) {
+		
+		statusResult = StatusDataDao.getRecord(client.getStationId(), time, time + 24
+				* 60 * 60 * 1000);
+		if(statusResult.size() == 0){
+			return ;
+		}
+		StringBuilder dateBuilder = new StringBuilder();
+		statusLc1.getData().clear();
+		statusLc2.getData().clear();
+		statusLc3.getData().clear();
+		LineChart.Series<Integer, Integer> series1 = new LineChart.Series<Integer, Integer>();
+		LineChart.Series<Integer, Integer> series2 = new LineChart.Series<Integer, Integer>();
+		LineChart.Series<Integer, Integer> series3 = new LineChart.Series<Integer, Integer>();
+		dateBuilder.append(UTCTimeUtil.timeFormat3(statusResult.get(0).getStartTime()));
+		dateBuilder.append("-");
+		int i = 0;
+		for (; i < statuslineChartTotal && i < statusResult.size(); i++) {
+			for(int j = 0; j < 10; j++){
+				XYChart.Data<Integer, Integer> data1 = new XYChart.Data<Integer, Integer>(
+						i*10+j, statusResult.get(i).getUdPeakValue()[j]);
+				XYChart.Data<Integer, Integer> data2 = new XYChart.Data<Integer, Integer>(
+						i*10+j, statusResult.get(i).getEwPeakValue()[j]);
+				XYChart.Data<Integer, Integer> data3 = new XYChart.Data<Integer, Integer>(
+						i*10+j, statusResult.get(i).getNsPeakValue()[j]);
+				series1.getData().add(data1);
+				series2.getData().add(data2);
+				series3.getData().add(data3);
+			}
+		}
+		statusPageIndex = i;
+		statusTotalLabel.setText(String.valueOf((statusResult.size()+statuslineChartTotal)/statuslineChartTotal));
+		if(statusPageIndex % statuslineChartTotal > 0){
+			statusIndexLabel.setText(String.valueOf(String.valueOf(statusPageIndex/statuslineChartTotal + 1)));
+		}else{
+			statusIndexLabel.setText(String.valueOf(String.valueOf(statusPageIndex/statuslineChartTotal)));
+		}
+		dateBuilder.append(UTCTimeUtil.timeFormat3(statusResult.get(i - 1).getStartTime()));
+		dateBuilder.append("  峰峰值");
+		pvTitleLabel.setText(dateBuilder.toString());
+		statusLc1.getData().add(series1);
+		statusLc2.getData().add(series2);
+		statusLc3.getData().add(series3);
+	}
+	/** 下一页 */
+	@FXML
+	private void handleStatusNextPage() {
+		if (statusResult != null && statusResult.size() - statusPageIndex > 0) {
+			statusLc1.getData().clear();
+			statusLc2.getData().clear();
+			statusLc3.getData().clear();
+			StringBuilder dateBuilder = new StringBuilder();
+			LineChart.Series<Integer, Integer> series1 = new LineChart.Series<Integer, Integer>();
+			LineChart.Series<Integer, Integer> series2 = new LineChart.Series<Integer, Integer>();
+			LineChart.Series<Integer, Integer> series3 = new LineChart.Series<Integer, Integer>();
+			dateBuilder.append(UTCTimeUtil.timeFormat3(statusResult.get(statusPageIndex).getStartTime()));
+			dateBuilder.append("-");
+			int i = statusPageIndex;
+			for (int j = 0; j < statuslineChartTotal && i < statusResult.size(); i++,j++) {
+				for(int k = 0; k < 10; k++){
+					XYChart.Data<Integer, Integer> data1 = new XYChart.Data<Integer, Integer>(
+							j*10+k, statusResult.get(i).getUdPeakValue()[k]);
+					XYChart.Data<Integer, Integer> data2 = new XYChart.Data<Integer, Integer>(
+							j*10+k, statusResult.get(i).getEwPeakValue()[k]);
+					XYChart.Data<Integer, Integer> data3 = new XYChart.Data<Integer, Integer>(
+							j*10+k, statusResult.get(i).getNsPeakValue()[k]);
+					series1.getData().add(data1);
+					series2.getData().add(data2);
+					series3.getData().add(data3);
+				}
+			}
+			statusPageIndex = i;
+			if(statusPageIndex % statuslineChartTotal > 0){
+				statusIndexLabel.setText(String.valueOf(String.valueOf(statusPageIndex/statuslineChartTotal + 1)));
+			}else{
+				statusIndexLabel.setText(String.valueOf(String.valueOf(statusPageIndex/statuslineChartTotal)));
+			}
+			dateBuilder.append(UTCTimeUtil.timeFormat3(statusResult.get(i - 1).getStartTime()));
+			dateBuilder.append("  峰峰值");
+			pvTitleLabel.setText(dateBuilder.toString());
+			statusLc1.getData().add(series1);
+			statusLc2.getData().add(series2);
+			statusLc3.getData().add(series3);
+		}
+	}
+
+	/** 上一页 */
+	@FXML
+	private void handleStatusPrevPage() {
+		if (statusResult != null && statusPageIndex > statuslineChartTotal) {
+			StringBuilder dateBuilder = new StringBuilder();
+			statusLc1.getData().clear();
+			statusLc2.getData().clear();
+			statusLc3.getData().clear();
+			LineChart.Series<Integer, Integer> series1 = new LineChart.Series<Integer, Integer>();
+			LineChart.Series<Integer, Integer> series2 = new LineChart.Series<Integer, Integer>();
+			LineChart.Series<Integer, Integer> series3 = new LineChart.Series<Integer, Integer>();
+			
+			int i = statusPageIndex  - statuslineChartTotal;
+			if(statusPageIndex % statuslineChartTotal > 0){
+				i -= statusPageIndex % statuslineChartTotal;
+			}else{
+				i -= statuslineChartTotal;
+			}
+			dateBuilder.append(UTCTimeUtil.timeFormat3(statusResult.get(i).getStartTime()));
+			dateBuilder.append("-");
+			for (int j = 0; j < statuslineChartTotal; i++,j++) {
+				for(int k = 0; k < 10; k++){
+					XYChart.Data<Integer, Integer> data1 = new XYChart.Data<Integer, Integer>(
+							j*10+k, statusResult.get(i).getUdPeakValue()[k]);
+					XYChart.Data<Integer, Integer> data2 = new XYChart.Data<Integer, Integer>(
+							j*10+k, statusResult.get(i).getEwPeakValue()[k]);
+					XYChart.Data<Integer, Integer> data3 = new XYChart.Data<Integer, Integer>(
+							j*10+k, statusResult.get(i).getNsPeakValue()[k]);
+					series1.getData().add(data1);
+					series2.getData().add(data2);
+					series3.getData().add(data3);
+				}
+			}
+			statusPageIndex = i;
+			if(statusPageIndex % statuslineChartTotal > 0){
+				statusIndexLabel.setText(String.valueOf(String.valueOf(statusPageIndex/statuslineChartTotal + 1)));
+			}else{
+				statusIndexLabel.setText(String.valueOf(String.valueOf(statusPageIndex/statuslineChartTotal)));
+			}
+			dateBuilder.append(UTCTimeUtil.timeFormat3(statusResult.get(i - 1).getStartTime()));
+			dateBuilder.append("  峰峰值");
+			pvTitleLabel.setText(dateBuilder.toString());
+			statusLc1.getData().add(series1);
+			statusLc2.getData().add(series2);
+			statusLc3.getData().add(series3);
 		}
 	}
 }
