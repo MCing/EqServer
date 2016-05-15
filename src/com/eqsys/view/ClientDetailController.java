@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,7 +37,9 @@ import com.eqsys.model.CtrlEvent;
 import com.eqsys.model.WavefDataModel;
 import com.eqsys.msg.MsgConstant;
 import com.eqsys.msg.PeriodDataReq;
+import com.eqsys.msg.ThresholdReq;
 import com.eqsys.msg.TransModeReq;
+import com.eqsys.msg.TriggerReq;
 import com.eqsys.msg.data.StatusData;
 import com.eqsys.msg.data.TrgData;
 import com.eqsys.util.ClientConnList;
@@ -135,6 +138,7 @@ public class ClientDetailController extends FXMLController {
 	 * 控制 tab
 	 * 
 	 *********************************************************************************/
+	//申请时间段数据
 	@FXML
 	private HBox dataReqPane1;
 	@FXML
@@ -146,6 +150,26 @@ public class ClientDetailController extends FXMLController {
 	
 	private CalendarTimePicker startTp;
 	private CalendarTimePicker endTp;
+	
+	//阈值设置
+	@FXML
+	private TextField newThresholdTf;
+	//触发控制
+	@FXML
+	private HBox triSetPane1;
+	@FXML
+	private HBox triSetPane2;
+	@FXML
+	private DatePicker triSetDp1;
+	@FXML
+	private DatePicker triSetDp2;
+	
+	private CalendarTimePicker triSetStartTp;
+	private CalendarTimePicker triSetEndTp;
+	
+	
+	
+	
 	/** 设置ClientInfo(客户端信息值) */
 	private void initClientInfo() {
 		if (client == null) {
@@ -208,9 +232,21 @@ public class ClientDetailController extends FXMLController {
 		endTp = new CalendarTimePicker();
 		dataReqPane1.getChildren().add(startTp);
 		dataReqPane2.getChildren().add(endTp);
+		//触发控制
+		triSetDp1.setValue(LocalDate.now());
+		triSetDp2.setValue(LocalDate.now());
+		triSetStartTp = new CalendarTimePicker();
+		triSetEndTp = new CalendarTimePicker();
+		triSetPane1.getChildren().add(triSetStartTp);
+		triSetPane2.getChildren().add(triSetEndTp);
 	}
 	@FXML
 	private void handleDataReq(){
+		
+		if (!ClientConnList.getInstance().getState(client.getStationId())) {
+			updateErrorTip("未连接，无法控制！");
+			return;
+		}
 		
 		//获取开始和结束时间
 		long starttime = 0;
@@ -239,10 +275,15 @@ public class ClientDetailController extends FXMLController {
 		transModeEvent.setReqMsg(DataBuilder.buildCtrlReq(
 				client.getStationId(), req));
 		CtrlManager.getMagager().ctrlReq(transModeEvent);
+		updateErrorTip("请求发送成功,请注意查看系统事件");
 	}
 
 	@FXML
 	private void handleTranMode() {
+		if (!ClientConnList.getInstance().getState(client.getStationId())) {
+			updateErrorTip("未连接，无法控制！");
+			return;
+		}
 		Toggle selectedRb = transmodeGroup.getSelectedToggle();
 		if (selectedRb != null) {
 			short selectMode = (short) selectedRb.getUserData();
@@ -257,6 +298,63 @@ public class ClientDetailController extends FXMLController {
 				CtrlManager.getMagager().ctrlReq(transModeEvent);
 			}
 		}
+		updateErrorTip("请求发送成功,请注意查看系统事件");
+	}
+	@FXML
+	private void handleSetThreshold(){
+		
+		if (!ClientConnList.getInstance().getState(client.getStationId())) {
+			updateErrorTip("未连接，无法控制！");
+			return;
+		}
+		
+		String thresholdStr = newThresholdTf.getText();
+		if(thresholdStr == null) System.err.println("null");
+		else if("".equals(thresholdStr)) System.err.println("empty");
+		else{
+			CtrlEvent event = new CtrlEvent();
+			ThresholdReq req = new ThresholdReq();
+			req.setSubCommand(MsgConstant.CMD_TRGTHRESHOLD);
+			req.setTriggleThreshold(Short.valueOf(thresholdStr));
+			event.setClient(client);
+			event.setReqMsg(DataBuilder.buildCtrlReq(
+					client.getStationId(), req));
+			CtrlManager.getMagager().ctrlReq(event);
+		}
+		updateErrorTip("请求发送成功,请注意查看系统事件");
+	}
+	@FXML
+	private void handleTriggerSet(){
+		if (!ClientConnList.getInstance().getState(client.getStationId())) {
+			updateErrorTip("未连接，无法控制！");
+			return;
+		}
+		
+		//获取开始和结束时间
+		long starttime = 0;
+		long endtime = 0;
+		LocalDate startdate = triSetDp1.getValue();
+		LocalDate enddate = triSetDp2.getValue();
+		Calendar startCal = triSetStartTp.getCalendar();
+		startCal.set(Calendar.YEAR, startdate.getYear());
+		startCal.set(Calendar.MONTH, startdate.getMonthValue()-1);
+		startCal.set(Calendar.DATE, startdate.getDayOfMonth());
+		starttime = startCal.getTimeInMillis();	//使用当前系统时间
+		Calendar endCal = triSetEndTp.getCalendar();
+		endCal.set(Calendar.YEAR, enddate.getYear());
+		endCal.set(Calendar.MONTH, enddate.getMonthValue()-1);
+		endCal.set(Calendar.DATE, enddate.getDayOfMonth());
+		endtime = endCal.getTimeInMillis();
+		//发送请求
+		CtrlEvent event = new CtrlEvent();
+		TriggerReq req = new TriggerReq();
+		req.setSubCommand(MsgConstant.CMD_TRIGGER);
+		req.setStartTime(starttime);
+		req.setEndTime(endtime);
+		event.setClient(client);
+		event.setReqMsg(DataBuilder.buildCtrlReq(
+				client.getStationId(), req));
+		CtrlManager.getMagager().ctrlReq(event);
 		updateErrorTip("请求发送成功,请注意查看系统事件");
 	}
 
